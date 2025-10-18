@@ -1,0 +1,34 @@
+{
+  "events": [
+    {
+      "id": "event-001",
+      "title": "Beginners Welcoming Night",
+      "date": "[TO BE PROVIDED]",
+      "description": "[TO BE PROVIDED - Real description of the event]",
+      "googleDriveLink": "[TO BE PROVIDED - Google Drive folder link]",
+      "attendees": null,
+      "highlights": [],
+      "year": 2025
+    },
+    {
+      "id": "event-002",
+      "title": "Handstand Night",
+      "date": "[TO BE PROVIDED]",
+      "description": "[TO BE PROVIDED - Real description of the event]",
+      "googleDriveLink": "[TO BE PROVIDED - Google Drive folder link]",
+      "attendees": null,
+      "highlights": [],
+      "year": 2025
+    },
+    {
+      "id": "event-003",
+      "title": "Training Night",
+      "date": "[TO BE PROVIDED]",
+      "description": "[TO BE PROVIDED - Real description of the event]",
+      "googleDriveLink": "[TO BE PROVIDED - Google Drive folder link]",
+      "attendees": null,
+      "highlights": [],
+      "year": 2025
+    }
+  ]
+}

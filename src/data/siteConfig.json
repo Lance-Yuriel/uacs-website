@@ -1,0 +1,19 @@
+{
+  "name": "University of Auckland Calisthenics Society",
+  "abbreviation": "UACS",
+  "tagline": "Building strength, mastering movement",
+  "email": "uoacalisthenicssociety@gmail.com",
+  "founded": 2024,
+  "socialMedia": {
+    "instagram": "https://instagram.com/uacs_uoa",
+    "instagramHandle": "@uacs_uoa"
+  },
+  "links": {
+    "joinForm": "[TO BE PROVIDED - Google Form URL]",
+    "constitution": "[TO BE PROVIDED - PDF URL]"
+  },
+  "meta": {
+    "description": "Join the University of Auckland Calisthenics Society. Learn handstands, muscle-ups, and more. All skill levels welcome!",
+    "keywords": ["calisthenics", "University of Auckland", "fitness", "bodyweight training", "UACS", "gymnastics"]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "executives": [
+    {
+      "id": "exec-001",
+      "name": "Lance Villanueva",
+      "position": "President",
+      "foundingPosition": "Co-Founder",
+      "bio": "[TO BE PROVIDED - Real bio from Lance]",
+      "image": "/images/executives/lance-villanueva.jpg",
+      "email": "uoacalisthenicssociety@gmail.com",
+      "instagram": "[TO BE PROVIDED - Lance's Instagram]",
+      "linkedIn": "[TO BE PROVIDED - Lance's LinkedIn]",
+      "joinedYear": 2024,
+      "responsibilities": [
+        "Overall club leadership and strategy",
+        "External partnerships and sponsorships",
+        "Event coordination and planning"
+      ]
+    },
+    {
+      "id": "exec-002",
+      "name": "Arian [Last Name]",
+      "position": "Treasurer",
+      "foundingPosition": "Co-Founder",
+      "bio": "[TO BE PROVIDED - Real bio from Arian]",
+      "image": "/images/executives/arian.jpg",
+      "email": "uoacalisthenicssociety@gmail.com",
+      "instagram": "[TO BE PROVIDED - Arian's Instagram]",
+      "linkedIn": "[TO BE PROVIDED - Arian's LinkedIn]",
+      "joinedYear": 2024,
+      "responsibilities": [
+        "Financial management and budgeting",
+        "Membership fees and payments",
+        "Equipment procurement and maintenance"
+      ]
+    },
+    {
+      "id": "exec-003",
+      "name": "Rex [Last Name]",
+      "position": "Secretary",
+      "foundingPosition": "Co-Founder",
+      "bio": "[TO BE PROVIDED - Real bio from Rex]",
+      "image": "/images/executives/rex.jpg",
+      "email": "uoacalisthenicssociety@gmail.com",
+      "instagram": "[TO BE PROVIDED - Rex's Instagram]",
+      "linkedIn": "[TO BE PROVIDED - Rex's LinkedIn]",
+      "joinedYear": 2024,
+      "responsibilities": [
+        "Meeting minutes and documentation",
+        "Member communication and updates",
+        "Administrative tasks and record keeping"
+      ]
+    }
+  ]
+}

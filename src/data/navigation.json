@@ -1,0 +1,30 @@
+{
+  "logo": {
+    "text": "UACS",
+    "alt": "University of Auckland Calisthenics Society"
+  },
+  "mainNav": [
+    { "label": "Home", "href": "#hero" },
+    { "label": "About", "href": "#about" },
+    { "label": "Team", "href": "#team" },
+    { "label": "Events", "href": "#events" },
+    { "label": "Constitution", "href": "#constitution" }
+  ],
+  "ctaButton": {
+    "label": "Join UACS",
+    "href": "[TO BE PROVIDED - Google Form URL]",
+    "external": true
+  },
+  "socialLinks": [
+    { 
+      "platform": "Instagram", 
+      "href": "https://instagram.com/uacs_uoa", 
+      "icon": "Instagram" 
+    },
+    { 
+      "platform": "Email", 
+      "href": "mailto:uoacalisthenicssociety@gmail.com", 
+      "icon": "Mail" 
+    }
+  ]
+}
