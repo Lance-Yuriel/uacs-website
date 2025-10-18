@@ -52,8 +52,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: 'easeOut'
+        duration: 0.6
       }
     }
   };
@@ -91,7 +90,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
         {/* Features Grid */}
         <motion.div variants={itemVariants}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => {
+            {features.map((feature) => {
               const IconComponent = feature.icon;
               return (
                 <motion.div

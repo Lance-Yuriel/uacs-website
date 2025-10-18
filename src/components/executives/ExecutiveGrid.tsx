@@ -76,7 +76,7 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
             </h3>
             <p className="text-text-secondary leading-relaxed">
               More executive positions will be added as our team grows and we expand our 
-              leadership structure. We're always looking for passionate members to take on 
+              leadership structure. We&apos;re always looking for passionate members to take on 
               leadership roles and help shape the future of UACS.
             </p>
           </div>
@@ -89,7 +89,7 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
               Interested in Leadership?
             </h3>
             <p className="text-text-secondary mb-6">
-              We're always looking for dedicated members to join our executive team. 
+              We&apos;re always looking for dedicated members to join our executive team. 
               Contact us to learn about upcoming opportunities and how you can contribute 
               to the growth of our community.
             </p>

@@ -16,16 +16,16 @@ export interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ className }) => {
   const currentYear = new Date().getFullYear();
 
-  const getSocialIcon = (platform: string) => {
-    switch (platform.toLowerCase()) {
-      case 'instagram':
-        return <Instagram className="h-5 w-5" />;
-      case 'mail':
-        return <Mail className="h-5 w-5" />;
-      default:
-        return null;
-    }
-  };
+  // const getSocialIcon = (platform: string) => {
+  //   switch (platform.toLowerCase()) {
+  //     case 'instagram':
+  //       return <Instagram className="h-5 w-5" />;
+  //     case 'mail':
+  //       return <Mail className="h-5 w-5" />;
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   return (
     <footer className={cn('bg-background-primary border-t border-border-default', className)}>

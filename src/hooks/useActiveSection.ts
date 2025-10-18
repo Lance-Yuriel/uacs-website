@@ -24,7 +24,7 @@ export function useActiveSection(options: UseActiveSectionOptions = {}) {
           }
         }
       });
-    }, 100);
+    }, 100) as (entries: IntersectionObserverEntry[]) => void;
 
     const observer = new IntersectionObserver(observerCallback, {
       threshold,

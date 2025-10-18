@@ -2,13 +2,13 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import EventCard from './EventCard';
-import { Event, EventData } from '@/types/event';
-import eventsData from '@/data/events.json';
+import { Event } from '@/types/event';
+// import eventsData from '@/data/events.json';
 import { EmptyState } from '@/components/ui';
 
-const events = eventsData as EventData;
+// const events = eventsData as EventData;
 
 export interface EventYearSectionProps {
   year: number;
