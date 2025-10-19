@@ -100,7 +100,11 @@ body {
 
 /* Focus styles for accessibility */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black;
+  @apply focus:outline-none;
+}
+
+.focus-ring:focus {
+  box-shadow: 0 0 0 2px #8B5CF6;
 }
 
 /* Scrollbar styling */

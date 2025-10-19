@@ -28,7 +28,7 @@ const Section: React.FC<SectionProps> = ({
       data-section={id}
       className={cn(spacingClasses[spacing], className)}
     >
-      <div className={cn('max-w-8xl mx-auto px-4 sm:px-6 lg:px-8', containerClassName)}>
+      <div className={cn('max-w-7xl mx-auto px-4 sm:px-6 lg:px-8', containerClassName)}>
         {children}
       </div>
     </section>

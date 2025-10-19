@@ -57,7 +57,7 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
           className
         )}
       >
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex-shrink-0">
@@ -69,9 +69,9 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
               </button>
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
+            {/* Desktop Navigation - Centered */}
+            <div className="hidden md:flex flex-1 justify-center">
+              <div className="flex items-center space-x-8">
                 {navigation.mainNav.map((item) => (
                   <button
                     key={item.label}
