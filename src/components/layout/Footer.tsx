@@ -122,7 +122,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
             <p className="text-text-tertiary text-sm">
               Building strength, mastering movement
             </p>
-            <p className="text-text-tertiary text-xs mt-2">
+            <p className="text-text-tertiary text-sm">
               Website designed & developed by Lance Villanueva
             </p>
           </div>

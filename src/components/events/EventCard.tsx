@@ -103,11 +103,6 @@ const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
               {hasValidDriveLink && <ExternalLink className="h-3 w-3" />}
             </button>
             
-            {!hasValidDriveLink && (
-              <p className="text-text-muted text-xs mt-2 text-center">
-                Photos will be available after the event
-              </p>
-            )}
           </div>
         </CardContent>
       </Card>

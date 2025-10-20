@@ -133,7 +133,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-primary-400">2024</div>
+                  <div className="text-2xl font-bold text-primary-400">2025</div>
                   <div className="text-sm text-text-tertiary">Founded</div>
                 </div>
                 <div className="hidden sm:block w-px h-12 bg-border-default" />
