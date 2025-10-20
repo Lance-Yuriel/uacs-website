@@ -26,7 +26,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
     {
       icon: Calendar,
       title: 'Regular Sessions',
-      description: 'Weekly training sessions and workshops to keep you motivated and progressing.'
+      description: 'Training sessions and workshops to keep you motivated and progressing.'
     },
     {
       icon: Trophy,
@@ -72,9 +72,9 @@ const About: React.FC<AboutProps> = ({ className }) => {
             Who We Are
           </h2>
           <p className="text-lg md:text-xl text-text-secondary leading-relaxed">
-            The University of Auckland Calisthenics Society is a student-run organization 
+            The University of Auckland Calisthenics Society is a student-led club
             dedicated to promoting bodyweight training and building a strong, supportive 
-            community of fitness enthusiasts.
+            community of fitness enthusiasts across all skill levels.
           </p>
         </motion.div>
 
