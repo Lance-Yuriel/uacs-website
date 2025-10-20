@@ -30,7 +30,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
       transition={{ duration: 0.6 }}
       className={className}
     >
-      <Card className="h-full group" hover={true}>
+      <Card className="h-full group flex flex-col" hover={true}>
         <CardHeader className="pb-4">
           <div className="space-y-3">
             {/* Event Title */}
@@ -56,7 +56,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="flex flex-col flex-grow space-y-4">
           {/* Description */}
           <div>
             <p className="text-text-secondary text-sm leading-relaxed">
@@ -81,6 +81,9 @@ const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
               </ul>
             </div>
           )}
+
+          {/* Spacer to push button to bottom */}
+          <div className="flex-grow"></div>
 
           {/* View Photos Button */}
           <div className="pt-4 border-t border-border-default">
