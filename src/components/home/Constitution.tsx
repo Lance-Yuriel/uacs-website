@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Download, ExternalLink } from 'lucide-react';
+import { FileText, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui';
 
@@ -95,17 +95,16 @@ const Constitution: React.FC<ConstitutionProps> = ({ className }) => {
                 </div>
               </div>
 
-              {/* Download Button */}
+              {/* View Button */}
               <div className="pt-8">
                  <Button
                    href="https://docs.google.com/document/d/1HsYQg9iZjry3PM6Sxm8orFm7oz5FGBFDzAiAlTi8t_o/edit?usp=sharing"
                    external={true}
                    variant="primary"
                    size="lg"
-                   className="min-w-[200px] font-semibold text-lg px-8 py-4"
+                   className="min-w-[200px] font-semibold text-lg px-8 py-4 border-2 border-white"
                  >
-                   <Download className="mr-2 h-5 w-5" />
-                   Download Constitution
+                   View Constitution
                  </Button>
               </div>
             </div>
