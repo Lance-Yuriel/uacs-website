@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Section } from '@/components/layout';
+import { cn } from '@/lib/utils';
 import ExecutiveCard from './ExecutiveCard';
 import { ExecutiveData } from '@/types/executive';
 import executivesData from '@/data/executives.json';
@@ -37,14 +37,13 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
   };
 
   return (
-    <Section id="team" className={className}>
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-        className="space-y-16"
-      >
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-100px' }}
+      className={cn("space-y-16", className)}
+    >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
@@ -81,28 +80,7 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
             </p>
           </div>
         </motion.div>
-
-        {/* Call to Action */}
-        <motion.div variants={itemVariants} className="text-center">
-          <div className="bg-gradient-to-r from-primary-500/10 to-accent-blue/10 border border-primary-500/20 rounded-2xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-xl font-semibold text-white mb-4">
-              Interested in Leadership?
-            </h3>
-            <p className="text-text-secondary mb-6">
-              We&apos;re always looking for dedicated members to join our executive team. 
-              Contact us to learn about upcoming opportunities and how you can contribute 
-              to the growth of our community.
-            </p>
-            <a
-              href="mailto:uoacalisthenicssociety@gmail.com"
-              className="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium"
-            >
-              Get in Touch
-            </a>
-          </div>
-        </motion.div>
-      </motion.div>
-    </Section>
+    </motion.div>
   );
 };
 
