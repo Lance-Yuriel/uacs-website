@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Section } from '@/components/layout';
+import { cn } from '@/lib/utils';
 import EventYearSection from './EventYearSection';
 import { EventData, UpcomingEventData } from '@/types/event';
 import { EmptyState } from '@/components/ui';
@@ -17,12 +17,15 @@ export interface EventGalleryProps {
 }
 
 const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
-  // Group events by year
+  // Group events by year, filtering out placeholder events
   const eventsByYear = events.events.reduce((acc, event) => {
     if (!acc[event.year]) {
       acc[event.year] = [];
     }
-    acc[event.year].push(event);
+    // Only add non-placeholder events to the array
+    if (!(event as any).isPlaceholder) {
+      acc[event.year].push(event);
+    }
     return acc;
   }, {} as Record<number, typeof events.events>);
 
@@ -54,14 +57,13 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
   };
 
   return (
-    <Section id="events" className={className}>
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-        className="space-y-16"
-      >
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-100px' }}
+      className={cn("space-y-16", className)}
+    >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
@@ -152,8 +154,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
             </div>
           </div>
         </motion.div>
-      </motion.div>
-    </Section>
+    </motion.div>
   );
 };
 

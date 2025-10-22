@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar, Footer } from "@/components/layout";
+import { Navbar, Footer, ScrollToTop } from "@/components/layout";
 import siteConfig from "@/data/siteConfig.json";
 import { SiteConfig } from "@/types/site";
 
@@ -39,6 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} font-sans antialiased`}>
+        <ScrollToTop />
         <Navbar />
         {children}
         <Footer />

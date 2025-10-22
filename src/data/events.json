@@ -22,10 +22,20 @@
       "id": "event-003",
       "title": "Training Night",
       "date": "Tue 14th Oct",
-      "description": "[TO BE PROVIDED - Real description of the event]",
+      "description": "A dynamic training session featuring skill stations, free practice time, and community building. The night concluded with an exciting last-person-standing plank challenge that brought everyone together.",
       "googleDriveLink": "https://drive.google.com/drive/u/0/folders/1KayqWCW0WpnY1H-aQH8tRuYcFP6JbRqg",
       "highlights": [],
       "year": 2025
+    },
+    {
+      "id": "event-2026-placeholder",
+      "title": "[TO BE PROVIDED]",
+      "date": "[TO BE PROVIDED]",
+      "description": "[TO BE PROVIDED]",
+      "googleDriveLink": "",
+      "highlights": [],
+      "year": 2026,
+      "isPlaceholder": true
     }
   ]
 }

@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Ensure page always starts at top */
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  scroll-snap-type: y mandatory;
+}
+
 /* Aurora Design System CSS Variables */
 :root {
   /* Background Colors */
