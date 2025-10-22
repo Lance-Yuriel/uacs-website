@@ -42,7 +42,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
             <div className="flex items-center text-text-secondary text-sm">
               <Calendar className="h-4 w-4 mr-2" />
               <span>
-                {event.date === '[TO BE PROVIDED]' ? 'Date TBA' : formatDate(event.date)}
+                {event.date === '[TO BE PROVIDED]' ? 'Date TBA' : event.date}
               </span>
             </div>
 
