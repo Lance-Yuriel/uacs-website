@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Target, Users, Calendar, Trophy } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import MemberCounter from './MemberCounter';
-import { Section } from '@/components/layout';
+import { cn } from '@/lib/utils';
 
 export interface AboutProps {
   className?: string;
@@ -58,14 +58,13 @@ const About: React.FC<AboutProps> = ({ className }) => {
   };
 
   return (
-    <Section id="about" className={className}>
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-        className="space-y-16"
-      >
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-100px' }}
+      className={cn("space-y-16", className)}
+    >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
@@ -78,13 +77,18 @@ const About: React.FC<AboutProps> = ({ className }) => {
           </p>
         </motion.div>
 
-        {/* Member Counter */}
-        <motion.div variants={itemVariants} className="flex justify-center">
-          <Card className="max-w-md w-full" hover={true}>
-            <CardContent className="p-8">
-              <MemberCounter />
-            </CardContent>
-          </Card>
+        {/* Group Photo */}
+        <motion.div variants={itemVariants} className="w-full">
+          <div className="relative w-full max-w-4xl mx-auto">
+            <Image
+              src="/images/about/group-photo.jpg"
+              alt="UACS Group Photo - Members posing in the gym"
+              width={1200}
+              height={675}
+              className="rounded-2xl shadow-2xl object-cover w-full h-auto"
+              priority
+            />
+          </div>
         </motion.div>
 
         {/* Features Grid */}
@@ -118,8 +122,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
             })}
           </div>
         </motion.div>
-      </motion.div>
-    </Section>
+    </motion.div>
   );
 };
 

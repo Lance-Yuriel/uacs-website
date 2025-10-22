@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui';
+import HeroMemberCount from './HeroMemberCount';
 import siteConfig from '@/data/siteConfig.json';
 import navigationData from '@/data/navigation.json';
 import { SiteConfig } from '@/types/site';
@@ -17,10 +18,10 @@ export interface HeroProps {
 }
 
 const Hero: React.FC<HeroProps> = ({ className }) => {
-  const scrollToAbout = () => {
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
+  const scrollToEvents = () => {
+    const eventsSection = document.getElementById('events');
+    if (eventsSection) {
+      eventsSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -148,7 +149,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
             </Button>
             
             <Button
-              onClick={scrollToAbout}
+              onClick={scrollToEvents}
               variant="secondary"
               size="lg"
               className="min-w-[200px] font-semibold text-lg px-8 py-4"
@@ -157,10 +158,13 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
             </Button>
           </motion.div>
 
+          {/* Member Count */}
+          <HeroMemberCount />
+
           {/* Founded info */}
           <motion.div
             variants={itemVariants}
-            className="pt-8"
+            className="pt-4"
           >
             <p className="text-text-muted text-sm">
               Founded in {site.founded} • University of Auckland
@@ -177,7 +181,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
       >
         <button
-          onClick={scrollToAbout}
+          onClick={scrollToEvents}
           className="flex flex-col items-center text-text-tertiary hover:text-text-secondary transition-colors group"
           aria-label="Scroll to next section"
         >
