@@ -65,38 +65,9 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
       data-section="hero"
       className={`min-h-screen flex items-center justify-center relative overflow-hidden ${className || ''}`}
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background-primary via-background-secondary to-background-primary">
-        <div className="absolute inset-0 bg-gradient-radial from-primary-500/10 via-transparent to-transparent opacity-50" />
-      </div>
-
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-500/5 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-blue/5 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 2
-          }}
-        />
+      {/* Background gradient overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background-primary/80 via-background-secondary/60 to-background-primary/80">
+        <div className="absolute inset-0 bg-gradient-radial from-primary-500/5 via-transparent to-transparent opacity-30" />
       </div>
 
       {/* Content */}
@@ -133,28 +104,19 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
             {site.tagline}
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <motion.div
             variants={buttonVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8"
+            className="flex items-center justify-center pt-8"
           >
             <Button
               href={navigation.ctaButton.href}
               external={navigation.ctaButton.external}
               variant="primary"
               size="lg"
-              className="min-w-[200px] font-semibold text-lg px-8 py-4"
+              className="min-w-[280px] font-bold text-xl px-12 py-6 shadow-2xl hover:shadow-primary-500/25 transition-all duration-300 bg-primary-500 hover:bg-primary-600 border-2 border-primary-400 hover:border-primary-300 transform hover:scale-105"
             >
               {navigation.ctaButton.label}
-            </Button>
-            
-            <Button
-              onClick={scrollToEvents}
-              variant="secondary"
-              size="lg"
-              className="min-w-[200px] font-semibold text-lg px-8 py-4"
-            >
-              Learn More
             </Button>
           </motion.div>
 
