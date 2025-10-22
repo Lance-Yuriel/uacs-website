@@ -98,20 +98,16 @@ const Constitution: React.FC<ConstitutionProps> = ({ className }) => {
 
               {/* Download Button */}
               <div className="pt-8">
-                <Button
-                  href="[TO BE PROVIDED - PDF URL]"
-                  external={true}
-                  variant="primary"
-                  size="lg"
-                  className="min-w-[200px]"
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  Download Constitution
-                  <ExternalLink className="ml-2 h-3 w-3" />
-                </Button>
-                <p className="text-text-tertiary text-sm mt-4">
-                  Constitution will be available for download once finalized
-                </p>
+                 <Button
+                   href="https://docs.google.com/document/d/1HsYQg9iZjry3PM6Sxm8orFm7oz5FGBFDzAiAlTi8t_o/edit?usp=sharing"
+                   external={true}
+                   variant="primary"
+                   size="lg"
+                   className="min-w-[200px] font-semibold text-lg px-8 py-4"
+                 >
+                   <Download className="mr-2 h-5 w-5" />
+                   Download Constitution
+                 </Button>
               </div>
             </div>
           </div>
@@ -131,6 +127,7 @@ const Constitution: React.FC<ConstitutionProps> = ({ className }) => {
               href="mailto:uoacalisthenicssociety@gmail.com"
               variant="secondary"
               size="md"
+              className="font-semibold px-6 py-3"
             >
               Contact Executive Team
             </Button>

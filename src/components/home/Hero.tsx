@@ -142,7 +142,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
               external={navigation.ctaButton.external}
               variant="primary"
               size="lg"
-              className="min-w-[200px]"
+              className="min-w-[200px] font-semibold text-lg px-8 py-4"
             >
               {navigation.ctaButton.label}
             </Button>
@@ -151,7 +151,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
               onClick={scrollToAbout}
               variant="secondary"
               size="lg"
-              className="min-w-[200px]"
+              className="min-w-[200px] font-semibold text-lg px-8 py-4"
             >
               Learn More
             </Button>

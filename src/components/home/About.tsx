@@ -118,33 +118,6 @@ const About: React.FC<AboutProps> = ({ className }) => {
             })}
           </div>
         </motion.div>
-
-        {/* Mission Statement */}
-        <motion.div variants={itemVariants} className="text-center max-w-3xl mx-auto">
-          <Card className="p-8 md:p-12">
-            <CardContent>
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
-                Our Mission
-              </h3>
-              <p className="text-lg text-text-secondary leading-relaxed mb-6">
-                To provide a welcoming environment where students can learn, practice, 
-                and master calisthenics skills while building lasting friendships and 
-                developing physical and mental strength.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary-400">2025</div>
-                  <div className="text-sm text-text-tertiary">Founded</div>
-                </div>
-                <div className="hidden sm:block w-px h-12 bg-border-default" />
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary-400">University of Auckland</div>
-                  <div className="text-sm text-text-tertiary">Location</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
       </motion.div>
     </Section>
   );

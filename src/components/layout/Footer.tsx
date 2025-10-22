@@ -41,7 +41,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
                 {site.name}
               </p>
               <p className="text-text-tertiary text-sm mt-1">
-                Founded {site.founded}
+                Founded in {site.founded}
               </p>
             </div>
             <p className="text-text-secondary text-sm leading-relaxed">
@@ -63,17 +63,6 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
                 </a>
               ))}
             </nav>
-            <div className="pt-4">
-              <a
-                href={site.links.constitution}
-                className="inline-flex items-center text-text-secondary hover:text-white transition-colors text-sm"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Constitution
-                <ExternalLink className="ml-1 h-3 w-3" />
-              </a>
-            </div>
           </div>
 
           {/* Contact & Social */}
@@ -102,12 +91,11 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
             <div className="pt-4">
               <a
                 href={site.links.joinForm}
-                className="inline-flex items-center px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm font-medium"
+                className="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-semibold"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Join UACS
-                <ExternalLink className="ml-1 h-3 w-3" />
               </a>
             </div>
           </div>
