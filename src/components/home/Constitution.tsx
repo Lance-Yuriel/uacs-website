@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Download, ExternalLink } from 'lucide-react';
-import { Section } from '@/components/layout';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui';
 
 export interface ConstitutionProps {
@@ -34,14 +34,13 @@ const Constitution: React.FC<ConstitutionProps> = ({ className }) => {
   };
 
   return (
-    <Section id="constitution" className={className}>
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-        className="space-y-16"
-      >
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-100px' }}
+      className={cn("space-y-16", className)}
+    >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
@@ -112,29 +111,7 @@ const Constitution: React.FC<ConstitutionProps> = ({ className }) => {
             </div>
           </div>
         </motion.div>
-
-        {/* Additional Info */}
-        <motion.div variants={itemVariants} className="max-w-3xl mx-auto text-center">
-          <div className="bg-gradient-to-r from-primary-500/5 to-accent-blue/5 border border-primary-500/20 rounded-2xl p-8">
-            <h3 className="text-xl font-semibold text-white mb-4">
-              Questions About Our Constitution?
-            </h3>
-            <p className="text-text-secondary mb-6">
-              If you have any questions about our constitution, governance structure, 
-              or how our society operates, feel free to contact our executive team.
-            </p>
-            <Button
-              href="mailto:uoacalisthenicssociety@gmail.com"
-              variant="secondary"
-              size="md"
-              className="font-semibold px-6 py-3"
-            >
-              Contact Executive Team
-            </Button>
-          </div>
-        </motion.div>
-      </motion.div>
-    </Section>
+    </motion.div>
   );
 };
 
