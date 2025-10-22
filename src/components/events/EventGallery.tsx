@@ -141,13 +141,13 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
                 href="https://instagram.com/uacs_uoa"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium"
+                className="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium border-2 border-white"
               >
                 Follow on Instagram
               </a>
               <a
                 href="mailto:uoacalisthenicssociety@gmail.com"
-                className="inline-flex items-center px-6 py-3 border border-primary-500/30 text-primary-400 rounded-lg hover:bg-primary-500/10 transition-colors font-medium"
+                className="inline-flex items-center px-6 py-3 border-2 border-white text-primary-400 rounded-lg hover:bg-primary-500/10 transition-colors font-medium"
               >
                 Contact Us
               </a>
