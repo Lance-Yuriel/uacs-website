@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Instagram, Linkedin, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
-import { Card, CardContent, CardHeader, Badge } from '@/components/ui';
+import { Card, CardContent, CardHeader, Badge, TiltedCard } from '@/components/ui';
 import { Executive } from '@/types/executive';
 
 export interface ExecutiveCardProps {
@@ -46,10 +46,24 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
       transition={{ duration: 0.6 }}
       className={className}
     >
-      <Card className="h-full group" hover={true}>
-        <CardHeader className="pb-4">
+      <TiltedCard
+        backgroundColor="rgba(24, 24, 27, 0.8)"
+        gradientColors={['rgba(24, 24, 27, 0.8)', 'rgba(39, 39, 42, 0.6)']}
+        altText={`${executive.name} - ${executive.position}`}
+        captionText={`${executive.name} - ${executive.position}`}
+        containerHeight="450px"
+        containerWidth="100%"
+        imageHeight="450px"
+        imageWidth="100%"
+        rotateAmplitude={12}
+        scaleOnHover={1.05}
+        showMobileWarning={false}
+        showTooltip={false}
+        displayOverlayContent={true}
+      >
+        <div className="text-center space-y-3">
           {/* Profile Image */}
-          <div className="relative w-24 h-24 mx-auto mb-4">
+          <div className="relative w-20 h-20 mx-auto mb-3">
             {!imageError ? (
               <Image
                 src={executive.image}
@@ -60,7 +74,7 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
               />
             ) : (
               <div className="w-full h-full rounded-full bg-surface-card border-2 border-border-default group-hover:border-primary-500/50 transition-colors flex items-center justify-center">
-                <span className="text-2xl font-bold text-text-secondary">
+                <span className="text-lg font-bold text-text-secondary">
                   {executive.name.split(' ').map(n => n[0]).join('')}
                 </span>
               </div>
@@ -68,7 +82,7 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
           </div>
 
           {/* Name and Position */}
-          <div className="text-center space-y-2">
+          <div className="space-y-2">
             <h3 className="text-xl font-bold text-white group-hover:text-primary-400 transition-colors">
               {executive.name}
             </h3>
@@ -83,9 +97,7 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
               </Badge>
             )}
           </div>
-        </CardHeader>
 
-        <CardContent className="space-y-4">
           {/* Bio */}
           <div className="text-center">
             <p className="text-text-secondary text-sm leading-relaxed">
@@ -132,8 +144,8 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
               Joined {executive.joinedYear}
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </TiltedCard>
     </motion.div>
   );
 };
