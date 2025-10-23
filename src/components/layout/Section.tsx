@@ -26,9 +26,12 @@ const Section: React.FC<SectionProps> = ({
     <section
       id={id}
       data-section={id}
-      className={cn(spacingClasses[spacing], className)}
+      className={cn(spacingClasses[spacing], 'relative', className)}
     >
-      <div className={cn('max-w-7xl mx-auto px-4 sm:px-6 lg:px-8', containerClassName)}>
+      {/* Subtle background overlay for text readability */}
+      <div className="absolute inset-0 bg-background-primary/40 backdrop-blur-[0.5px]" />
+      
+      <div className={cn('max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10', containerClassName)}>
         {children}
       </div>
     </section>

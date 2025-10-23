@@ -108,7 +108,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
               © {currentYear} {site.name}. All rights reserved.
             </p>
             <p className="text-text-tertiary text-sm">
-              Building strength, mastering movement
+              Empowering students through calisthenics
             </p>
             <p className="text-text-tertiary text-sm">
               Website designed & developed by Lance Villanueva
