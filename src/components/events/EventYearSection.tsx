@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import EventCard from './EventCard';
 import { Event } from '@/types/event';
-// import eventsData from '@/data/events.json';
 import { EmptyState } from '@/components/ui';
 
 // const events = eventsData as EventData;
@@ -34,17 +33,17 @@ const EventYearSection: React.FC<EventYearSectionProps> = ({
       <div className={className}>
         <button
           onClick={toggleExpanded}
-          className="w-full flex items-center justify-between p-6 bg-surface-card/50 backdrop-blur-sm border border-border-default rounded-2xl hover:bg-surface-card-hover/50 transition-colors"
+          className="w-full flex items-center justify-between p-6 bg-surface-card/50 backdrop-blur-sm border border-border-default rounded-2xl hover:bg-white hover:text-black transition-all duration-300 group"
         >
           <div className="text-left">
-            <h3 className="text-xl font-semibold text-white mb-1">
+            <h3 className="text-xl font-semibold text-white mb-1 group-hover:text-black">
               {year}
             </h3>
-            <p className="text-text-secondary text-sm">
+            <p className="text-text-secondary text-sm group-hover:text-gray-600">
               No events yet for this year
             </p>
           </div>
-          <ChevronDown className={`h-5 w-5 text-text-tertiary transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`h-5 w-5 text-text-tertiary group-hover:text-black transition-all duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
         </button>
         
         <AnimatePresence>
@@ -73,13 +72,13 @@ const EventYearSection: React.FC<EventYearSectionProps> = ({
     <div className={className}>
       <button
         onClick={toggleExpanded}
-        className="w-full flex items-center justify-between p-6 bg-surface-card/50 backdrop-blur-sm border border-border-default rounded-2xl hover:bg-surface-card-hover/50 transition-colors group"
+        className="w-full flex items-center justify-between p-6 bg-surface-card/50 backdrop-blur-sm border border-border-default rounded-2xl hover:bg-white hover:text-black transition-all duration-300 group"
       >
         <div className="text-left">
-          <h3 className="text-xl font-semibold text-white mb-1 group-hover:text-primary-400 transition-colors">
+          <h3 className="text-xl font-semibold text-white mb-1 group-hover:text-black transition-colors">
             {year}
           </h3>
-          <p className="text-text-secondary text-sm">
+          <p className="text-text-secondary text-sm group-hover:text-gray-600">
             {events.length} {events.length === 1 ? 'event' : 'events'}
           </p>
         </div>
@@ -87,7 +86,7 @@ const EventYearSection: React.FC<EventYearSectionProps> = ({
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          <ChevronDown className="h-5 w-5 text-text-tertiary" />
+          <ChevronDown className="h-5 w-5 text-text-tertiary group-hover:text-black transition-colors" />
         </motion.div>
       </button>
       
