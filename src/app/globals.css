@@ -9,6 +9,13 @@ html, body {
   scroll-snap-type: y mandatory;
 }
 
+/* Gradient Text Animation */
+@keyframes gradient-move {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 /* Aurora Design System CSS Variables */
 :root {
   /* Background Colors */

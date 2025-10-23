@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar, Footer, ScrollToTop } from "@/components/layout";
+import { PillNavbar, Footer, ScrollToTop } from "@/components/layout";
 import { LiquidEther } from "@/components/ui";
 import siteConfig from "@/data/siteConfig.json";
 import { SiteConfig } from "@/types/site";
@@ -64,7 +64,7 @@ export default function RootLayout({
           />
         </div>
         
-        <Navbar />
+        <PillNavbar />
         <div className="relative z-10">
           {children}
         </div>

@@ -131,6 +131,7 @@ const config: Config = {
         'slide-up': 'slideUp 0.6s ease-out',
         'scale-in': 'scaleIn 0.3s ease-out',
         shimmer: 'shimmer 2s infinite',
+        gradient: 'gradient 3s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -148,6 +149,11 @@ const config: Config = {
         shimmer: {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
+        },
+        gradient: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
         },
       },
       transitionTimingFunction: {
