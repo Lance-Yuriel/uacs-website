@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Target, Users, Calendar, Trophy } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
+import { Card, CardContent, CardHeader, CardTitle, GradientText, TiltedCard } from '@/components/ui';
 import { cn } from '@/lib/utils';
 
 export interface AboutProps {
@@ -68,12 +68,19 @@ const About: React.FC<AboutProps> = ({ className }) => {
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Who We Are
+            <GradientText
+              colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
+              animationSpeed={3}
+              showBorder={false}
+              className=""
+            >
+              Who We Are
+            </GradientText>
           </h2>
           <p className="text-lg md:text-xl text-text-secondary leading-relaxed">
             The University of Auckland Calisthenics Society is a student-led club
             dedicated to promoting bodyweight training and building a strong, supportive 
-            community of fitness enthusiasts across all skill levels.
+            fitness community across all skill levels.
           </p>
         </motion.div>
 
@@ -100,23 +107,35 @@ const About: React.FC<AboutProps> = ({ className }) => {
                 <motion.div
                   key={feature.title}
                   variants={itemVariants}
-                  className="group"
+                  className="group h-full"
                 >
-                  <Card className="h-full text-center" hover={true}>
-                    <CardHeader className="pb-4">
+                  <TiltedCard
+                    backgroundColor="rgba(24, 24, 27, 0.8)"
+                    gradientColors={['rgba(24, 24, 27, 0.8)', 'rgba(39, 39, 42, 0.6)']}
+                    altText={`${feature.title} - UACS`}
+                    captionText={feature.title}
+                    containerHeight="280px"
+                    containerWidth="100%"
+                    imageHeight="280px"
+                    imageWidth="100%"
+                    rotateAmplitude={12}
+                    scaleOnHover={1.05}
+                    showMobileWarning={false}
+                    showTooltip={false}
+                    displayOverlayContent={true}
+                  >
+                    <div className="text-center space-y-4">
                       <div className="mx-auto mb-4 p-4 bg-primary-500/10 rounded-full w-fit group-hover:bg-primary-500/20 transition-colors">
                         <IconComponent className="h-8 w-8 text-primary-400 group-hover:text-primary-300 transition-colors" />
                       </div>
-                      <CardTitle className="text-lg font-semibold">
+                      <h3 className="text-lg font-semibold text-white">
                         {feature.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0">
+                      </h3>
                       <p className="text-text-secondary text-sm leading-relaxed">
                         {feature.description}
                       </p>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </TiltedCard>
                 </motion.div>
               );
             })}

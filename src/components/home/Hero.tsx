@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui';
+import { Button, GradientText } from '@/components/ui';
 import HeroMemberCount from './HeroMemberCount';
 import siteConfig from '@/data/siteConfig.json';
 import navigationData from '@/data/navigation.json';
@@ -79,14 +79,19 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
           className="space-y-8"
         >
           {/* Main Title */}
-          <motion.h1
+          <motion.div
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight"
           >
-            <span className="gradient-text">
+            <GradientText
+              colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
+              animationSpeed={3}
+              showBorder={false}
+              className=""
+            >
               {site.abbreviation}
-            </span>
-          </motion.h1>
+            </GradientText>
+          </motion.div>
 
           {/* Subtitle */}
           <motion.p
@@ -114,7 +119,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
               external={navigation.ctaButton.external}
               variant="primary"
               size="lg"
-              className="min-w-[280px] font-bold text-xl px-12 py-6 shadow-2xl hover:shadow-primary-500/25 transition-all duration-300 bg-primary-500 hover:bg-primary-600 border-2 border-primary-400 hover:border-primary-300 transform hover:scale-105"
+              className="min-w-[280px] font-bold text-xl px-12 py-6 shadow-2xl hover:shadow-primary-500/25 border-2 border-primary-400 transform hover:scale-105"
             >
               {navigation.ctaButton.label}
             </Button>

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import EventYearSection from './EventYearSection';
 import { EventData, UpcomingEventData } from '@/types/event';
-import { EmptyState } from '@/components/ui';
+import { EmptyState, GradientText } from '@/components/ui';
 import eventsData from '@/data/events.json';
 import upcomingEventsData from '@/data/upcoming-events.json';
 
@@ -67,7 +67,14 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Events & Activities
+            <GradientText
+              colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
+              animationSpeed={3}
+              showBorder={false}
+              className=""
+            >
+              Events & Activities
+            </GradientText>
           </h2>
           <p className="text-lg md:text-xl text-text-secondary leading-relaxed">
             Join us for exciting calisthenics workshops, training sessions, and community events. 
@@ -141,13 +148,13 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
                 href="https://instagram.com/uacs_uoa"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium border-2 border-white"
+                className="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-white hover:text-black transition-all duration-300 font-medium border-2 border-white hover:border-primary-500"
               >
                 Follow on Instagram
               </a>
               <a
                 href="mailto:uoacalisthenicssociety@gmail.com"
-                className="inline-flex items-center px-6 py-3 border-2 border-white text-primary-400 rounded-lg hover:bg-primary-500/10 transition-colors font-medium"
+                className="inline-flex items-center px-6 py-3 border-2 border-white text-primary-400 rounded-lg hover:bg-white hover:text-black transition-all duration-300 font-medium"
               >
                 Contact Us
               </a>

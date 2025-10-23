@@ -4,6 +4,8 @@ export { default as Badge } from './Badge';
 export { default as EmptyState } from './EmptyState';
 export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as LiquidEther } from './LiquidEther';
+export { default as GradientText } from './GradientText';
+export { default as TiltedCard } from './TiltedCard';
 
 export type { ButtonProps } from './Button';
 export type { CardProps, CardHeaderProps, CardContentProps, CardTitleProps, CardDescriptionProps } from './Card';

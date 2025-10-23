@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { GradientText } from '@/components/ui';
 import ExecutiveCard from './ExecutiveCard';
 import { ExecutiveData } from '@/types/executive';
 import executivesData from '@/data/executives.json';
@@ -47,7 +48,14 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Meet Our Team
+            <GradientText
+              colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
+              animationSpeed={3}
+              showBorder={false}
+              className=""
+            >
+              Meet Our Team
+            </GradientText>
           </h2>
           <p className="text-lg md:text-xl text-text-secondary leading-relaxed">
             Our dedicated executive team leads the University of Auckland Calisthenics Society 
