@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'white-hover';
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
   href?: string;
@@ -25,10 +25,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseClasses = 'inline-flex items-center justify-center font-semibold transition-smooth focus-ring rounded-xl disabled:opacity-50 disabled:cursor-not-allowed';
     
     const variants = {
-      primary: 'bg-primary-500 text-white hover:bg-primary-600 hover:-translate-y-0.5 hover:glow',
+      primary: 'bg-primary-500 text-white hover:bg-white hover:text-black hover:-translate-y-0.5 hover:glow transition-all duration-300 [&:hover]:text-black',
       secondary: 'bg-primary-500/10 text-primary-500 border border-primary-500/30 hover:bg-primary-500/20 hover:border-primary-500',
       ghost: 'text-text-secondary hover:text-white hover:bg-white/5',
-      outline: 'border border-border-default text-text-primary hover:border-primary-500 hover:text-primary-500 hover:bg-primary-500/5'
+      outline: 'border border-border-default text-text-primary hover:border-primary-500 hover:text-primary-500 hover:bg-primary-500/5',
+      'white-hover': 'bg-primary-500 text-white hover:bg-white hover:text-black transition-all duration-300'
     };
     
     const sizes = {

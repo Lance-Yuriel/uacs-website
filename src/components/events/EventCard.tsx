@@ -91,9 +91,9 @@ const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
               onClick={handleViewPhotos}
               disabled={!hasValidDriveLink}
               className={`
-                w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors
+                w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300
                 ${hasValidDriveLink 
-                  ? 'bg-primary-500/10 text-primary-400 hover:bg-primary-500/20 hover:text-primary-300 border border-primary-500/30' 
+                  ? 'bg-primary-500/10 text-primary-400 hover:bg-white hover:text-black border border-primary-500/30 hover:border-primary-500' 
                   : 'bg-surface-card text-text-tertiary cursor-not-allowed border border-border-default'
                 }
               `}
