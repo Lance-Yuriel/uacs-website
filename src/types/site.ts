@@ -21,4 +21,5 @@ export interface SiteConfig {
 export interface MemberCountResponse {
   count: number;
   lastUpdated: string;
+  error?: string; // Optional error field
 }

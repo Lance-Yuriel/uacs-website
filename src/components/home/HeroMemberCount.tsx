@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, TrendingUp } from 'lucide-react';
+import { User } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui';
 import { MemberCountResponse } from '@/types/site';
 
@@ -20,16 +20,27 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
     const fetchMemberCount = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/members');
+        const response = await fetch('/api/members', {
+          cache: 'no-store', // Always fetch fresh data
+        });
         
         if (!response.ok) {
-          throw new Error('Failed to fetch member count');
+          throw new Error(`HTTP ${response.status}: Failed to fetch member count`);
         }
         
         const data: MemberCountResponse = await response.json();
-        setMemberCount(data.count);
+        
+        // Handle API errors gracefully
+        if (data.error) {
+          console.warn('API returned error:', data.error);
+          setError(data.error);
+          setMemberCount(data.count || 0);
+        } else {
+          setMemberCount(data.count);
+          setError(null);
+        }
+        
         setLastUpdated(data.lastUpdated);
-        setError(null);
       } catch (err) {
         console.error('Error fetching member count:', err);
         setError('Unable to load member count');
@@ -75,9 +86,9 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
       >
         <Card className="max-w-md w-full" hover={true}>
           <CardContent className="p-8">
-            <div className="flex items-center justify-center gap-3 text-text-tertiary">
-              <Users className="h-8 w-8 animate-pulse" />
-              <span className="text-lg">Loading member count...</span>
+            <div className="text-center">
+              <User className="h-12 w-12 text-text-tertiary mx-auto mb-4 animate-pulse" />
+              <p className="text-text-secondary text-lg">Loading member count...</p>
             </div>
           </CardContent>
         </Card>
@@ -85,7 +96,8 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
     );
   }
 
-  if (error || memberCount === null) {
+  // Show error state when there's an error and no valid count
+  if (error && (memberCount === null || memberCount === 0)) {
     return (
       <motion.div
         variants={{
@@ -97,9 +109,9 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
         <Card className="max-w-md w-full" hover={true}>
           <CardContent className="p-8">
             <div className="text-center">
-              <Users className="h-12 w-12 text-text-tertiary mx-auto mb-4" />
+              <User className="h-12 w-12 text-text-tertiary mx-auto mb-4" />
               <p className="text-text-secondary text-lg">
-                Member count unavailable. Please check back later.
+                Unable to retrieve member count at this time
               </p>
             </div>
           </CardContent>
@@ -120,17 +132,7 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
         <CardContent className="p-8">
           <div className="text-center">
             <div className="flex items-center justify-center mb-4">
-              <div className="relative">
-                <Users className="h-16 w-16 text-primary-500" />
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                  className="absolute -top-1 -right-1 bg-accent-success rounded-full p-1"
-                >
-                  <TrendingUp className="h-4 w-4 text-white" />
-                </motion.div>
-              </div>
+              <User className="h-16 w-16 text-primary-500" />
             </div>
             
             <motion.div
@@ -140,27 +142,21 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
               className="space-y-2"
             >
               <div className="text-4xl md:text-5xl font-bold text-white">
-                {memberCount.toLocaleString()}
+                {memberCount?.toLocaleString() || '0'}
               </div>
               <p className="text-text-secondary text-lg font-medium">
                 {currentYear} Member Count
               </p>
+              {error && (
+                <p className="text-accent-warning text-xs">
+                  {error}
+                </p>
+              )}
               {lastUpdated && (
                 <p className="text-text-tertiary text-sm">
                   Updated {formatLastUpdated(lastUpdated)}
                 </p>
               )}
-            </motion.div>
-
-            {/* Growth indicator */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-              className="mt-4 flex items-center justify-center gap-2 text-accent-success text-sm"
-            >
-              <TrendingUp className="h-4 w-4" />
-              <span>Growing community</span>
             </motion.div>
           </div>
         </CardContent>
