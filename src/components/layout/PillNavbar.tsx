@@ -1,11 +1,14 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Instagram, Mail } from 'lucide-react';
+import { Menu, X, Instagram, Mail, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { gsap } from 'gsap';
 import { cn } from '@/lib/utils';
 import { useActiveSection } from '@/hooks/useActiveSection';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui';
+import { supabase } from '@/lib/supabase';
 import navigationData from '@/data/navigation.json';
 import { NavigationData } from '@/types/navigation';
 
@@ -19,6 +22,18 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { activeSection, scrollToSection } = useActiveSection();
+  const { isAdmin, user } = useAuth();
+  const router = useRouter();
+
+  // Debug: Log admin status
+  useEffect(() => {
+    console.log('Navbar - isAdmin:', isAdmin, 'user:', user);
+  }, [isAdmin, user]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+  };
   
   // Refs for animations
   const navRef = useRef<HTMLElement>(null);
@@ -152,7 +167,7 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 flex items-center gap-8">
               <button
                 ref={logoRef}
                 onClick={() => handleNavClick('#hero')}
@@ -160,6 +175,14 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
               >
                 {navigation.logo.text}
               </button>
+              {isAdmin && (
+                <button
+                  onClick={() => router.push('/')}
+                  className="px-4 py-2 rounded-lg font-medium text-sm border border-border-primary text-white hover:bg-white hover:text-black transition-all duration-300"
+                >
+                  View Website
+                </button>
+              )}
             </div>
 
             {/* Desktop Navigation - Centered Pill Style */}
@@ -206,7 +229,16 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
             </div>
 
             {/* Desktop CTA and Social Links */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-8">
+              {isAdmin && (
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 rounded-lg font-medium text-sm border border-border-primary text-white hover:bg-white hover:text-black transition-all duration-300 flex items-center gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              )}
               {/* Social Links */}
               <div className="flex items-center space-x-3">
                 {navigation.socialLinks.map((social) => (

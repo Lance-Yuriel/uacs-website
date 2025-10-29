@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Button } from '@/components/ui';
+import { Card, CardContent } from '@/components/ui';
 import { motion } from 'framer-motion';
-import TiltedCard from '@/components/ui/TiltedCard';
+import { cn } from '@/lib/utils';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -48,16 +48,8 @@ export default function AdminLogin() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md"
       >
-        <TiltedCard
-          backgroundColor="rgba(24, 24, 27, 0.8)"
-          gradientColors={['rgba(24, 24, 27, 0.9)', 'rgba(39, 39, 42, 0.7)']}
-          containerHeight="auto"
-          imageHeight="auto"
-          scaleOnHover={1.02}
-          rotateAmplitude={8}
-          showTooltip={false}
-        >
-          <div className="w-full">
+        <Card className="w-full" hover={false}>
+          <CardContent className="p-8">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-white mb-2">Admin Login</h1>
               <p className="text-text-secondary">Sign in to manage content</p>
@@ -74,7 +66,7 @@ export default function AdminLogin() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 bg-background-secondary/50 border border-border-primary rounded-lg text-white placeholder-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 bg-background-secondary border border-border-primary rounded-lg text-white placeholder-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="your@email.com"
                 />
               </div>
@@ -89,7 +81,7 @@ export default function AdminLogin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 bg-background-secondary/50 border border-border-primary rounded-lg text-white placeholder-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 bg-background-secondary border border-border-primary rounded-lg text-white placeholder-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="Enter your password"
                 />
               </div>
@@ -100,17 +92,23 @@ export default function AdminLogin() {
                 </div>
               )}
 
-              <Button
-                type="submit"
-                variant="primary"
-                className="w-full"
-                disabled={loading}
-              >
-                {loading ? 'Signing in...' : 'Sign In'}
-              </Button>
+              <div className="pt-4 mt-6">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={cn(
+                    'w-full px-6 py-3 text-base rounded-lg font-bold whitespace-nowrap cursor-pointer transition-all duration-300 ease-out',
+                    'text-white hover:bg-white hover:text-black border border-gray-700',
+                    'bg-[#1a1a1a] hover:border-white',
+                    loading && 'opacity-50 cursor-not-allowed'
+                  )}
+                >
+                  {loading ? 'Signing in...' : 'Sign In'}
+                </button>
+              </div>
             </form>
-          </div>
-        </TiltedCard>
+          </CardContent>
+        </Card>
       </motion.div>
     </div>
   );

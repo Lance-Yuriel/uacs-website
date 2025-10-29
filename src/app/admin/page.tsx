@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Card, CardContent } from '@/components/ui';
+import { Card, CardContent, GradientText } from '@/components/ui';
 import { motion } from 'framer-motion';
 import { Users, Calendar, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui';
@@ -61,37 +61,27 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background-primary via-background-secondary to-background-primary p-4">
-      <div className="max-w-6xl mx-auto pt-8">
+    <div className="min-h-screen bg-gradient-to-br from-background-primary via-background-secondary to-background-primary flex items-center">
+      <div className="max-w-6xl mx-auto px-4 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
-              <p className="text-text-secondary">Welcome, {user.email}</p>
-            </div>
-            <div className="flex gap-4">
-              <Button
-                href="/"
-                variant="secondary"
+          <div className="text-center mb-12">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              <GradientText
+                colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
+                animationSpeed={3}
               >
-                View Website
-              </Button>
-              <Button
-                onClick={handleLogout}
-                variant="secondary"
-              >
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
-              </Button>
-            </div>
+                UACS Admin Dashboard
+              </GradientText>
+            </h1>
+            <p className="text-lg md:text-xl text-text-secondary">Welcome, {user.email}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="cursor-pointer hover:scale-105 transition-transform">
+            <Card glass={false} hover={false} className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white [&:hover_*]:text-black">
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="p-4 bg-primary-500/10 rounded-lg">
@@ -105,7 +95,7 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:scale-105 transition-transform">
+            <Card glass={false} hover={false} className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white [&:hover_*]:text-black">
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="p-4 bg-primary-500/10 rounded-lg">
@@ -121,7 +111,7 @@ export default function AdminDashboard() {
           </div>
 
           <div className="mt-8">
-            <Card>
+            <Card hover={false}>
               <CardContent className="p-6">
                 <h2 className="text-xl font-bold text-white mb-4">Quick Stats</h2>
                 <p className="text-text-secondary">
