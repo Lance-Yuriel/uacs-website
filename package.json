@@ -10,6 +10,7 @@
     "migrate": "tsx scripts/migrate-data.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.76.1",
     "@tanstack/react-query": "^5.90.5",
     "@types/three": "^0.180.0",
