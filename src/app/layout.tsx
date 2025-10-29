@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { PillNavbar, Footer, ScrollToTop } from "@/components/layout";
 import { LiquidEther } from "@/components/ui";
+import { AuthProvider } from "@/contexts/AuthContext";
 import siteConfig from "@/data/siteConfig.json";
 import { SiteConfig } from "@/types/site";
 
@@ -40,35 +41,37 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <ScrollToTop />
-        
-        {/* Global LiquidEther Background */}
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <LiquidEther
-            colors={['#6443EA', '#98BEFB', '#A58BF8']}
-            mouseForce={20}
-            cursorSize={100}
-            isViscous={false}
-            viscous={30}
-            iterationsViscous={32}
-            iterationsPoisson={32}
-            resolution={0.5}
-            isBounce={false}
-            autoDemo={true}
-            autoSpeed={0.5}
-            autoIntensity={2.2}
-            takeoverDuration={0.25}
-            autoResumeDelay={3000}
-            autoRampDuration={0.6}
-            style={{ width: '100%', height: '100%' }}
-          />
-        </div>
-        
-        <PillNavbar />
-        <div className="relative z-10">
-          {children}
-        </div>
-        <Footer />
+        <AuthProvider>
+          <ScrollToTop />
+          
+          {/* Global LiquidEther Background */}
+          <div className="fixed inset-0 z-0 pointer-events-none">
+            <LiquidEther
+              colors={['#6443EA', '#98BEFB', '#A58BF8']}
+              mouseForce={20}
+              cursorSize={100}
+              isViscous={false}
+              viscous={30}
+              iterationsViscous={32}
+              iterationsPoisson={32}
+              resolution={0.5}
+              isBounce={false}
+              autoDemo={true}
+              autoSpeed={0.5}
+              autoIntensity={2.2}
+              takeoverDuration={0.25}
+              autoResumeDelay={3000}
+              autoRampDuration={0.6}
+              style={{ width: '100%', height: '100%' }}
+            />
+          </div>
+          
+          <PillNavbar />
+          <div className="relative z-10">
+            {children}
+          </div>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
