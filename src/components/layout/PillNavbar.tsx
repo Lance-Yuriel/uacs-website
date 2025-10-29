@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Instagram, Mail, LogOut } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
 import { cn } from '@/lib/utils';
 import { useActiveSection } from '@/hooks/useActiveSection';
@@ -24,6 +24,10 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
   const { activeSection, scrollToSection } = useActiveSection();
   const { isAdmin, user } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Hide navbar on admin pages
+  const isAdminPage = pathname?.startsWith('/admin');
 
   // Debug: Log admin status
   useEffect(() => {
@@ -176,16 +180,25 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
                 {navigation.logo.text}
               </button>
               {isAdmin && (
-                <button
-                  onClick={() => router.push('/')}
-                  className="px-4 py-2 rounded-lg font-medium text-sm border border-border-primary text-white hover:bg-white hover:text-black transition-all duration-300"
-                >
-                  View Website
-                </button>
+                <>
+                  <button
+                    onClick={() => router.push('/')}
+                    className="px-4 py-2 rounded-lg font-medium text-sm border border-border-primary text-white hover:bg-white hover:text-black transition-all duration-300"
+                  >
+                    View Website
+                  </button>
+                  <button
+                    onClick={() => router.push('/admin')}
+                    className="px-4 py-2 rounded-lg font-medium text-sm border border-border-primary text-white hover:bg-white hover:text-black transition-all duration-300"
+                  >
+                    Dashboard
+                  </button>
+                </>
               )}
             </div>
 
             {/* Desktop Navigation - Centered Pill Style */}
+            {!isAdminPage && (
             <div 
               ref={navItemsRef}
               className="hidden md:flex flex-1 justify-center"
@@ -227,6 +240,7 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
                 </ul>
               </div>
             </div>
+            )}
 
             {/* Desktop CTA and Social Links */}
             <div className="hidden md:flex items-center space-x-8">

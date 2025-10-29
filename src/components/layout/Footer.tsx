@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import { Instagram, Mail, ExternalLink } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import siteConfig from '@/data/siteConfig.json';
 import navigationData from '@/data/navigation.json';
@@ -14,7 +17,14 @@ export interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ className }) => {
+  const pathname = usePathname();
+  const isAdminPage = pathname?.startsWith('/admin');
   const currentYear = new Date().getFullYear();
+
+  // Hide footer on admin pages
+  if (isAdminPage) {
+    return null;
+  }
 
   // const getSocialIcon = (platform: string) => {
   //   switch (platform.toLowerCase()) {
