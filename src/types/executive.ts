@@ -2,7 +2,8 @@ export interface Executive {
   id: string;
   name: string;
   position: string;
-  foundingPosition: 'Co-Founder' | 'Founder';
+  title: string;
+  isCoFounder?: boolean;
   bio: string;
   image: string;
   email: string;

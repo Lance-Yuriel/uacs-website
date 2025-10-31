@@ -27,17 +27,33 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function migrateExecutives() {
   console.log('📊 Migrating executives data...');
   
+  // First, delete all existing executives to avoid duplicates
+  console.log('🗑️  Clearing existing executives...');
+  const { error: deleteError } = await supabase
+    .from('executives')
+    .delete()
+    .not('id', 'is', null); // Delete all rows
+  
+  if (deleteError) {
+    console.error('⚠️  Warning: Could not clear existing executives:', deleteError);
+    console.log('Continuing with migration (you may have duplicates)...');
+  } else {
+    console.log('✅ Cleared existing executives');
+  }
+  
   const executives = executivesData.executives.map((exec) => ({
+    id: exec.id,
     name: exec.name,
     position: exec.position,
-    title: exec.foundingPosition || null,
-    photo_url: exec.image || null,
-    short_bio: exec.bio || null,
-    introduction: null, // Will be added via admin interface later
-    degree: null, // Will be added via admin interface later
-    favourite_skills: null, // Will be added via admin interface later
+    title: exec.title || null,
+    is_co_founder: exec.isCoFounder ?? false,
+    bio: exec.bio || null,
+    image: exec.image || null,
+    responsibilities: exec.responsibilities || null,
+    joined_year: exec.joinedYear || null,
     email: exec.email || null,
     instagram: exec.instagram || null,
+    linked_in: (exec as any).linkedIn || null,
   }));
 
   const { data, error } = await supabase
@@ -56,35 +72,60 @@ async function migrateExecutives() {
 async function migrateEvents() {
   console.log('📅 Migrating events data...');
   
+  // First, delete all existing events to avoid duplicates
+  console.log('🗑️  Clearing existing events...');
+  const { error: deleteError } = await supabase
+    .from('events')
+    .delete()
+    .not('id', 'is', null); // Delete all rows
+  
+  if (deleteError) {
+    console.error('⚠️  Warning: Could not clear existing events:', deleteError);
+    console.log('Continuing with migration (you may have duplicates)...');
+  } else {
+    console.log('✅ Cleared existing events');
+  }
+  
   // Parse date strings to proper DATE format
   const events = eventsData.events.map((event) => {
     // Convert date like "Mon 29th Oct" to a proper date
-    // For now, we'll use the current year and the month/day
     let dateStr = event.date;
-    
-    // If it's a simple date format, try to parse it
-    // Otherwise, use a placeholder date
     let parsedDate: string;
     
+    // Parse date format like "Mon 29th Oct" or "Tue 14th Oct"
     try {
-      // Try to parse different date formats
       if (dateStr.includes('Oct')) {
-        parsedDate = '2025-10-29'; // Placeholder - you may need to adjust
+        // Extract day number from strings like "29th" or "6th" or "14th"
+        const dayMatch = dateStr.match(/(\d+)(?:st|nd|rd|th)/);
+        const day = dayMatch ? dayMatch[1].padStart(2, '0') : '01';
+        parsedDate = `${event.year || 2025}-10-${day}`;
+      } else if (dateStr.includes('[TO BE PROVIDED]') || dateStr === '[TO BE PROVIDED]') {
+        // Use a placeholder date for events that aren't scheduled yet
+        parsedDate = new Date().toISOString().split('T')[0];
       } else {
+        // Try to parse as-is or use current date as fallback
         parsedDate = new Date().toISOString().split('T')[0];
       }
     } catch {
       parsedDate = new Date().toISOString().split('T')[0];
     }
 
+    // Determine status based on date
+    const eventDate = new Date(parsedDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    eventDate.setHours(0, 0, 0, 0);
+    const status = eventDate >= today ? 'upcoming' : 'past';
+
     return {
+      id: event.id,
       event_name: event.title,
       date: parsedDate,
       time: null,
       location: null,
       description: event.description || null,
       google_drive_link: event.googleDriveLink || null,
-      status: 'past', // Assume past events for now
+      status: status,
     };
   });
 
