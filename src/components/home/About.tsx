@@ -63,11 +63,11 @@ const About: React.FC<AboutProps> = ({ className }) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
-      className={cn("space-y-16", className)}
+      className={cn("space-y-10", className)}
     >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             <GradientText
               colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
               animationSpeed={3}

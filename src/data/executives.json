@@ -4,7 +4,8 @@
       "id": "exec-001",
       "name": "Lance Villanueva",
       "position": "President",
-      "foundingPosition": "Co-Founder",
+      "title": "Executive",
+      "isCoFounder": true,
       "bio": "[TBA - Lance's bio]",
       "image": "/images/executives/lance-villanueva.jpg",
       "email": "uoacalisthenicssociety@gmail.com",
@@ -20,7 +21,8 @@
       "id": "exec-002",
       "name": "Arian Tavakoli",
       "position": "Treasurer",
-      "foundingPosition": "Co-Founder",
+      "title": "Executive",
+      "isCoFounder": true,
       "bio": "[TBA - Arian's bio]",
       "image": "/images/executives/arian.jpg",
       "email": "uoacalisthenicssociety@gmail.com",
@@ -36,7 +38,8 @@
       "id": "exec-003",
       "name": "Rex Yong",
       "position": "Secretary",
-      "foundingPosition": "Co-Founder",
+      "title": "Executive",
+      "isCoFounder": true,
       "bio": "[TBA - Rex's bio]",
       "image": "/images/executives/rex.jpg",
       "email": "uoacalisthenicssociety@gmail.com",
@@ -46,6 +49,23 @@
         "Meeting minutes and documentation",
         "Member communication and updates",
         "Administrative tasks and record keeping"
+      ]
+    },
+    {
+      "id": "exec-004",
+      "name": "Test Executive",
+      "position": "Vice President",
+      "title": "Executive",
+      "isCoFounder": false,
+      "bio": "This is a test executive to demonstrate the horizontal scroll feature.",
+      "image": "/images/executives/test.jpg",
+      "email": "test@example.com",
+      "instagram": "test_instagram",
+      "joinedYear": 2025,
+      "responsibilities": [
+        "Assisting the president",
+        "Coordinating events",
+        "Member engagement"
       ]
     }
   ]

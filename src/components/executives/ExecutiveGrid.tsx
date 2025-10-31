@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { GradientText } from '@/components/ui';
-import ExecutiveCard from './ExecutiveCard';
+import ExecutiveCarousel from './ExecutiveCarousel';
 import { ExecutiveData } from '@/types/executive';
 import executivesData from '@/data/executives.json';
 
@@ -43,11 +43,11 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
-      className={cn("space-y-16", className)}
+      className={cn("space-y-10", className)}
     >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             <GradientText
               colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
               animationSpeed={3}
@@ -63,16 +63,9 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
           </p>
         </motion.div>
 
-        {/* Executive Grid */}
-        <motion.div variants={itemVariants}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {executives.executives.map((executive) => (
-              <ExecutiveCard
-                key={executive.id}
-                executive={executive}
-              />
-            ))}
-          </div>
+        {/* Executive Carousel */}
+        <motion.div variants={itemVariants} className="max-w-7xl mx-auto">
+          <ExecutiveCarousel executives={executives.executives} />
         </motion.div>
 
         {/* Future Executives Message */}
