@@ -7,7 +7,9 @@ A modern, responsive website for the University of Auckland Calisthenics Society
 - **Aurora-inspired Design**: Dark theme with glassmorphism effects and purple accents
 - **Responsive Design**: Mobile-first approach with smooth animations
 - **Real-time Member Counter**: Google Sheets API integration
-- **Executive Profiles**: Dynamic team member showcase
+- **Executive Profiles**: Dynamic team member showcase backed by Supabase (full CRUD + photo uploads)
+- **Admin Dashboard & Preview**: Secure admin area with drag-and-drop ordering and live expanded-card preview
+- **Supabase Storage Uploads**: In-browser image validation, upload progress, and automatic modal preview updates
 - **Events Gallery**: Organized by year with collapsible sections
 - **Smooth Navigation**: Fixed navbar with active section highlighting
 - **SEO Optimized**: Proper metadata and structured data
@@ -20,7 +22,8 @@ A modern, responsive website for the University of Auckland Calisthenics Society
 - **Styling**: Tailwind CSS v4
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
-- **Data Fetching**: TanStack Query
+- **Backend**: Supabase (PostgreSQL + Auth + Storage)
+- **Data Fetching**: Supabase client SDKs & server helpers
 - **Deployment**: Vercel
 
 ## 📦 Installation
@@ -42,12 +45,20 @@ A modern, responsive website for the University of Auckland Calisthenics Society
    # Edit .env.local with your actual values
    ```
 
-4. **Start development server:**
+4. **Configure Supabase Storage:**
+   - Follow [`SUPABASE_STORAGE_SETUP.md`](./SUPABASE_STORAGE_SETUP.md) to create the `executive-photos` bucket and policies.
+
+5. **(Optional) Seed Supabase data from JSON:**
+   ```bash
+   npm run migrate
+   ```
+
+6. **Start development server:**
    ```bash
    npm run dev
    ```
 
-5. **Open in browser:**
+7. **Open in browser:**
    ```
    http://localhost:3000
    ```
@@ -58,10 +69,11 @@ A modern, responsive website for the University of Auckland Calisthenics Society
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
+- `npm run migrate` - Push `executives.json` and `events.json` into Supabase tables
 
 ## 📊 Google Sheets Integration
 
-The website includes a real-time member counter powered by Google Sheets API. See [SETUP.md](./SETUP.md) for detailed configuration instructions.
+The website includes a real-time member counter powered by Google Sheets API. See [SETUP.md](./SETUP.md) for detailed configuration instructions. Supabase setup instructions live in [`PROJECT_SUMMARY_PROMPT.md`](./PROJECT_SUMMARY_PROMPT.md) and [`SUPABASE_STORAGE_SETUP.md`](./SUPABASE_STORAGE_SETUP.md).
 
 ## 🎨 Design System
 
@@ -86,17 +98,17 @@ src/
 │   ├── ui/               # Reusable UI components
 │   ├── layout/           # Layout components
 │   ├── home/             # Homepage sections
-│   ├── executives/       # Executive team
-│   └── events/           # Events gallery
-├── data/                 # JSON data files
-├── lib/                  # Utility functions
+│   ├── executives/       # Public executive cards + modal
+│   └── admin/            # Admin CRUD forms & live preview
+├── data/                 # JSON data files (used by migration script)
+├── lib/                  # Utility functions & Supabase helpers
 ├── types/                # TypeScript interfaces
 └── hooks/                # Custom React hooks
 ```
 
 ## 📝 Content Management
 
-Most content can be updated by editing JSON files:
+The executive section is managed directly inside the admin dashboard (Supabase backed). The legacy JSON files remain for migration/testing:
 
 - `src/data/executives.json` - Executive team profiles
 - `src/data/events.json` - Past events
@@ -125,6 +137,9 @@ Most content can be updated by editing JSON files:
 Set these in your Vercel dashboard:
 
 ```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key # used by migration script only
 GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
 GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@project.iam.gserviceaccount.com
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KEY-----\n"
@@ -144,7 +159,7 @@ GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KEY-
 - [ ] Instagram feed embed
 - [ ] Newsletter subscription
 - [ ] Member portal with authentication
-- [ ] Admin dashboard
+- [ ] Events management dashboard (next focus)
 - [ ] Event registration system
 
 ## 🤝 Contributing
@@ -152,26 +167,3 @@ GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KEY-
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
 3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Contact
-
-- **Email**: uoacalisthenicssociety@gmail.com
-- **Instagram**: [@uacs_nz](https://instagram.com/uacs_nz)
-- **Website**: [https://uacs.vercel.app](https://uacs.vercel.app)
-
-## 🙏 Acknowledgments
-
-- Design inspiration from Aurora design system
-- Icons by [Lucide](https://lucide.dev)
-- Built with [Next.js](https://nextjs.org)
-- Deployed on [Vercel](https://vercel.com)
-
----
-
-**Made with ❤️ for the University of Auckland Calisthenics Society**
