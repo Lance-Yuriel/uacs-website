@@ -77,13 +77,13 @@ The website includes a real-time member counter powered by Google Sheets API. Se
 
 ## 🎨 Design System
 
-The website uses a custom Aurora-inspired design system with:
+The site now relies heavily on interactive pieces from [react-bits](https://github.com/cruip/react-bits) to deliver a dynamic feel:
 
-- **Colors**: Dark theme with purple (#8B5CF6) accents
-- **Typography**: Inter font family
-- **Effects**: Glassmorphism with backdrop blur
-- **Animations**: Smooth transitions and micro-interactions
-- **Layout**: Centered container with proper spacing
+- **Mood**: Dark, high-contrast palette with neutral greys and electric accent hues
+- **Typography**: Inter + custom weights for hierarchy
+- **Micro-interactions**: Hover reveals, parallax layers, and physics-inspired motion via Framer Motion + react-bits modules (Ripple, Magnetic, Spotlight, Noise)
+- **Layout**: Fluid spacing with stacked-to-two-column transitions for admin vs. public view
+- **Preview fidelity**: Shared layout component (`ExecutiveProfileContent`) ensures modal and admin preview stay pixel-perfect
 
 ## 📁 Project Structure
 
