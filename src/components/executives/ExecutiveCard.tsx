@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Instagram, Linkedin, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Instagram, ExternalLink, Maximize2, X } from 'lucide-react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, Badge } from '@/components/ui';
 import { Executive } from '@/types/executive';
+import ExecutiveModal from './ExecutiveModal';
 
 export interface ExecutiveCardProps {
   executive: Executive;
@@ -14,10 +15,23 @@ export interface ExecutiveCardProps {
 
 const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) => {
   const [imageError, setImageError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleImageError = () => {
     setImageError(true);
   };
+
+  useEffect(() => {
+    setImageError(false);
+  }, [executive.image]);
+
+  const getInitials = (name: string) =>
+    name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('');
 
   const getSocialIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
@@ -25,8 +39,6 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
         return <Mail className="h-4 w-4" />;
       case 'instagram':
         return <Instagram className="h-4 w-4" />;
-      case 'linkedin':
-        return <Linkedin className="h-4 w-4" />;
       default:
         return <ExternalLink className="h-4 w-4" />;
     }
@@ -34,19 +46,28 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
 
   const socialLinks = [
     { platform: 'Email', href: `mailto:${executive.email}`, icon: 'mail' },
-    ...(executive.instagram ? [{ platform: 'Instagram', href: executive.instagram, icon: 'instagram' }] : []),
-    ...(executive.linkedIn ? [{ platform: 'LinkedIn', href: executive.linkedIn, icon: 'linkedin' }] : [])
+    ...(executive.instagram ? [{ platform: 'Instagram', href: executive.instagram, icon: 'instagram' }] : [])
   ];
 
   return (
-    <div className={className}>
-      <Card className="h-[520px] flex flex-col !border-white bg-[#1a1a1a]/90" hover={false} glass={false}>
-        <CardContent className="flex-1 flex flex-col p-6 text-center h-full">
-          {/* Top Section - Fixed height */}
-          <div className="flex-shrink-0">
+    <>
+      <div className={className}>
+        <Card className="h-[520px] flex flex-col !border-white bg-[#1a1a1a]/90" hover={false} glass={false}>
+          <CardContent className="flex-1 flex flex-col p-6 text-center h-full relative">
+            {/* Expand Icon - Top Right */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="absolute top-4 right-4 z-10 p-2 rounded-lg bg-surface-card/50 backdrop-blur-sm border border-white/20 hover:bg-primary-500/20 hover:border-primary-400 transition-all duration-200 group"
+              aria-label={`Expand ${executive.name}'s profile`}
+            >
+              <Maximize2 className="h-4 w-4 text-text-secondary group-hover:text-primary-400 transition-colors" />
+            </button>
+
+            {/* Top Section - Fixed height */}
+            <div className="flex-shrink-0">
             {/* Profile Image */}
             <div className="relative w-20 h-20 mx-auto mb-3">
-              {!imageError ? (
+              {executive.image && !imageError ? (
                 <Image
                   src={executive.image}
                   alt={`${executive.name} - ${executive.position}`}
@@ -55,9 +76,9 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
                   onError={handleImageError}
                 />
               ) : (
-                <div className="w-full h-full rounded-full bg-surface-card border-2 border-border-default flex items-center justify-center">
-                  <span className="text-lg font-bold text-text-secondary">
-                    {executive.name.split(' ').map(n => n[0]).join('')}
+                <div className="w-full h-full rounded-full bg-surface-card border-2 border-white/60 flex items-center justify-center">
+                  <span className="text-lg font-bold text-white">
+                    {getInitials(executive.name)}
                   </span>
                 </div>
               )}
@@ -133,6 +154,17 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
         </CardContent>
       </Card>
     </div>
+
+    {/* Modal */}
+    <AnimatePresence>
+      {isModalOpen && (
+        <ExecutiveModal
+          executive={executive}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+    </AnimatePresence>
+  </>
   );
 };
 

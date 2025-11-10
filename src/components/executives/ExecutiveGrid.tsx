@@ -1,20 +1,63 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { GradientText } from '@/components/ui';
+import { GradientText, LoadingSpinner } from '@/components/ui';
 import ExecutiveCarousel from './ExecutiveCarousel';
-import { ExecutiveData } from '@/types/executive';
-import executivesData from '@/data/executives.json';
-
-const executives = executivesData as ExecutiveData;
+import { Executive } from '@/types/executive';
 
 export interface ExecutiveGridProps {
   className?: string;
 }
 
+// Map database executive to frontend Executive type
+function mapDatabaseExecutiveToExecutive(dbExec: any): Executive {
+  return {
+    id: dbExec.id,
+    name: dbExec.name,
+    position: dbExec.position,
+    title: dbExec.title || 'Executive',
+    isCoFounder: dbExec.is_co_founder || false,
+    bio: dbExec.bio || '[Bio coming soon]',
+    image: dbExec.image || '/images/executives/default.jpg',
+    email: dbExec.email || '',
+    instagram: dbExec.instagram || undefined,
+    joinedYear: dbExec.joined_year || new Date().getFullYear(),
+    responsibilities: dbExec.responsibilities || [],
+    // Extended fields
+    introduction: dbExec.introduction || undefined,
+    degree: dbExec.degree || undefined,
+    favouriteSkills: dbExec.favourite_skills || undefined,
+  };
+}
+
 const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
+  const [executives, setExecutives] = useState<Executive[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchExecutives();
+  }, []);
+
+  const fetchExecutives = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch('/api/executives');
+      if (!response.ok) throw new Error('Failed to fetch executives');
+      const data = await response.json();
+      // Map database format to frontend format
+      const mappedExecutives = data.map(mapDatabaseExecutiveToExecutive);
+      setExecutives(mappedExecutives);
+    } catch (err) {
+      console.error('Error fetching executives:', err);
+      setError('Failed to load executives');
+    } finally {
+      setLoading(false);
+    }
+  };
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -65,7 +108,21 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
 
         {/* Executive Carousel */}
         <motion.div variants={itemVariants} className="max-w-7xl mx-auto">
-          <ExecutiveCarousel executives={executives.executives} />
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <LoadingSpinner size="lg" />
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-text-secondary">{error}</p>
+            </div>
+          ) : executives.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-text-secondary">No executives found.</p>
+            </div>
+          ) : (
+            <ExecutiveCarousel executives={executives} />
+          )}
         </motion.div>
 
         {/* Future Executives Message */}
