@@ -15,15 +15,11 @@ export interface Database {
           joined_year: number | null;
           email: string | null;
           instagram: string | null;
-          linked_in: string | null;
+          introduction: string | null;
+          degree: string | null;
+          favourite_skills: string[] | null;
           created_at: string;
           updated_at: string;
-          // Legacy columns (can be removed after migration)
-          photo_url?: string | null;
-          short_bio?: string | null;
-          introduction?: string | null;
-          degree?: string | null;
-          favourite_skills?: string[] | null;
         };
         Insert: {
           id?: string;
@@ -38,6 +34,9 @@ export interface Database {
           email?: string | null;
           instagram?: string | null;
           linked_in?: string | null;
+          introduction?: string | null;
+          degree?: string | null;
+          favourite_skills?: string[] | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -54,6 +53,9 @@ export interface Database {
           email?: string | null;
           instagram?: string | null;
           linked_in?: string | null;
+          introduction?: string | null;
+          degree?: string | null;
+          favourite_skills?: string[] | null;
           created_at?: string;
           updated_at?: string;
         };

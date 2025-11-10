@@ -20,7 +20,10 @@ CREATE TABLE executives (
   joined_year INTEGER,
   email TEXT,
   instagram TEXT,
-  linked_in TEXT,
+  introduction TEXT,
+  degree TEXT,
+  favourite_skills TEXT[],
+  display_order INTEGER DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -98,6 +101,8 @@ CREATE POLICY "Allow public delete on events"
   ON events FOR DELETE
   USING (true);
 
+-- Step 8: Create index for display_order for efficient sorting
+CREATE INDEX IF NOT EXISTS idx_executives_display_order ON executives(display_order);
+
 -- Note: After running this schema, run the migration script to populate data:
 -- npm run migrate
-

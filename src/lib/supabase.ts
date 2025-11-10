@@ -1,7 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-// Check if we're on the client or server side
-const isClient = typeof window !== 'undefined';
+import { createBrowserClient } from '@supabase/ssr';
 
 // Environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -12,14 +9,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Supabase environment variables are not set. Database features will be disabled.');
 }
 
-// Create Supabase client for server-side usage
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: isClient,
-    detectSessionInUrl: isClient,
-  },
-});
+// Create Supabase client for client-side usage with SSR cookie support
+// This ensures cookies are set properly for API routes to read them
+export const supabase = createBrowserClient(
+  supabaseUrl,
+  supabaseAnonKey
+);
 
 // Export types for TypeScript
 export type { Database } from '@/types/database';

@@ -53,7 +53,9 @@ async function migrateExecutives() {
     joined_year: exec.joinedYear || null,
     email: exec.email || null,
     instagram: exec.instagram || null,
-    linked_in: (exec as any).linkedIn || null,
+    introduction: (exec as any).introduction || null,
+    degree: (exec as any).degree || null,
+    favourite_skills: (exec as any).favouriteSkills || null,
   }));
 
   const { data, error } = await supabase

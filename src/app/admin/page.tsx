@@ -81,7 +81,12 @@ export default function AdminDashboard() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card glass={false} hover={false} className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white [&:hover_*]:text-black">
+            <Card 
+              glass={false} 
+              hover={false} 
+              className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white [&:hover_*]:text-black"
+              onClick={() => router.push('/admin/executives')}
+            >
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="p-4 bg-primary-500/10 rounded-lg">

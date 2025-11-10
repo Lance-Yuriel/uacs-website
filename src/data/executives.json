@@ -15,7 +15,10 @@
         "Overall club leadership and strategy",
         "External partnerships and sponsorships",
         "Event coordination and planning"
-      ]
+      ],
+      "introduction": null,
+      "degree": null,
+      "favouriteSkills": null
     },
     {
       "id": "exec-002",
@@ -32,7 +35,10 @@
         "Financial management and budgeting",
         "Membership fees and payments",
         "Equipment procurement and maintenance"
-      ]
+      ],
+      "introduction": null,
+      "degree": null,
+      "favouriteSkills": null
     },
     {
       "id": "exec-003",
@@ -49,7 +55,10 @@
         "Meeting minutes and documentation",
         "Member communication and updates",
         "Administrative tasks and record keeping"
-      ]
+      ],
+      "introduction": null,
+      "degree": null,
+      "favouriteSkills": null
     },
     {
       "id": "exec-004",
@@ -57,7 +66,7 @@
       "position": "Vice President",
       "title": "Executive",
       "isCoFounder": false,
-      "bio": "This is a test executive to demonstrate the horizontal scroll feature.",
+      "bio": "Test exec for scroll feature",
       "image": "/images/executives/test.jpg",
       "email": "test@example.com",
       "instagram": "test_instagram",
@@ -66,7 +75,10 @@
         "Assisting the president",
         "Coordinating events",
         "Member engagement"
-      ]
+      ],
+      "introduction": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "degree": "BSc Computer Science",
+      "favouriteSkills": ["Handstand", "L-Sit", "Muscle-Up"]
     }
   ]
 }

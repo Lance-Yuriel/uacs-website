@@ -8,9 +8,12 @@ export interface Executive {
   image: string;
   email: string;
   instagram?: string;
-  linkedIn?: string;
   joinedYear: number;
   responsibilities: string[];
+  // Extended fields for expanded view
+  introduction?: string;
+  degree?: string;
+  favouriteSkills?: string[]; // Max 3 skills
 }
 
 export interface ExecutiveData {
