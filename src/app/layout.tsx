@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { PillNavbar, Footer, ScrollToTop } from "@/components/layout";
+import AutoHideScrollbar from "@/components/layout/AutoHideScrollbar";
+import SmartSnapScroll from "@/components/layout/SmartSnapScroll";
 import { LiquidEther } from "@/components/ui";
 import { AuthProvider } from "@/contexts/AuthContext";
 import siteConfig from "@/data/siteConfig.json";
@@ -25,6 +27,12 @@ export const metadata: Metadata = {
   description: site.meta.description,
   keywords: site.meta.keywords,
   authors: [{ name: "UACS Executive Team" }],
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
   openGraph: {
     title: site.name,
     description: site.meta.description,
@@ -48,6 +56,8 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${inter.variable} ${bricolageGrotesque.variable} font-sans antialiased`}>
         <AuthProvider>
+          <AutoHideScrollbar />
+          <SmartSnapScroll />
           <ScrollToTop />
           
           {/* Global LiquidEther Background */}

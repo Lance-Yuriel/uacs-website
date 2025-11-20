@@ -75,8 +75,9 @@ function SortableExecutiveCard({ executive, onEdit, onDelete, deleting }: Sortab
             <button
               {...attributes}
               {...listeners}
-              className="cursor-grab active:cursor-grabbing p-1.5 hover:bg-surface-card-hover rounded transition-colors mt-0.5 flex-shrink-0"
+              className="cursor-grab active:cursor-grabbing p-2 hover:bg-surface-card-hover rounded transition-colors mt-0.5 flex-shrink-0 touch-manipulation"
               aria-label="Drag to reorder"
+              style={{ minWidth: '44px', minHeight: '44px' }}
             >
               <GripVertical className="h-4 w-4 text-text-tertiary hover:text-text-secondary" />
             </button>
@@ -106,7 +107,7 @@ function SortableExecutiveCard({ executive, onEdit, onDelete, deleting }: Sortab
           
           {/* Bio Section */}
           {executive.bio && (
-            <div className="mb-4 flex-1 min-h-[48px] ml-11">
+            <div className="mb-4 flex-1 min-h-[48px] ml-[56px]">
               <p className="text-text-secondary text-sm leading-relaxed line-clamp-2">
                 {executive.bio}
               </p>
@@ -117,7 +118,8 @@ function SortableExecutiveCard({ executive, onEdit, onDelete, deleting }: Sortab
           <div className="flex gap-2 pt-4 border-t border-border-default mt-auto">
             <button
               onClick={() => onEdit(executive)}
-              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all duration-200 text-sm font-medium border border-primary-500/30 hover:border-primary-500/50"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all duration-200 text-sm font-medium border border-primary-500/30 hover:border-primary-500/50 touch-manipulation"
+              style={{ minHeight: '44px' }}
             >
               <Pencil className="h-4 w-4" />
               <span>Edit</span>
@@ -125,7 +127,8 @@ function SortableExecutiveCard({ executive, onEdit, onDelete, deleting }: Sortab
             <button
               onClick={() => onDelete(executive.id)}
               disabled={deleting === executive.id}
-              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg transition-all duration-200 text-sm font-medium border border-red-500/30 hover:border-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg transition-all duration-200 text-sm font-medium border border-red-500/30 hover:border-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+              style={{ minHeight: '44px' }}
             >
               {deleting === executive.id ? (
                 <>
@@ -321,15 +324,17 @@ export default function AdminExecutivesPage() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+            <div className="flex items-center gap-3 sm:gap-4">
               <button
                 onClick={() => router.push('/admin')}
-                className="p-2 hover:bg-surface-card rounded-lg transition-colors"
+                className="p-2.5 hover:bg-surface-card rounded-lg transition-colors touch-manipulation"
+                style={{ minWidth: '44px', minHeight: '44px' }}
+                aria-label="Back to dashboard"
               >
                 <ArrowLeft className="h-5 w-5 text-white" />
               </button>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-display tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-display tracking-tight">
                 <GradientText
                   colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
                   animationSpeed={3}
@@ -340,10 +345,12 @@ export default function AdminExecutivesPage() {
             </div>
             <Button
               onClick={handleAddClick}
-              className="bg-primary-500 hover:bg-primary-600 text-white"
+              className="bg-primary-500 hover:bg-primary-600 text-white touch-manipulation w-full sm:w-auto"
+              style={{ minHeight: '44px' }}
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add Executive
+              <span className="hidden sm:inline">Add Executive</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           </div>
 

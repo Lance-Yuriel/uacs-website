@@ -101,9 +101,10 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
             <div className="pt-4">
               <a
                 href={site.links.joinForm}
-                className="inline-flex items-center px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-semibold"
+                className="inline-flex items-center justify-center px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-semibold touch-manipulation"
                 target="_blank"
                 rel="noopener noreferrer"
+                style={{ minHeight: '44px' }}
               >
                 Join UACS
               </a>

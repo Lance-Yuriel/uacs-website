@@ -289,28 +289,31 @@ const ExecutiveCarousel: React.FC<ExecutiveCarouselProps> = ({ executives, class
       {/* Navigation Buttons */}
       <button
         onClick={handlePrev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-surface-card/90 backdrop-blur-sm border border-border-default rounded-full p-3 hover:bg-surface-card hover:border-primary-500/50 transition-colors shadow-lg"
+        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 bg-surface-card/90 backdrop-blur-sm border border-border-default rounded-full p-3 md:p-3 transition-all duration-300 shadow-lg group hover:bg-primary-500/25 hover:border-primary-400 hover:shadow-primary-500/40 hover:shadow-2xl hover:scale-110 active:scale-95 touch-manipulation"
         aria-label="Previous executive"
+        style={{ minWidth: '44px', minHeight: '44px' }}
       >
-        <ChevronLeft className="h-5 w-5 text-white" />
+        <ChevronLeft className="h-5 w-5 md:h-5 md:w-5 text-white group-hover:text-primary-200 transition-colors duration-300" />
       </button>
       
       <button
         onClick={handleNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-surface-card/90 backdrop-blur-sm border border-border-default rounded-full p-3 hover:bg-surface-card hover:border-primary-500/50 transition-colors shadow-lg"
+        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 bg-surface-card/90 backdrop-blur-sm border border-border-default rounded-full p-3 md:p-3 transition-all duration-300 shadow-lg group hover:bg-primary-500/25 hover:border-primary-400 hover:shadow-primary-500/40 hover:shadow-2xl hover:scale-110 active:scale-95 touch-manipulation"
         aria-label="Next executive"
+        style={{ minWidth: '44px', minHeight: '44px' }}
       >
-        <ChevronRight className="h-5 w-5 text-white" />
+        <ChevronRight className="h-5 w-5 md:h-5 md:w-5 text-white group-hover:text-primary-200 transition-colors duration-300" />
       </button>
 
       {/* Carousel Container */}
       <div
         ref={containerRef}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-16 py-4"
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 sm:px-8 md:px-16 py-4"
         style={{
           scrollSnapType: 'x mandatory',
           WebkitOverflowScrolling: 'touch',
-        }}
+          touchAction: 'pan-x',
+        } as React.CSSProperties}
         onScroll={() => updateIndexRef.current?.()}
       >
         {infiniteExecutives.map((executive, index) => {
@@ -323,7 +326,7 @@ const ExecutiveCarousel: React.FC<ExecutiveCarouselProps> = ({ executives, class
           return (
             <div
               key={`${executive.id}-${index}`}
-              className="flex-shrink-0 snap-center w-full md:w-[48%] lg:w-[35%] px-2"
+              className="flex-shrink-0 snap-center w-[85%] sm:w-[70%] md:w-[48%] lg:w-[35%] px-2"
               style={{
                 transform: isCenter ? 'scale(1)' : 'scale(0.85)',
                 opacity: isCenter ? 1 : 0.6,
@@ -342,12 +345,13 @@ const ExecutiveCarousel: React.FC<ExecutiveCarouselProps> = ({ executives, class
           <button
             key={index}
             onClick={() => scrollToIndex(index)}
-            className={`h-2 rounded-full transition-all ${
+            className={`h-2 rounded-full transition-all touch-manipulation ${
               index === currentIndex
                 ? 'bg-primary-500 w-8'
                 : 'bg-border-default w-2 hover:bg-border-emphasis'
             }`}
             aria-label={`Go to executive ${index + 1}`}
+            style={{ minWidth: '32px', minHeight: '32px', padding: '8px' }}
           />
         ))}
       </div>

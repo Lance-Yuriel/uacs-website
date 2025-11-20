@@ -6,7 +6,7 @@ html {
 }
 
 html, body {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: none;
 }
 
 /* Gradient Text Animation */
@@ -74,6 +74,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Improve touch performance on mobile */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Glassmorphism utility classes */
@@ -125,21 +128,80 @@ body {
 }
 
 /* Scrollbar styling */
+html ::-webkit-scrollbar,
+body ::-webkit-scrollbar,
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 15px;
 }
 
+html ::-webkit-scrollbar-track,
+body ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track {
   background: var(--background-secondary);
 }
 
+html ::-webkit-scrollbar-thumb,
+body ::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb {
   background: var(--border-default);
   border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.5s;
 }
 
+html ::-webkit-scrollbar-thumb:hover,
+body ::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:hover {
   background: var(--border-emphasis);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* Show scrollbar when scrolling */
+html.scrolling ::-webkit-scrollbar-thumb,
+html.scrolling body ::-webkit-scrollbar-thumb {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.5s ease 0.5s;
+}
+
+html.scrolling {
+  scrollbar-color: var(--border-default) var(--background-secondary);
+  transition: scrollbar-color 0.2s ease;
+}
+
+html.scrolling ::-webkit-scrollbar-thumb {
+  opacity: 1;
+}
+
+/* Executive modal scrollbar - thin */
+#executive-modal-scroll-container {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #27272A transparent; /* Firefox */
+}
+
+#executive-modal-scroll-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+#executive-modal-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#executive-modal-scroll-container::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 3px;
+}
+
+#executive-modal-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
 }
 
 /* Hide scrollbar utility */

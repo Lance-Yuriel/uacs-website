@@ -17,6 +17,7 @@ import { supabase } from '@/lib/supabase';
 import { Badge, Button, Card, CardContent, GradientText } from '@/components/ui';
 import { motion } from 'framer-motion';
 import EventForm from '@/components/admin/EventForm';
+import { formatTime12Hour } from '@/lib/utils';
 import type { EventWithMeta, EventsResponse } from '@/types/event';
 
 export default function AdminEventsPage() {
@@ -147,17 +148,18 @@ export default function AdminEventsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background-primary via-background-secondary to-background-primary py-24 px-4">
       <div className="max-w-6xl mx-auto space-y-12">
-        <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="flex items-center gap-4">
+        <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
+          <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={() => router.push('/admin')}
-              className="p-2 hover:bg-surface-card rounded-lg transition-colors"
+              className="p-2.5 hover:bg-surface-card rounded-lg transition-colors touch-manipulation"
               aria-label="Back to Dashboard"
+              style={{ minWidth: '44px', minHeight: '44px' }}
             >
               <ArrowLeft className="h-5 w-5 text-white" />
             </button>
             <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-display tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-display tracking-tight">
                 <GradientText
                   colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
                   animationSpeed={3}
@@ -165,17 +167,19 @@ export default function AdminEventsPage() {
                   Manage Events
                 </GradientText>
               </h1>
-              <p className="text-text-secondary mt-2">
+              <p className="text-text-secondary mt-2 text-sm sm:text-base">
                 Create upcoming events, update details, and upload photo galleries for past sessions.
               </p>
             </div>
           </div>
           <Button
             onClick={handleAddEvent}
-            className="bg-primary-500 hover:bg-primary-600 text-white self-start md:self-auto"
+            className="bg-primary-500 hover:bg-primary-600 text-white self-start md:self-auto touch-manipulation w-full sm:w-auto"
+            style={{ minHeight: '44px' }}
           >
             <Plus className="h-4 w-4 mr-2" />
-            Add Event
+            <span className="hidden sm:inline">Add Event</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </header>
 
@@ -255,7 +259,7 @@ export default function AdminEventsPage() {
                       {item.time && (
                         <div className="flex items-center gap-2">
                           <Clock className="h-4 w-4" />
-                          <span>{item.time}</span>
+                          <span>{formatTime12Hour(item.time) || item.time}</span>
                         </div>
                       )}
                       {item.location && (
@@ -376,7 +380,7 @@ export default function AdminEventsPage() {
                       {item.time && (
                         <div className="flex items-center gap-2">
                           <Clock className="h-4 w-4" />
-                          <span>{item.time}</span>
+                          <span>{formatTime12Hour(item.time) || item.time}</span>
                         </div>
                       )}
                       {item.location && (

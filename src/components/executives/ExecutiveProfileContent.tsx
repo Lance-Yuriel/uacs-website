@@ -86,7 +86,7 @@ const ExecutiveProfileContent: React.FC<ExecutiveProfileContentProps> = ({
   const headerImageSize = 'w-28 h-28 md:w-32 md:h-32';
 
   return (
-    <div className={`flex flex-col h-full gap-5 ${className}`}>
+    <div className={`flex flex-col gap-5 ${className}`} style={{ minHeight: 'fit-content' }}>
       <div className="flex items-start gap-5">
         <div className={`relative ${headerImageSize} flex-shrink-0`}>
           {executive.image && !imageError ? (
@@ -178,7 +178,6 @@ const ExecutiveProfileContent: React.FC<ExecutiveProfileContentProps> = ({
                 <ul className="space-y-1.5">
                   {responsibilitiesList.map((responsibility, index) => (
                     <li key={`${responsibility}-${index}`} className="text-[15px] md:text-[16px] text-text-secondary flex items-start">
-                      <span className="text-primary-400 mr-2 mt-1">•</span>
                       <span className="leading-relaxed">{responsibility}</span>
                     </li>
                   ))}
