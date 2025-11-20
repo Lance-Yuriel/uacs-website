@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { PillNavbar, Footer, ScrollToTop } from "@/components/layout";
 import { LiquidEther } from "@/components/ui";
@@ -12,6 +12,12 @@ const site = siteConfig as SiteConfig;
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+const bricolageGrotesque = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -40,7 +46,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${bricolageGrotesque.variable} font-sans antialiased`}>
         <AuthProvider>
           <ScrollToTop />
           

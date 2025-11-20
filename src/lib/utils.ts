@@ -19,6 +19,30 @@ export function formatDate(date: string): string {
   }
 }
 
+export function formatTime12Hour(time: string | null | undefined): string | null {
+  if (!time) return null;
+  
+  try {
+    // Handle HH:MM or HH:MM:SS format
+    const [hourStr, minuteStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr || '0', 10);
+    
+    if (isNaN(hour) || isNaN(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+      return time; // Return original if invalid
+    }
+    
+    const period = hour >= 12 ? 'PM' : 'AM';
+    let displayHour = hour % 12;
+    if (displayHour === 0) displayHour = 12; // 0 and 12 both become 12
+    
+    return `${displayHour}:${String(minute).padStart(2, '0')} ${period}`;
+  } catch (error) {
+    console.error('Error formatting time:', error);
+    return time; // Return original on error
+  }
+}
+
 export function scrollToSection(sectionId: string): void {
   const element = document.getElementById(sectionId.replace('#', ''));
   if (element) {

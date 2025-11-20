@@ -1,27 +1,38 @@
-export interface Event {
+export type EventStatus = 'upcoming' | 'past';
+
+export interface EventDTO {
   id: string;
-  title: string;
+  eventName: string;
+  date: string; // ISO date string (YYYY-MM-DD)
+  time: string | null; // HH:MM or HH:MM:SS
+  location: string | null;
+  description: string | null;
+  googleDriveLink: string | null;
+  registrationLink: string | null;
+  status: EventStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EventWithMeta extends EventDTO {
+  year: number;
+  daysUntil: number | null;
+  countdownMessage: string | null;
+  isHappeningToday: boolean;
+}
+
+export interface EventsResponse {
+  upcoming: EventWithMeta[];
+  past: EventWithMeta[];
+}
+
+export interface EventFormState {
+  id?: string;
+  eventName: string;
   date: string;
+  time: string;
+  location: string;
   description: string;
   googleDriveLink: string;
-  attendees?: number;
-  highlights?: string[];
-  year: number;
-}
-
-export interface EventData {
-  events: Event[];
-}
-
-export interface UpcomingEvent {
-  id: string;
-  title: string;
-  date: string;
-  description: string;
-  location?: string;
-  registrationLink?: string;
-}
-
-export interface UpcomingEventData {
-  events: UpcomingEvent[];
+  registrationLink: string;
 }

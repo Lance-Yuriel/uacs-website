@@ -37,6 +37,7 @@ CREATE TABLE events (
   location TEXT,
   description TEXT,
   google_drive_link TEXT,
+  registration_link TEXT,
   status TEXT DEFAULT 'past' CHECK (status IN ('upcoming', 'past')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

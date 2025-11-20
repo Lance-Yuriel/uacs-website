@@ -1,169 +1,138 @@
 # UACS Website
 
-A modern, responsive website for the University of Auckland Calisthenics Society built with Next.js, TypeScript, and Tailwind CSS.
+A Next.js 15 App Router site for the University of Auckland Calisthenics Society (UACS). The app combines a public marketing site with authenticated admin tools backed by Supabase.
 
-## 🌟 Features
+## Overview
 
-- **Aurora-inspired Design**: Dark theme with glassmorphism effects and purple accents
-- **Responsive Design**: Mobile-first approach with smooth animations
-- **Real-time Member Counter**: Google Sheets API integration
-- **Executive Profiles**: Dynamic team member showcase backed by Supabase (full CRUD + photo uploads)
-- **Admin Dashboard & Preview**: Secure admin area with drag-and-drop ordering and live expanded-card preview
-- **Supabase Storage Uploads**: In-browser image validation, upload progress, and automatic modal preview updates
-- **Events Gallery**: Organized by year with collapsible sections
-- **Smooth Navigation**: Fixed navbar with active section highlighting
-- **SEO Optimized**: Proper metadata and structured data
-- **TypeScript**: Full type safety throughout the application
+- **Public experience**: Aurora-inspired design, dynamic hero with live member count, executive carousel with modal details, smooth motion via Framer Motion, and responsive layout with Tailwind CSS 4.
+- **Admin experience**: Secure Supabase-authenticated dashboards where committee members manage executive profiles, upload images, and preview cards in real time.
+- **Data sources**: Supabase Postgres for structured content and Google Sheets for real-time member statistics. API routes use `@supabase/ssr` helpers for cookie-aware sessions.
 
-## 🚀 Tech Stack
+## Key Features
+
+- **Real-time Member Counter**: Reads from Google Sheets with smart caching (`s-maxage=300`, `stale-while-revalidate=600`) and graceful fallbacks.
+- **Executive Management System**: CRUD via `/admin/executives`, drag-and-drop ordering, rich modal previews, and Supabase Storage-backed image uploads.
+- **Executive Carousel**: Infinite snap-scroll carousel with emphasized center card, expansions handled by `ExecutiveModal` sharing layout via `ExecutiveProfileContent`.
+- **Authentication & Authorization**: Supabase Auth integration (SSR-compatible), middleware session refresh, and app-wide `AuthContext`.
+- **Admin Dashboard**: Personalized welcome, quick stats, and navigation to management tools; admin navigation elements appear only when signed in.
+
+## Tech Stack
 
 - **Framework**: Next.js 15.5.6 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **Animations**: Framer Motion
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4 + custom tokens
+- **Animations**: Framer Motion 12
 - **Icons**: Lucide React
-- **Backend**: Supabase (PostgreSQL + Auth + Storage)
-- **Data Fetching**: Supabase client SDKs & server helpers
+- **Backend**: Supabase (PostgreSQL, Auth, Storage)
+- **Utilities**: Google Sheets API, `@supabase/ssr`
 - **Deployment**: Vercel
 
-## 📦 Installation
+## Getting Started
 
-1. **Clone the repository:**
+1. **Clone & install**
    ```bash
    git clone https://github.com/yourusername/uacs-website.git
    cd uacs-website
-   ```
-
-2. **Install dependencies:**
-   ```bash
    npm install
    ```
-
-3. **Set up environment variables:**
+2. **Environment variables**
    ```bash
    cp .env.example .env.local
-   # Edit .env.local with your actual values
+   # Populate .env.local with Supabase + Google credentials (see below)
    ```
-
-4. **Configure Supabase Storage:**
-   - Follow [`SUPABASE_STORAGE_SETUP.md`](./SUPABASE_STORAGE_SETUP.md) to create the `executive-photos` bucket and policies.
-
-5. **(Optional) Seed Supabase data from JSON:**
-   ```bash
-   npm run migrate
-   ```
-
-6. **Start development server:**
+3. **Run locally**
    ```bash
    npm run dev
    ```
+4. **Open the site**: `http://localhost:3000`
 
-7. **Open in browser:**
-   ```
-   http://localhost:3000
-   ```
+### Required Environment Variables
 
-## 🔧 Available Scripts
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run migrate` - Push `executives.json` and `events.json` into Supabase tables
+# Optional service key (CLI scripts only)
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
-## 📊 Google Sheets Integration
+# Google Sheets member count
+GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
+GOOGLE_SHEETS_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
+GOOGLE_SHEETS_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KEY-----\n"
+```
 
-The website includes a real-time member counter powered by Google Sheets API. See [SETUP.md](./SETUP.md) for detailed configuration instructions. Supabase setup instructions live in [`PROJECT_SUMMARY_PROMPT.md`](./PROJECT_SUMMARY_PROMPT.md) and [`SUPABASE_STORAGE_SETUP.md`](./SUPABASE_STORAGE_SETUP.md).
+### Available Scripts
 
-## 🎨 Design System
+- `npm run dev` – Start development server (Turbopack)
+- `npm run build` – Production build
+- `npm run start` – Run production server
+- `npm run lint` – ESLint
+- `npm run migrate` – Seed Supabase tables from JSON data
 
-The site now relies heavily on interactive pieces from [react-bits](https://github.com/cruip/react-bits) to deliver a dynamic feel:
+## Documentation & Setup Guides
 
-- **Mood**: Dark, high-contrast palette with neutral greys and electric accent hues
-- **Typography**: Inter + custom weights for hierarchy
-- **Micro-interactions**: Hover reveals, parallax layers, and physics-inspired motion via Framer Motion + react-bits modules (Ripple, Magnetic, Spotlight, Noise)
-- **Layout**: Fluid spacing with stacked-to-two-column transitions for admin vs. public view
-- **Preview fidelity**: Shared layout component (`ExecutiveProfileContent`) ensures modal and admin preview stay pixel-perfect
+- **Supabase project bootstrap**: `SETUP_SUPABASE.md`
+- **Admin authentication**: `SETUP_ADMIN_AUTH.md`
+- **Supabase Storage for executive photos**: `SUPABASE_STORAGE_SETUP.md`
+- **Local + deployment quick reference**: `SETUP.md`
 
-## 📁 Project Structure
+Each guide focuses on a specific operational area; the README stays high-level to avoid duplication.
+
+## Architecture Notes
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── page.tsx           # Main homepage
-│   ├── layout.tsx         # Root layout
-│   ├── globals.css        # Global styles
-│   └── api/               # API routes
-├── components/            # React components
-│   ├── ui/               # Reusable UI components
-│   ├── layout/           # Layout components
-│   ├── home/             # Homepage sections
-│   ├── executives/       # Public executive cards + modal
-│   └── admin/            # Admin CRUD forms & live preview
-├── data/                 # JSON data files (used by migration script)
-├── lib/                  # Utility functions & Supabase helpers
-├── types/                # TypeScript interfaces
-└── hooks/                # Custom React hooks
+├── app/
+│   ├── api/               # Supabase-powered Next.js API routes
+│   ├── admin/             # Auth-protected admin pages
+│   └── layout.tsx         # Wraps site with AuthProvider
+├── components/
+│   ├── executives/        # Carousel, modal, shared profile content
+│   ├── admin/             # Forms & previews used in dashboard
+│   └── home/              # Hero member counter and landing sections
+├── contexts/              # Auth context for client components
+├── lib/                   # Supabase clients, Google Sheets helpers, utilities
+└── types/                 # Shared TypeScript contracts
 ```
 
-## 📝 Content Management
+### Executive Validation Rules
 
-The executive section is managed directly inside the admin dashboard (Supabase backed). The legacy JSON files remain for migration/testing:
+- **Name**: ≤ 32 characters (≈ 4-5 words); live validation with error messaging.
+- **Bio**: ≤ 50 characters; live counter with friendly error messaging.
+- **Introduction**: 700-750 characters (≈ 112-120 words); real-time counter and error state.
+- **Favourite skills**: ≤ 3 comma-separated values; live badge preview and error when exceeded.
+- **Images**: 20 MB max, JPEG/PNG/WebP; validated before upload.
 
-- `src/data/executives.json` - Executive team profiles
-- `src/data/events.json` - Past events
-- `src/data/siteConfig.json` - Site configuration
-- `src/data/navigation.json` - Navigation links
+These rules are enforced in `ExecutiveForm` with immediate feedback, matching the layout used in the public modal preview.
 
-## 🚀 Deployment
+## Security & Deployment
 
-### Vercel (Recommended)
+- Secrets live in `.env.local` (never committed). Production variables configured in Vercel.
+- Supabase RLS policies permit public reads while restricting writes to authenticated admins.
+- Admin pages hide from unauthenticated visitors and redirect to `/admin/login`.
+- Deploy to Vercel by connecting your repository, setting environment variables, and pushing to `main`.
 
-1. **Push to GitHub:**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
+## Upcoming Feature: Events Management
 
-2. **Deploy to Vercel:**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Import your GitHub repository
-   - Add environment variables
-   - Deploy!
+- **Database**: Supabase `events` table with `id`, `event_name`, `date`, `time`, `location`, optional `description` (past events only), optional `google_drive_link`, `status` (`upcoming` | `past`), and timestamps.
+- **Admin experience**: `/admin/events` CRUD surface with live previews, ability to update any field (date/time/location changes included), and automatic status transitions when event dates pass.
+- **Public upcoming events**:
+  - Chronologically sorted cards showing name, date/time, location.
+  - Dynamic message per event: `"X days until [Event Name]!"` or `"[Event Name] is happening today!"`.
+- **Public past events**:
+  - Automatically moves events once the date passes.
+  - Cards grouped by year (e.g., 2024, 2025) with space for descriptions and a Google Drive gallery link.
+  - Before photos are available, display a `Photos coming soon` button placeholder; when a link exists, show a `View photos` action.
+- **Validation**:
+  - Event name: ≤ 32 characters (≈ 4-5 words)
+  - Location: ≤ 50 characters
+  - Description: ≤ 210 characters (~24 words)
+  - All validations include real-time counters, error messaging, and enforced submission guardrails.
 
-### Environment Variables
-
-Set these in your Vercel dashboard:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key # used by migration script only
-GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
-GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@project.iam.gserviceaccount.com
-GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KEY-----\n"
-```
-
-## 🛡️ Security
-
-- ✅ Environment variables properly configured
-- ✅ Service account with minimal permissions
-- ✅ No secrets committed to version control
-- ✅ HTTPS enforced in production
-- ✅ Input validation and error handling
-
-## 🔄 Future Enhancements
-
-- [ ] Google Calendar integration
-- [ ] Instagram feed embed
-- [ ] Newsletter subscription
-- [ ] Member portal with authentication
-- [ ] Events management dashboard (next focus)
-- [ ] Event registration system
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
+2. Create a feature branch: `git checkout -b feature/your-change`
+3. Commit: `git commit -m "Describe your change"`
+4. Open a pull request

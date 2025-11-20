@@ -84,7 +84,7 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
         }}
         className={`flex justify-center ${className || ''}`}
       >
-        <Card className="max-w-md w-full" hover={true}>
+        <Card className="max-w-md w-full transition-transform duration-300 hover:scale-[1.02]" hover={true}>
           <CardContent className="p-8">
             <div className="text-center">
               <User className="h-12 w-12 text-text-tertiary mx-auto mb-4 animate-pulse" />
@@ -106,7 +106,7 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
         }}
         className={`flex justify-center ${className || ''}`}
       >
-        <Card className="max-w-md w-full" hover={true}>
+        <Card className="max-w-md w-full transition-transform duration-300 hover:scale-[1.02]" hover={true}>
           <CardContent className="p-8">
             <div className="text-center">
               <User className="h-12 w-12 text-text-tertiary mx-auto mb-4" />
@@ -128,7 +128,7 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
       }}
       className={`flex justify-center ${className || ''}`}
     >
-      <Card className="max-w-md w-full" hover={true}>
+      <Card className="max-w-md w-full transition-transform duration-300 hover:scale-[1.02]" hover={true}>
         <CardContent className="p-8">
           <div className="text-center">
             <div className="flex items-center justify-center mb-4">

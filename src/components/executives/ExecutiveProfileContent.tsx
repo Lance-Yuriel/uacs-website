@@ -99,14 +99,14 @@ const ExecutiveProfileContent: React.FC<ExecutiveProfileContentProps> = ({
             />
           ) : (
             <div className="w-full h-full rounded-full border-4 border-white/60 bg-[#111111] flex items-center justify-center">
-              <span className="text-2xl md:text-3xl font-bold text-white">{initials}</span>
+              <span className="text-2xl md:text-3xl font-bold text-white font-display tracking-tight">{initials}</span>
             </div>
           )}
         </div>
 
         <div className="flex-1 flex flex-col justify-center">
           <div className="space-y-1.5 mb-2.5">
-            <h2 className="text-2xl md:text-[28px] font-bold text-white leading-tight">{executive.name}</h2>
+            <h2 className="text-2xl md:text-[32px] font-extrabold text-white leading-tight font-display tracking-tight">{executive.name}</h2>
             <p className="text-base md:text-lg text-text-secondary font-medium leading-snug">
               {executive.position}
             </p>
@@ -147,7 +147,7 @@ const ExecutiveProfileContent: React.FC<ExecutiveProfileContentProps> = ({
         <div className="flex flex-col flex-1 gap-3.5">
           <div className="border-t border-white/20">
             <div className={`flex flex-col justify-center ${bioPaddingClass}`} style={bioMinHeightStyle}>
-              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5">Bio</h3>
+              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5 font-display tracking-tight">Bio</h3>
               <p className="text-[15px] md:text-[16px] text-text-secondary leading-normal">
                 {executive.bio || (showPlaceholders ? 'Add a short bio to preview it here.' : '')}
               </p>
@@ -159,7 +159,7 @@ const ExecutiveProfileContent: React.FC<ExecutiveProfileContentProps> = ({
               className={`flex flex-col justify-center ${introPaddingClass}`}
               style={introMinHeightStyle}
             >
-              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5">Introduction</h3>
+              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5 font-display tracking-tight">Introduction</h3>
               <p className="text-[15px] md:text-[16px] text-text-secondary leading-relaxed">
                 {executive.introduction || (showPlaceholders ? 'Write an introduction to see how it will appear.' : '')}
               </p>
@@ -173,7 +173,7 @@ const ExecutiveProfileContent: React.FC<ExecutiveProfileContentProps> = ({
               className={`flex flex-col justify-center ${responsibilitiesPaddingClass}`}
               style={responsibilitiesMinHeightStyle}
             >
-              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5">Key Responsibilities</h3>
+              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5 font-display tracking-tight">Key Responsibilities</h3>
               {responsibilitiesList.length > 0 && (
                 <ul className="space-y-1.5">
                   {responsibilitiesList.map((responsibility, index) => (
@@ -189,7 +189,7 @@ const ExecutiveProfileContent: React.FC<ExecutiveProfileContentProps> = ({
 
           <div className="border-t border-white/20">
             <div className={`flex flex-col justify-center ${educationPaddingClass}`}>
-              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5">Education</h3>
+              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5 font-display tracking-tight">Education</h3>
               {educationPreview ? (
                 <p className="text-[15px] md:text-[16px] text-text-secondary leading-normal">
                   {educationPreview}
@@ -200,7 +200,7 @@ const ExecutiveProfileContent: React.FC<ExecutiveProfileContentProps> = ({
 
           <div className="border-t border-white/20">
             <div className={`flex flex-col justify-center ${favouriteSkillsPaddingClass}`}>
-              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5">Favourite Skills</h3>
+              <h3 className="text-lg md:text-[20px] font-semibold text-white mb-1.5 font-display tracking-tight">Favourite Skills</h3>
               {favouriteSkillsPreview && favouriteSkillsPreview.length > 0 ? (
                 <div className="flex flex-wrap gap-1.5">
                   {favouriteSkillsPreview.slice(0, 3).map((skill, index) => (

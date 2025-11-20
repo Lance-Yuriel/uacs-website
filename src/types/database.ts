@@ -69,6 +69,7 @@ export interface Database {
           location: string | null;
           description: string | null;
           google_drive_link: string | null;
+          registration_link: string | null;
           status: 'upcoming' | 'past';
           created_at: string;
           updated_at: string;
@@ -81,6 +82,7 @@ export interface Database {
           location?: string | null;
           description?: string | null;
           google_drive_link?: string | null;
+          registration_link?: string | null;
           status?: 'upcoming' | 'past';
           created_at?: string;
           updated_at?: string;
@@ -93,6 +95,7 @@ export interface Database {
           location?: string | null;
           description?: string | null;
           google_drive_link?: string | null;
+          registration_link?: string | null;
           status?: 'upcoming' | 'past';
           created_at?: string;
           updated_at?: string;

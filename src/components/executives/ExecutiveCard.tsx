@@ -52,7 +52,7 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
   return (
     <>
       <div className={className}>
-        <Card className="h-[520px] flex flex-col !border-white bg-[#1a1a1a]/90" hover={false} glass={false}>
+        <Card className="h-[520px] flex flex-col !border-white bg-[#0e0d1c]/90" hover={false} glass={false}>
           <CardContent className="flex-1 flex flex-col p-6 text-center h-full relative">
             {/* Expand Icon - Top Right */}
             <button
@@ -77,7 +77,7 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
                 />
               ) : (
                 <div className="w-full h-full rounded-full bg-surface-card border-2 border-white/60 flex items-center justify-center">
-                  <span className="text-lg font-bold text-white">
+                  <span className="text-lg font-bold text-white font-display tracking-tight">
                     {getInitials(executive.name)}
                   </span>
                 </div>
@@ -86,7 +86,7 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
 
             {/* Name and Position */}
             <div className="space-y-2 mb-3">
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-white font-display tracking-tight">
                 {executive.name}
               </h3>
               <p className="text-text-secondary font-medium">
@@ -116,7 +116,7 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
 
           {/* Responsibilities - Flexible middle section */}
           <div className="flex-1 flex flex-col mb-4 min-h-[120px]">
-            <h4 className="text-sm font-semibold text-white mb-2">Key Responsibilities</h4>
+            <h4 className="text-sm font-semibold text-white mb-2 font-display tracking-tight">Key Responsibilities</h4>
             <ul className="space-y-1 flex-1">
               {executive.responsibilities.map((responsibility, index) => (
                 <li key={index} className="text-text-secondary text-sm flex items-start">

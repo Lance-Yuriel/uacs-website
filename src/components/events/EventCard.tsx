@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Users, ExternalLink, Image as ImageIcon } from 'lucide-react';
+import { Calendar, ExternalLink, Image as ImageIcon, MapPin } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import { Event } from '@/types/event';
+import { EventWithMeta } from '@/types/event';
 import { formatDate } from '@/lib/utils';
 
 export interface EventCardProps {
-  event: Event;
+  event: EventWithMeta;
   className?: string;
 }
 
@@ -30,27 +30,27 @@ const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
       transition={{ duration: 0.6 }}
       className={className}
     >
-      <Card className="h-full group flex flex-col" hover={true}>
+      <Card className="h-full group flex flex-col transition-transform duration-300 hover:scale-[1.02]" hover={true}>
         <CardHeader className="pb-4">
           <div className="space-y-3">
             {/* Event Title */}
             <CardTitle className="text-xl group-hover:text-primary-400 transition-colors">
-              {event.title}
+              {event.eventName}
             </CardTitle>
             
             {/* Date */}
             <div className="flex items-center text-text-secondary text-sm">
               <Calendar className="h-4 w-4 mr-2" />
               <span>
-                {event.date === '[TO BE PROVIDED]' ? 'Date TBA' : event.date}
+                {formatDate(event.date)}
               </span>
             </div>
 
-            {/* Attendees (if available) */}
-            {event.attendees && (
+            {/* Location */}
+            {event.location && (
               <div className="flex items-center text-text-secondary text-sm">
-                <Users className="h-4 w-4 mr-2" />
-                <span>{event.attendees} attendees</span>
+                <MapPin className="h-4 w-4 mr-2" />
+                <span>{event.location}</span>
               </div>
             )}
           </div>
@@ -60,27 +60,9 @@ const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
           {/* Description */}
           <div>
             <p className="text-text-secondary text-sm leading-relaxed">
-              {event.description === '[TO BE PROVIDED - Real description of the event]' 
-                ? 'Event description coming soon...' 
-                : event.description
-              }
+              {event.description || 'Event description coming soon...'}
             </p>
           </div>
-
-          {/* Highlights */}
-          {event.highlights && event.highlights.length > 0 && (
-            <div>
-              <h4 className="text-sm font-semibold text-white mb-2">Event Highlights</h4>
-              <ul className="space-y-1">
-                {event.highlights.map((highlight, index) => (
-                  <li key={index} className="text-text-secondary text-sm flex items-start">
-                    <span className="text-primary-400 mr-2 mt-1">•</span>
-                    {highlight}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
 
           {/* Spacer to push button to bottom */}
           <div className="flex-grow"></div>

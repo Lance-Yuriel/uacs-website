@@ -55,8 +55,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-        display: ['Cal Sans', 'Inter', 'sans-serif'],
+        sans: ['var(--font-inter)', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        display: ['var(--font-display)', 'Bricolage Grotesque', 'Inter', 'sans-serif'],
         mono: ['Fira Code', 'Monaco', 'monospace'],
       },
       fontSize: {
@@ -71,6 +71,8 @@ const config: Config = {
         '5xl': '3rem',
         '6xl': '3.75rem',
         '7xl': '4.5rem',
+        '8xl': '6rem',
+        '9xl': '8rem',
       },
       fontWeight: {
         light: '300',
@@ -79,6 +81,7 @@ const config: Config = {
         semibold: '600',
         bold: '700',
         extrabold: '800',
+        black: '900',
       },
       lineHeight: {
         tight: '1.25',
@@ -93,6 +96,7 @@ const config: Config = {
         normal: '0',
         wide: '0.025em',
         wider: '0.05em',
+        widest: '0.1em',
       },
       spacing: {
         '18': '4.5rem',

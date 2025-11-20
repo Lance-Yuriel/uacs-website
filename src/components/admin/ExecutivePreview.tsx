@@ -9,7 +9,7 @@ interface ExecutivePreviewProps {
 
 const ExecutivePreview: React.FC<ExecutivePreviewProps> = ({ executive, className = '' }) => {
   return (
-    <div className={`bg-[#1a1a1a] border border-white/20 rounded-2xl p-4 md:p-6 lg:p-8 w-full max-w-[800px] mx-auto ${className}`}>
+    <div className={`bg-[#0e0d1c] border border-white/20 rounded-2xl p-4 md:p-6 lg:p-8 w-full max-w-[800px] mx-auto ${className}`}>
       <ExecutiveProfileContent executive={executive} variant="preview" />
     </div>
   );

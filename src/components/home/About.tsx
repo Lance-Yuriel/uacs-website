@@ -41,18 +41,21 @@ const About: React.FC<AboutProps> = ({ className }) => {
       opacity: 1,
       transition: {
         duration: 0.6,
-        staggerChildren: 0.1
+        staggerChildren: 0.12,
+        delayChildren: 0.1
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 35, scale: 0.96 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.6
+        duration: 0.65,
+        ease: [0.22, 1, 0.36, 1] as const
       }
     }
   };
@@ -67,7 +70,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
     >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 font-display tracking-tight">
             <GradientText
               colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
               animationSpeed={3}
@@ -110,8 +113,8 @@ const About: React.FC<AboutProps> = ({ className }) => {
                   className="group h-full"
                 >
                   <TiltedCard
-                    backgroundColor="rgba(24, 24, 27, 0.8)"
-                    gradientColors={['rgba(24, 24, 27, 0.8)', 'rgba(39, 39, 42, 0.6)']}
+                    backgroundColor="rgba(14, 13, 28, 0.8)"
+                    gradientColors={['rgba(14, 13, 28, 0.8)', 'rgba(20, 19, 40, 0.6)']}
                     altText={`${feature.title} - UACS`}
                     captionText={feature.title}
                     containerHeight="280px"
@@ -119,7 +122,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
                     imageHeight="280px"
                     imageWidth="100%"
                     rotateAmplitude={12}
-                    scaleOnHover={1.05}
+                    scaleOnHover={1.03}
                     showMobileWarning={false}
                     showTooltip={false}
                     displayOverlayContent={true}

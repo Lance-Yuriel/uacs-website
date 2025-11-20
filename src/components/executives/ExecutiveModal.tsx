@@ -66,7 +66,7 @@ const ExecutiveModal: React.FC<ExecutiveModalProps> = ({ executive, onClose }) =
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed left-4 right-4 md:left-16 md:right-16 lg:left-24 lg:right-24 xl:left-32 xl:right-32 top-16 md:top-16 bottom-8 md:bottom-12 bg-[#1a1a1a] border border-white/20 rounded-2xl z-[100] overflow-hidden max-w-[800px] mx-auto"
+            className="fixed left-4 right-4 md:left-16 md:right-16 lg:left-24 lg:right-24 xl:left-32 xl:right-32 top-16 md:top-16 bottom-8 md:bottom-12 bg-[#0e0d1c] border border-white/20 rounded-2xl z-[100] overflow-hidden max-w-[800px] mx-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative p-4 md:p-6 lg:p-8 w-full max-w-none h-full flex flex-col">

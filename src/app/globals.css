@@ -53,7 +53,8 @@ html, body {
 @theme inline {
   --color-background: var(--background-primary);
   --color-foreground: var(--text-primary);
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: var(--font-display), 'Bricolage Grotesque', 'Inter', sans-serif;
   --font-mono: 'Fira Code', 'Monaco', monospace;
 }
 

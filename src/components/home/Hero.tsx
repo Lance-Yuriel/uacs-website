@@ -31,18 +31,21 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        staggerChildren: 0.2
+        staggerChildren: 0.15,
+        delayChildren: 0.1
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 40, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.6
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1] as const
       }
     }
   };
@@ -81,7 +84,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
           {/* Main Title */}
           <motion.div
             variants={itemVariants}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[0.9] tracking-tight font-display"
           >
             <GradientText
               colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
@@ -96,7 +99,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
           {/* Subtitle */}
           <motion.p
             variants={itemVariants}
-            className="text-xl sm:text-2xl md:text-3xl font-light text-text-secondary max-w-3xl mx-auto leading-relaxed"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-text-secondary max-w-3xl mx-auto leading-relaxed font-display tracking-tight"
           >
             {site.name}
           </motion.p>
@@ -119,7 +122,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
               external={navigation.ctaButton.external}
               variant="primary"
               size="lg"
-              className="min-w-[280px] font-bold text-xl px-12 py-6 shadow-2xl hover:shadow-primary-500/25 border-2 border-primary-400 transform hover:scale-105"
+              className="min-w-[280px] font-bold text-xl px-12 py-6 shadow-2xl hover:shadow-primary-500/25 border-2 border-primary-400 transform hover:scale-[1.02] transition-transform duration-300 ease-out"
             >
               {navigation.ctaButton.label}
             </Button>

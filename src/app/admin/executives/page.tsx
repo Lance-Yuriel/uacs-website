@@ -68,56 +68,76 @@ function SortableExecutiveCard({ executive, onEdit, onDelete, deleting }: Sortab
 
   return (
     <div ref={setNodeRef} style={style}>
-      <Card className="bg-surface-card">
-        <CardContent className="p-6">
+      <Card className="bg-surface-card transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col">
+        <CardContent className="p-5 flex flex-col flex-1">
+          {/* Header Section */}
           <div className="flex items-start gap-3 mb-4">
             <button
               {...attributes}
               {...listeners}
-              className="cursor-grab active:cursor-grabbing p-1 hover:bg-surface-card-hover rounded transition-colors mt-1"
+              className="cursor-grab active:cursor-grabbing p-1.5 hover:bg-surface-card-hover rounded transition-colors mt-0.5 flex-shrink-0"
               aria-label="Drag to reorder"
             >
-              <GripVertical className="h-5 w-5 text-text-secondary" />
+              <GripVertical className="h-4 w-4 text-text-tertiary hover:text-text-secondary" />
             </button>
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-white mb-1">{executive.name}</h3>
-              <p className="text-text-secondary text-sm">{executive.position}</p>
-              {executive.title && (
-                <span className="inline-block mt-2 px-2 py-1 text-xs bg-primary-500/20 text-primary-300 rounded">
-                  {executive.title}
-                </span>
-              )}
-              {executive.is_co_founder && (
-                <span className="inline-block mt-2 ml-2 px-2 py-1 text-xs bg-primary-500/20 text-primary-300 rounded">
-                  Co-Founder
-                </span>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-bold text-white mb-1.5 font-display tracking-tight leading-tight">
+                {executive.name}
+              </h3>
+              <p className="text-text-secondary text-sm font-medium mb-2">
+                {executive.position}
+              </p>
+              {(executive.title || executive.is_co_founder) && (
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {executive.is_co_founder && (
+                    <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-primary-500/20 text-primary-300 rounded-md border border-primary-500/30">
+                      Co-Founder
+                    </span>
+                  )}
+                  {executive.title && (
+                    <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-primary-500/20 text-primary-300 rounded-md border border-primary-500/30">
+                      {executive.title}
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           </div>
           
+          {/* Bio Section */}
           {executive.bio && (
-            <p className="text-text-secondary text-sm mb-4 line-clamp-2">{executive.bio}</p>
+            <div className="mb-4 flex-1 min-h-[48px] ml-11">
+              <p className="text-text-secondary text-sm leading-relaxed line-clamp-2">
+                {executive.bio}
+              </p>
+            </div>
           )}
 
-          <div className="flex gap-2 mt-4">
+          {/* Actions Section */}
+          <div className="flex gap-2 pt-4 border-t border-border-default mt-auto">
             <button
               onClick={() => onEdit(executive)}
-              className="flex-1 px-4 py-2 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-colors text-sm font-medium"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all duration-200 text-sm font-medium border border-primary-500/30 hover:border-primary-500/50"
             >
-              <Pencil className="h-4 w-4 inline mr-1" />
-              Edit
+              <Pencil className="h-4 w-4" />
+              <span>Edit</span>
             </button>
             <button
               onClick={() => onDelete(executive.id)}
               disabled={deleting === executive.id}
-              className="flex-1 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg transition-colors text-sm font-medium disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg transition-all duration-200 text-sm font-medium border border-red-500/30 hover:border-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {deleting === executive.id ? (
-                <Loader2 className="h-4 w-4 inline mr-1 animate-spin" />
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Deleting...</span>
+                </>
               ) : (
-                <Trash2 className="h-4 w-4 inline mr-1" />
+                <>
+                  <Trash2 className="h-4 w-4" />
+                  <span>Delete</span>
+                </>
               )}
-              Delete
             </button>
           </div>
         </CardContent>
@@ -296,9 +316,9 @@ export default function AdminExecutivesPage() {
     <div className="min-h-screen bg-gradient-to-br from-background-primary via-background-secondary to-background-primary py-24 px-4">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 20, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
@@ -309,7 +329,7 @@ export default function AdminExecutivesPage() {
               >
                 <ArrowLeft className="h-5 w-5 text-white" />
               </button>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-display tracking-tight">
                 <GradientText
                   colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
                   animationSpeed={3}
@@ -348,17 +368,46 @@ export default function AdminExecutivesPage() {
                 items={executives.map((exec) => exec.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {executives.map((exec) => (
-                    <SortableExecutiveCard
+                <motion.div 
+                  className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                      opacity: 1,
+                      transition: {
+                        staggerChildren: 0.08,
+                        delayChildren: 0.1,
+                      },
+                    },
+                  }}
+                >
+                  {executives.map((exec, index) => (
+                    <motion.div
                       key={exec.id}
-                      executive={exec}
-                      onEdit={handleEditClick}
-                      onDelete={handleDeleteClick}
-                      deleting={deleting}
-                    />
+                      variants={{
+                        hidden: { opacity: 0, y: 20, scale: 0.95 },
+                        visible: {
+                          opacity: 1,
+                          y: 0,
+                          scale: 1,
+                          transition: {
+                            duration: 0.5,
+                            ease: [0.22, 1, 0.36, 1] as const,
+                          },
+                        },
+                      }}
+                    >
+                      <SortableExecutiveCard
+                        executive={exec}
+                        onEdit={handleEditClick}
+                        onDelete={handleDeleteClick}
+                        deleting={deleting}
+                      />
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
               </SortableContext>
             </DndContext>
           )}

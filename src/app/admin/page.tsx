@@ -64,12 +64,12 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-background-primary via-background-secondary to-background-primary flex items-center">
       <div className="max-w-6xl mx-auto px-4 w-full">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 20, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
         >
           <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 font-display tracking-tight">
               <GradientText
                 colors={['#BBD6FF', '#DCEBFF', '#A5C8F8', '#DCEBFF', '#BBD6FF']}
                 animationSpeed={3}
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
             <Card 
               glass={false} 
               hover={false} 
-              className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white [&:hover_*]:text-black"
+              className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white hover:scale-[1.02] [&:hover_*]:text-black"
               onClick={() => router.push('/admin/executives')}
             >
               <CardContent className="p-6">
@@ -93,21 +93,26 @@ export default function AdminDashboard() {
                     <Users className="h-8 w-8 text-primary-400" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white mb-1">Executives</h2>
+                    <h2 className="text-2xl font-bold text-white mb-1 font-display tracking-tight">Executives</h2>
                     <p className="text-text-secondary">Manage team members</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card glass={false} hover={false} className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white [&:hover_*]:text-black">
+            <Card 
+              glass={false} 
+              hover={false} 
+              className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white hover:scale-[1.02] [&:hover_*]:text-black"
+              onClick={() => router.push('/admin/events')}
+            >
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="p-4 bg-primary-500/10 rounded-lg">
                     <Calendar className="h-8 w-8 text-primary-400" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white mb-1">Events</h2>
+                    <h2 className="text-2xl font-bold text-white mb-1 font-display tracking-tight">Events</h2>
                     <p className="text-text-secondary">Manage events and photos</p>
                   </div>
                 </div>
@@ -118,7 +123,7 @@ export default function AdminDashboard() {
           <div className="mt-8">
             <Card hover={false}>
               <CardContent className="p-6">
-                <h2 className="text-xl font-bold text-white mb-4">Quick Stats</h2>
+                <h2 className="text-xl font-bold text-white mb-4 font-display tracking-tight">Quick Stats</h2>
                 <p className="text-text-secondary">
                   Admin features coming soon. You can now sign in and out securely!
                 </p>

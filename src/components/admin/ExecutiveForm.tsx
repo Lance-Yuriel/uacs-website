@@ -239,9 +239,18 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
 
   // Validation helper functions
   const ESTIMATED_LONG_WORD_LENGTH = 6; // baseline for bio
+  const MAX_NAME_CHARACTERS = 32;
 
   const estimateWordsFromCharacters = (characters: number) =>
     Math.max(1, Math.floor(characters / ESTIMATED_LONG_WORD_LENGTH));
+
+  const validateName = (value: string): string | null => {
+    if (value.length > MAX_NAME_CHARACTERS) {
+      const approxWords = Math.max(1, Math.floor(value.length / 6.5)); // ~4-5 words at 32 chars
+      return `Name must be ${MAX_NAME_CHARACTERS} characters or less (currently ${value.length}, approx. ${approxWords} words)`;
+    }
+    return null;
+  };
 
   const validateBio = (value: string): string | null => {
     if (value.length > 50) {
@@ -250,12 +259,16 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
     return null;
   };
 
+  const MIN_INTRO_CHARACTERS = 700;
   const MAX_INTRO_CHARACTERS = 750;
 
   const estimateIntroWords = (characters: number) =>
     Math.max(1, Math.floor(characters / 6.25)); // tuned for ~120 words at 750 chars
 
   const validateIntroduction = (value: string): string | null => {
+    if (value.length < MIN_INTRO_CHARACTERS) {
+      return `Introduction must be at least ${MIN_INTRO_CHARACTERS} characters (currently ${value.length}, approx. ${estimateIntroWords(value.length)} words)`;
+    }
     if (value.length > MAX_INTRO_CHARACTERS) {
       return `Introduction must be ${MAX_INTRO_CHARACTERS} characters or less (currently ${value.length}, approx. ${estimateIntroWords(value.length)} words)`;
     }
@@ -366,7 +379,9 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
 
     // Validate as user types
     let error: string | null = null;
-    if (name === 'bio') {
+    if (name === 'name') {
+      error = validateName(value);
+    } else if (name === 'bio') {
       error = validateBio(value);
     } else if (name === 'introduction') {
       error = validateIntroduction(value);
@@ -385,6 +400,9 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     
+    const nameError = validateName(formData.name);
+    if (nameError) newErrors.name = nameError;
+
     const bioError = validateBio(formData.bio);
     if (bioError) newErrors.bio = bioError;
 
@@ -439,7 +457,7 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Name <span className="text-red-400">*</span>
+                    Name (max 32 characters ≈ 4-5 words) <span className="text-red-400">*</span>
                   </label>
                   <input
                     type="text"
@@ -447,8 +465,13 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 bg-background-secondary border border-border-default rounded-lg text-white focus:outline-none focus:border-primary-500"
+                    className={`w-full px-4 py-2 bg-background-secondary border rounded-lg text-white focus:outline-none ${
+                      errors.name ? 'border-red-500' : 'border-border-default focus:border-primary-500'
+                    }`}
                   />
+                  {errors.name && (
+                    <span className="text-xs text-red-400 mt-1 block">{errors.name}</span>
+                  )}
                 </div>
 
                 <div>
@@ -629,7 +652,7 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
 
               <div>
                 <label className="block text-sm font-medium text-white mb-2">
-                  Introduction (max 750 characters ≈ 120 words) <span className="text-red-400">*</span>
+                  Introduction (700-750 characters ≈ 112-120 words) <span className="text-red-400">*</span>
                 </label>
                 <textarea
                   name="introduction"
@@ -644,9 +667,12 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
                 />
                 <div className="flex justify-between mt-1">
                   <span className={`text-xs ${
-                    errors.introduction ? 'text-red-400' : 'text-text-secondary'
+                    errors.introduction || formData.introduction.length < MIN_INTRO_CHARACTERS ? 'text-red-400' : 'text-text-secondary'
                   }`}>
                     {formData.introduction.length}/{MAX_INTRO_CHARACTERS} characters (~{estimateIntroWords(formData.introduction.length)} words)
+                    {formData.introduction.length > 0 && formData.introduction.length < MIN_INTRO_CHARACTERS && (
+                      <span className="ml-2">(minimum {MIN_INTRO_CHARACTERS})</span>
+                    )}
                   </span>
                   {errors.introduction && (
                     <span className="text-xs text-red-400">{errors.introduction}</span>

@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import EventCard from './EventCard';
-import { Event } from '@/types/event';
+import { EventWithMeta } from '@/types/event';
 import { EmptyState } from '@/components/ui';
 
 // const events = eventsData as EventData;
 
 export interface EventYearSectionProps {
   year: number;
-  events: Event[];
+  events: EventWithMeta[];
   isDefaultExpanded?: boolean;
   className?: string;
 }
@@ -97,15 +97,17 @@ const EventYearSection: React.FC<EventYearSectionProps> = ({
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden"
+            className="overflow-hidden px-4 md:px-6 lg:px-8 -mx-4 md:-mx-6 lg:-mx-8"
           >
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.map((event) => (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                />
-              ))}
+            <div className="mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {events.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                  />
+                ))}
+              </div>
             </div>
           </motion.div>
         )}

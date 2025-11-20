@@ -71,6 +71,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate name length
+    if (typeof name === 'string' && name.trim().length > 32) {
+      const approxWords = Math.max(1, Math.floor(name.trim().length / 6.5));
+      return NextResponse.json(
+        { error: `Name must be 32 characters or fewer (currently ${name.trim().length}, approx ${approxWords} words)` },
+        { status: 400 }
+      );
+    }
+
     // Get max display_order to append new executive at the end
     const { data: maxOrderData } = await supabase
       .from('executives')
