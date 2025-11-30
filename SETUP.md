@@ -21,7 +21,7 @@ Copy `.env.example` to `.env.local` and add Supabase + Google Sheets values (see
 
 - Supabase project/database bootstrap → `SETUP_SUPABASE.md`
 - Admin authentication workflow → `SETUP_ADMIN_AUTH.md`
-- Supabase Storage bucket policies → `SUPABASE_STORAGE_SETUP.md`
+- Supabase Storage bucket policies → `SUPABASE_EXECUTIVE_PHOTOS_SETUP.md`
 - Full project overview, architecture, and validation rules → `README.md`
 
 ## Deployment Snapshot

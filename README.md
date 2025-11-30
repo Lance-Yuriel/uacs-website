@@ -74,7 +74,8 @@ GOOGLE_SHEETS_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVA
 
 - **Supabase project bootstrap**: `SETUP_SUPABASE.md`
 - **Admin authentication**: `SETUP_ADMIN_AUTH.md`
-- **Supabase Storage for executive photos**: `SUPABASE_STORAGE_SETUP.md`
+- **Supabase Storage for executive photos**: `SUPABASE_EXECUTIVE_PHOTOS_SETUP.md`
+- **Supabase Storage for event photos**: `SUPABASE_EVENT_PHOTOS_SETUP.md`
 - **Local + deployment quick reference**: `SETUP.md`
 
 Each guide focuses on a specific operational area; the README stays high-level to avoid duplication.
