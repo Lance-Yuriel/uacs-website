@@ -68,6 +68,8 @@ export interface Database {
           time: string | null;
           location: string | null;
           description: string | null;
+          upcoming_description: string | null;
+          event_photo_url: string | null;
           google_drive_link: string | null;
           registration_link: string | null;
           status: 'upcoming' | 'past';
@@ -81,6 +83,8 @@ export interface Database {
           time?: string | null;
           location?: string | null;
           description?: string | null;
+          upcoming_description?: string | null;
+          event_photo_url?: string | null;
           google_drive_link?: string | null;
           registration_link?: string | null;
           status?: 'upcoming' | 'past';
@@ -94,6 +98,8 @@ export interface Database {
           time?: string | null;
           location?: string | null;
           description?: string | null;
+          upcoming_description?: string | null;
+          event_photo_url?: string | null;
           google_drive_link?: string | null;
           registration_link?: string | null;
           status?: 'upcoming' | 'past';

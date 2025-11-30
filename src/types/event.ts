@@ -6,7 +6,9 @@ export interface EventDTO {
   date: string; // ISO date string (YYYY-MM-DD)
   time: string | null; // HH:MM or HH:MM:SS
   location: string | null;
-  description: string | null;
+  description: string | null; // For past events (summary, max 210 chars)
+  upcomingDescription: string | null; // For upcoming events (promotional caption, max 100 chars)
+  eventPhotoUrl: string | null;
   googleDriveLink: string | null;
   registrationLink: string | null;
   status: EventStatus;
@@ -33,6 +35,8 @@ export interface EventFormState {
   time: string;
   location: string;
   description: string;
+  upcomingDescription: string;
+  eventPhotoUrl: string;
   googleDriveLink: string;
   registrationLink: string;
 }

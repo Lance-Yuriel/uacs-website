@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Loader2, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import EventYearSection from './EventYearSection';
+import PastEventCard from './PastEventCard';
+import EventModal from './EventModal';
 import UpcomingEventCard from './UpcomingEventCard';
 import { EmptyState, GradientText } from '@/components/ui';
 import type { EventWithMeta, EventsResponse } from '@/types/event';
@@ -48,6 +49,10 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
   const [error, setError] = useState<string | null>(null);
   const [upcomingEvents, setUpcomingEvents] = useState<EventWithMeta[]>([]);
   const [pastEvents, setPastEvents] = useState<EventWithMeta[]>([]);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventWithMeta | null>(null);
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
+  const yearDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -105,6 +110,35 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
       }))
       .sort((a, b) => b.year - a.year);
   }, [pastEvents]);
+
+  // Set default selected year to the latest year
+  useEffect(() => {
+    if (pastEventsByYear.length > 0 && selectedYear === null) {
+      setSelectedYear(pastEventsByYear[0].year);
+    }
+  }, [pastEventsByYear, selectedYear]);
+
+  const filteredEvents = useMemo(() => {
+    if (selectedYear === null) return [];
+    const yearGroup = pastEventsByYear.find(group => group.year === selectedYear);
+    return yearGroup?.events || [];
+  }, [pastEventsByYear, selectedYear]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target as Node)) {
+        setIsYearDropdownOpen(false);
+      }
+    };
+
+    if (isYearDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isYearDropdownOpen]);
 
   return (
     <motion.div
@@ -175,18 +209,114 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
           />
         ) : pastEventsByYear.length > 0 ? (
           <div>
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center font-display tracking-tight">Past Events</h3>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+              <h3 className="text-3xl md:text-4xl font-bold text-white text-center md:text-left font-display tracking-tight">
+                Past Events
+              </h3>
+              
+              {/* Year Selector Dropdown */}
+              <div className="flex items-center gap-3 justify-center md:justify-end" ref={yearDropdownRef}>
+                <span className="text-text-secondary text-sm">Year:</span>
+                <div className="relative z-50">
+                  <button
+                    onClick={() => setIsYearDropdownOpen(!isYearDropdownOpen)}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 text-sm",
+                      "bg-surface-card/70 backdrop-blur-sm text-white/90 border border-border-default hover:border-primary-400/60",
+                      "min-w-[120px] justify-between shadow-sm hover:shadow-md",
+                      "hover:bg-surface-card/80",
+                      isYearDropdownOpen && "border-primary-400/80 bg-surface-card/90"
+                    )}
+                  >
+                    <span className={cn(
+                      "transition-colors duration-200",
+                      selectedYear ? "text-white" : "text-text-secondary"
+                    )}>
+                      {selectedYear || 'Select year'}
+                    </span>
+                    <ChevronDown 
+                      className={cn(
+                        "h-4 w-4 text-text-secondary transition-all duration-300 flex-shrink-0",
+                        isYearDropdownOpen && "rotate-180"
+                      )} 
+                    />
+                  </button>
 
-            <div className="space-y-6">
-              {pastEventsByYear.map((group, index) => (
-                <EventYearSection
-                  key={group.year}
-                  year={group.year}
-                  events={group.events}
-                  isDefaultExpanded={index === 0}
-                />
-              ))}
+                  {/* Backdrop when dropdown is open */}
+                  <AnimatePresence>
+                    {isYearDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="fixed inset-0 z-40"
+                        onClick={() => setIsYearDropdownOpen(false)}
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  <AnimatePresence>
+                    {isYearDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                        className="absolute right-0 mt-2 w-full min-w-[120px] bg-surface-card border border-primary-400/40 rounded-lg shadow-2xl z-50 overflow-hidden backdrop-blur-sm"
+                        style={{ 
+                          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
+                        }}
+                      >
+                        <div className="max-h-[200px] overflow-y-auto">
+                          {pastEventsByYear.map((group) => (
+                            <button
+                              key={group.year}
+                              onClick={() => {
+                                setSelectedYear(group.year);
+                                setIsYearDropdownOpen(false);
+                              }}
+                              className={cn(
+                                "w-full text-left px-4 py-2.5 text-sm transition-colors duration-200",
+                                "hover:bg-primary-500/20 hover:text-white",
+                                selectedYear === group.year
+                                  ? "bg-primary-500/30 text-primary-300 font-semibold"
+                                  : "text-text-secondary"
+                              )}
+                            >
+                              {group.year}
+                            </button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
             </div>
+
+            {/* Events Grid */}
+            {filteredEvents.length > 0 ? (
+              <div className={cn(
+                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative",
+                isYearDropdownOpen && "z-0"
+              )}>
+                {filteredEvents.map((event) => (
+                  <PastEventCard
+                    key={event.id}
+                    event={event}
+                    onClick={() => setSelectedEvent(event)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="max-w-md mx-auto">
+                <EmptyState
+                  title="No Events"
+                  description={`No events found for ${selectedYear}.`}
+                />
+              </div>
+            )}
           </div>
         ) : (
           <div className="max-w-md mx-auto">
@@ -198,9 +328,17 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
         )}
       </motion.div>
 
+      {/* Event Modal */}
+      {selectedEvent && (
+        <EventModal
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
+      )}
+
       {/* Call to Action */}
       <motion.div variants={itemVariants} className="text-center">
-        <div className="bg-gradient-to-r from-primary-500/10 to-accent-blue/10 border border-primary-500/20 rounded-2xl p-8 max-w-2xl mx-auto">
+        <div className="bg-gradient-to-r from-primary-500/10 to-accent-blue/10 border-2 border-[#BBD6FF] rounded-2xl p-8 max-w-2xl mx-auto shadow-[0_0_12px_rgba(187,214,255,0.5)]">
           <h3 className="text-xl font-semibold text-white mb-4">Stay Updated</h3>
           <p className="text-text-secondary mb-6">
             Follow us on Instagram and join our community to stay updated on upcoming events,

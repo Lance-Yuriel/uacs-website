@@ -1,10 +1,12 @@
 'use client';
 
 import { useMemo, useState, useRef } from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, Upload, Image as ImageIcon } from 'lucide-react';
 import { Button, Card, CardContent } from '@/components/ui';
+import { supabase } from '@/lib/supabase';
+import Image from 'next/image';
 import UpcomingEventCard from '@/components/events/UpcomingEventCard';
-import EventCard from '@/components/events/EventCard';
+import PastEventCard from '@/components/events/PastEventCard';
 import { buildCountdownMeta, determineEventStatus } from '@/lib/events';
 import type { EventWithMeta } from '@/types/event';
 
@@ -16,6 +18,7 @@ interface EventFormProps {
 const MAX_EVENT_NAME_CHARACTERS = 32;
 const MAX_LOCATION_CHARACTERS = 50;
 const MAX_DESCRIPTION_CHARACTERS = 210;
+const MAX_UPCOMING_DESCRIPTION_CHARACTERS = 100;
 const ESTIMATED_DESCRIPTION_WORD_LENGTH = 8.75;
 
 function estimateDescriptionWords(characters: number): number {
@@ -84,6 +87,11 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(event?.eventPhotoUrl || null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     eventName: event?.eventName ?? '',
@@ -91,6 +99,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
     time: formatTimeForDisplay(event?.time),
     location: event?.location ?? '',
     description: event?.description ?? '',
+    upcomingDescription: event?.upcomingDescription ?? '',
+    eventPhotoUrl: event?.eventPhotoUrl ?? '',
     googleDriveLink: event?.googleDriveLink ?? '',
     registrationLink: event?.registrationLink ?? '',
   });
@@ -100,6 +110,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
     () => estimateDescriptionWords(descriptionLength),
     [descriptionLength]
   );
+  const upcomingDescriptionLength = useMemo(() => formData.upcomingDescription.length, [formData.upcomingDescription]);
 
   const normalizedPreviewTime = useMemo(() => normalizeTimeInput(formData.time) ?? null, [formData.time]);
 
@@ -117,6 +128,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
       time: normalizedPreviewTime,
       location: formData.location ? formData.location : null,
       description: formData.description || '',
+      upcomingDescription: formData.upcomingDescription || '',
+      eventPhotoUrl: formData.eventPhotoUrl || null,
       googleDriveLink: formData.googleDriveLink || null,
       registrationLink: formData.registrationLink || null,
       status: determineEventStatus(formData.date || null),
@@ -131,11 +144,154 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
 
   const pastPreviewEvent = useMemo<EventWithMeta>(() => ({
     ...previewEvent,
+    eventPhotoUrl: imagePreview || formData.eventPhotoUrl || null,
+    upcomingDescription: null, // Past events don't show upcoming description
     status: 'past',
     daysUntil: null,
     countdownMessage: null,
     isHappeningToday: false,
-  }), [previewEvent]);
+  }), [previewEvent, imagePreview, formData.eventPhotoUrl]);
+
+  // File validation
+  const validateFile = (file: File): string | null => {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const maxSize = 50 * 1024 * 1024; // 50MB
+
+    if (!allowedTypes.includes(file.type)) {
+      return 'Invalid file type. Please upload a JPEG, PNG, or WebP image.';
+    }
+
+    if (file.size > maxSize) {
+      return 'File size too large. Maximum size is 50MB.';
+    }
+
+    return null;
+  };
+
+  // Handle file selection
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validationError = validateFile(file);
+    if (validationError) {
+      setUploadError(validationError);
+      setSelectedFile(null);
+      setImagePreview(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
+
+    setUploadError(null);
+    setSelectedFile(file);
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    // Upload file immediately
+    await uploadFile(file);
+  };
+
+  // Upload file to Supabase Storage
+  const uploadFile = async (file: File) => {
+    setUploading(true);
+    setUploadError(null);
+
+    try {
+      // Generate unique filename - use ID if available, otherwise use temp ID
+      const fileExt = file.name.split('.').pop();
+      const eventId = eventIdRef.current || `temp-${Date.now()}`;
+      const fileName = `${eventId}-${Date.now()}.${fileExt}`;
+      const filePath = `events/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('event-photos')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) {
+        // If file already exists, try with different timestamp
+        if (error.message.includes('already exists')) {
+          const retryFileName = `${eventId}-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+          const retryPath = `events/${retryFileName}`;
+          const { data: retryData, error: retryError } = await supabase.storage
+            .from('event-photos')
+            .upload(retryPath, file, {
+              cacheControl: '3600',
+              upsert: false
+            });
+
+          if (retryError) throw retryError;
+
+          const { data: urlData } = supabase.storage
+            .from('event-photos')
+            .getPublicUrl(retryPath);
+
+          if (urlData?.publicUrl) {
+            setFormData(prev => ({ ...prev, eventPhotoUrl: urlData.publicUrl }));
+          }
+          return;
+        }
+        throw error;
+      }
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('event-photos')
+        .getPublicUrl(filePath);
+
+      if (urlData?.publicUrl) {
+        // Update form data with the new URL
+        setFormData(prev => ({
+          ...prev,
+          eventPhotoUrl: urlData.publicUrl
+        }));
+
+        // If editing and had a previous image, delete old one (optional cleanup)
+        if (isEditing && event?.eventPhotoUrl && event.eventPhotoUrl.includes('event-photos')) {
+          // Extract old file path from URL and delete it
+          const urlParts = event.eventPhotoUrl.split('event-photos/');
+          if (urlParts.length > 1) {
+            const oldPath = urlParts[1].split('?')[0];
+            if (oldPath) {
+              await supabase.storage
+                .from('event-photos')
+                .remove([`events/${oldPath}`]);
+            }
+          }
+        }
+      }
+    } catch (error: any) {
+      console.error('Error uploading file:', error);
+      setUploadError(error.message || 'Failed to upload image. Please try again.');
+      setSelectedFile(null);
+      setImagePreview(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleClearExistingImage = () => {
+    setSelectedFile(null);
+    setImagePreview(null);
+    setFormData(prev => ({ ...prev, eventPhotoUrl: '' }));
+    setUploadError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const validateForm = () => {
     const nextErrors: Record<string, string> = {};
@@ -164,6 +320,11 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
 
     if (descriptionLength > MAX_DESCRIPTION_CHARACTERS) {
       nextErrors.description = `Description must be ${MAX_DESCRIPTION_CHARACTERS} characters or fewer (currently ${descriptionLength}, approx ${descriptionEstimatedWords} words)`;
+    }
+
+    if (upcomingDescriptionLength > MAX_UPCOMING_DESCRIPTION_CHARACTERS) {
+      const approxWords = Math.max(1, Math.round(upcomingDescriptionLength / 8.75));
+      nextErrors.upcomingDescription = `Upcoming description must be ${MAX_UPCOMING_DESCRIPTION_CHARACTERS} characters or fewer (currently ${upcomingDescriptionLength}, approx ${approxWords} words)`;
     }
 
     if (!isValidUrl(formData.googleDriveLink)) {
@@ -212,6 +373,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
       const trimmedName = formData.eventName.trim();
       const trimmedLocation = formData.location.trim();
       const trimmedDescription = formData.description.trim();
+      const trimmedUpcomingDescription = formData.upcomingDescription.trim();
+      const trimmedPhotoUrl = formData.eventPhotoUrl.trim();
       const trimmedDriveLink = formData.googleDriveLink.trim();
       const trimmedRegistrationLink = formData.registrationLink.trim();
 
@@ -221,6 +384,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
         time: normalizedTime,
         location: trimmedLocation.length > 0 ? trimmedLocation : null,
         description: trimmedDescription.length > 0 ? trimmedDescription : null,
+        upcomingDescription: trimmedUpcomingDescription.length > 0 ? trimmedUpcomingDescription : null,
+        eventPhotoUrl: trimmedPhotoUrl.length > 0 ? trimmedPhotoUrl : null,
         googleDriveLink: trimmedDriveLink.length > 0 ? trimmedDriveLink : null,
         registrationLink: trimmedRegistrationLink.length > 0 ? trimmedRegistrationLink : null,
       };
@@ -257,10 +422,10 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-10">
-      <Card className="w-full max-w-6xl bg-background-primary/95 border border-border-default/60 shadow-2xl">
-        <CardContent className="p-0">
-          <div className="flex flex-col lg:flex-row">
-            <div className="flex-1 border-b border-border-default lg:border-b-0 lg:border-r">
+      <Card className="w-full max-w-6xl max-h-[90vh] bg-background-primary/95 border border-border-default/60 shadow-2xl flex flex-col">
+        <CardContent className="p-0 flex-1 flex flex-col min-h-0">
+          <div className="flex flex-col lg:flex-row flex-1 min-h-0">
+            <div className="flex-1 border-b border-border-default lg:border-b-0 lg:border-r flex flex-col min-h-0">
               <div className="flex items-center justify-between px-6 py-4 border-b border-border-default">
                 <div>
                   <h2 className="text-2xl font-semibold text-white">
@@ -280,7 +445,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6 lg:px-8">
+              <form onSubmit={handleSubmit} className="space-y-5 px-6 py-6 lg:px-8 overflow-y-auto flex-1">
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
                     Event Name (max 32 characters ≈ 4-5 words) <span className="text-red-400">*</span>
@@ -363,8 +528,38 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
-                    Description (optional, max {MAX_DESCRIPTION_CHARACTERS} characters ≈ 24 words)
+                    Upcoming Event Description (optional, max {MAX_UPCOMING_DESCRIPTION_CHARACTERS} characters ≈ 12 words)
                   </label>
+                  <p className="text-xs text-text-secondary mb-2">
+                    Short promotional caption for upcoming events. This won't appear in past events.
+                  </p>
+                  <textarea
+                    name="upcomingDescription"
+                    value={formData.upcomingDescription}
+                    onChange={handleChange}
+                    rows={3}
+                    className={`w-full px-4 py-2 bg-background-secondary border rounded-lg text-white focus:outline-none ${
+                      errors.upcomingDescription ? 'border-red-500 focus:border-red-500' : 'border-border-default focus:border-primary-500'
+                    }`}
+                    placeholder="A short, exciting caption to promote this upcoming event..."
+                  />
+                  <div className="flex justify-between mt-1 text-xs">
+                    <span className={upcomingDescriptionLength > MAX_UPCOMING_DESCRIPTION_CHARACTERS ? 'text-red-400' : 'text-text-secondary'}>
+                      {upcomingDescriptionLength}/{MAX_UPCOMING_DESCRIPTION_CHARACTERS} characters
+                    </span>
+                    {errors.upcomingDescription && (
+                      <span className="text-red-400">{errors.upcomingDescription}</span>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Past Event Description (optional, max {MAX_DESCRIPTION_CHARACTERS} characters ≈ 24 words)
+                  </label>
+                  <p className="text-xs text-text-secondary mb-2">
+                    Summary/highlights for past events. This won't appear in upcoming events.
+                  </p>
                   <textarea
                     name="description"
                     value={formData.description}
@@ -383,6 +578,93 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                       <span className="text-red-400">{errors.description}</span>
                     )}
                   </div>
+                </div>
+
+                <div>
+                  <div className="text-center mb-3 space-y-1">
+                    <label className="block text-sm font-medium text-white">
+                      Event Photo <span className="text-text-secondary text-xs">(optional - for past events)</span>
+                    </label>
+                    <p className="text-xs text-text-secondary">
+                      Recommended: 16:9 aspect ratio. Accepted formats: JPEG, PNG, WebP (max 50MB).
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col items-center gap-4 rounded-2xl bg-background-secondary/40 p-5">
+                    <div className="relative w-full max-w-md h-48">
+                      {imagePreview ? (
+                        <Image
+                          src={imagePreview}
+                          alt="Event photo preview"
+                          fill
+                          className="object-cover rounded-lg border-2 border-primary-500/40 shadow-lg"
+                        />
+                      ) : (
+                        <div className="w-full h-full rounded-lg border-2 border-dashed border-border-default/60 bg-background-tertiary/60 flex items-center justify-center">
+                          <ImageIcon className="h-12 w-12 text-text-tertiary" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col items-center gap-3 text-center w-full">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/jpg,image/png,image/webp"
+                        onChange={handleFileSelect}
+                        disabled={uploading}
+                        className="hidden"
+                        id="event-photo-upload"
+                      />
+
+                      <label
+                        htmlFor="event-photo-upload"
+                        className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-all text-sm font-medium w-full max-w-xs ${
+                          uploadError
+                            ? 'border-red-500/80 text-red-300 hover:border-red-500'
+                            : 'border-border-default/80 text-white hover:border-primary-500 hover:text-primary-300'
+                        } ${uploading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
+                      >
+                        {uploading ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin text-primary-400" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="h-4 w-4 text-primary-400" />
+                            {imagePreview ? 'Change Photo' : 'Upload Photo'}
+                          </>
+                        )}
+                      </label>
+
+                      {uploadError && (
+                        <p className="mt-2 text-sm text-red-400">{uploadError}</p>
+                      )}
+
+                      {selectedFile && !uploadError && (
+                        <p className="text-xs text-text-secondary">
+                          Selected: <span className="text-white font-medium">{selectedFile.name}</span>
+                        </p>
+                      )}
+
+                      {(imagePreview || formData.eventPhotoUrl) && !uploading && (
+                        <button
+                          type="button"
+                          onClick={handleClearExistingImage}
+                          className="text-xs text-red-400 hover:text-red-300 underline underline-offset-4 transition-colors"
+                        >
+                          Remove photo
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <input
+                    type="hidden"
+                    name="eventPhotoUrl"
+                    value={formData.eventPhotoUrl}
+                  />
                 </div>
 
                 <div>
@@ -459,7 +741,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
               </form>
             </div>
 
-            <div className="flex-1 px-6 py-6 lg:px-8 bg-background-secondary/40">
+            <div className="flex-1 px-6 py-6 lg:px-8 bg-background-secondary/40 overflow-y-auto">
               <div className="max-w-md mx-auto space-y-6">
                 <div>
                   <h3 className="text-xl font-semibold text-white">Preview</h3>
@@ -475,7 +757,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
 
                 <div className="space-y-2 pt-4 border-t border-border-default/40">
                   <span className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">Past appearance</span>
-                  <EventCard event={pastPreviewEvent} />
+                  <PastEventCard event={pastPreviewEvent} />
                 </div>
               </div>
             </div>
