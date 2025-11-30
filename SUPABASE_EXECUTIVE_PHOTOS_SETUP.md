@@ -1,4 +1,4 @@
-# Supabase Storage Setup for Executive Images
+# Supabase Storage Setup for Executive Photos
 
 ## Steps to Set Up Photo Upload Feature
 
@@ -10,7 +10,7 @@
 4. Configure the bucket:
    - **Name**: `executive-photos`
    - **Public bucket**: ✅ **Check this** (so images can be accessed publicly)
-   - **File size limit**: 20MB (or your preference)
+   - **File size limit**: 50MB (or your preference)
    - **Allowed MIME types**: `image/*`
 5. Click **Create bucket**
 
