@@ -22,6 +22,8 @@ export function mapRowToDto(row: EventRow): EventDTO {
     time: row.time,
     location: row.location,
     description: row.description,
+    upcomingDescription: row.upcoming_description,
+    eventPhotoUrl: row.event_photo_url,
     googleDriveLink: row.google_drive_link,
     registrationLink: row.registration_link,
     status: row.status,
@@ -65,6 +67,14 @@ export function validateEventPayload(body: any) {
     if (description.length > 210) {
       const approxWords = Math.max(1, Math.round(description.length / 8.75));
       errors.description = `Description must be 210 characters or fewer (currently ${description.length}, approx ${approxWords} words)`;
+    }
+  }
+
+  if (body.upcomingDescription) {
+    const upcomingDescription = body.upcomingDescription.trim();
+    if (upcomingDescription.length > 100) {
+      const approxWords = Math.max(1, Math.round(upcomingDescription.length / 8.75));
+      errors.upcomingDescription = `Upcoming description must be 100 characters or fewer (currently ${upcomingDescription.length}, approx ${approxWords} words)`;
     }
   }
 
@@ -183,6 +193,8 @@ export async function POST(request: NextRequest) {
     const time = typeof body.time === 'string' && body.time.trim().length > 0 ? body.time.trim() : null;
     const location = typeof body.location === 'string' && body.location.trim().length > 0 ? body.location.trim() : null;
     const description = typeof body.description === 'string' && body.description.trim().length > 0 ? body.description.trim() : null;
+    const upcomingDescription = typeof body.upcomingDescription === 'string' && body.upcomingDescription.trim().length > 0 ? body.upcomingDescription.trim() : null;
+    const eventPhotoUrl = typeof body.eventPhotoUrl === 'string' && body.eventPhotoUrl.trim().length > 0 ? body.eventPhotoUrl.trim() : null;
     const googleDriveLink = typeof body.googleDriveLink === 'string' && body.googleDriveLink.trim().length > 0 ? body.googleDriveLink.trim() : null;
     const registrationLink = typeof body.registrationLink === 'string' && body.registrationLink.trim().length > 0 ? body.registrationLink.trim() : null;
 
@@ -200,6 +212,8 @@ export async function POST(request: NextRequest) {
         time,
         location,
         description,
+        upcoming_description: upcomingDescription,
+        event_photo_url: eventPhotoUrl,
         google_drive_link: googleDriveLink,
         registration_link: registrationLink,
         status,
@@ -257,6 +271,8 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const time = typeof body.time === 'string' && body.time.trim().length > 0 ? body.time.trim() : null;
     const location = typeof body.location === 'string' && body.location.trim().length > 0 ? body.location.trim() : null;
     const description = typeof body.description === 'string' && body.description.trim().length > 0 ? body.description.trim() : null;
+    const upcomingDescription = typeof body.upcomingDescription === 'string' && body.upcomingDescription.trim().length > 0 ? body.upcomingDescription.trim() : null;
+    const eventPhotoUrl = typeof body.eventPhotoUrl === 'string' && body.eventPhotoUrl.trim().length > 0 ? body.eventPhotoUrl.trim() : null;
     const googleDriveLink = typeof body.googleDriveLink === 'string' && body.googleDriveLink.trim().length > 0 ? body.googleDriveLink.trim() : null;
 
     const status = determineEventStatus(date);
@@ -269,6 +285,8 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
         time,
         location,
         description,
+        upcoming_description: upcomingDescription,
+        event_photo_url: eventPhotoUrl,
         google_drive_link: googleDriveLink,
         status,
       })

@@ -36,6 +36,8 @@ CREATE TABLE events (
   time TEXT,
   location TEXT,
   description TEXT,
+  upcoming_description TEXT,
+  event_photo_url TEXT,
   google_drive_link TEXT,
   registration_link TEXT,
   status TEXT DEFAULT 'past' CHECK (status IN ('upcoming', 'past')),

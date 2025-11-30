@@ -64,6 +64,8 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const time = typeof body.time === 'string' && body.time.trim().length > 0 ? body.time.trim() : null;
     const location = typeof body.location === 'string' && body.location.trim().length > 0 ? body.location.trim() : null;
     const description = typeof body.description === 'string' && body.description.trim().length > 0 ? body.description.trim() : null;
+    const upcomingDescription = typeof body.upcomingDescription === 'string' && body.upcomingDescription.trim().length > 0 ? body.upcomingDescription.trim() : null;
+    const eventPhotoUrl = typeof body.eventPhotoUrl === 'string' && body.eventPhotoUrl.trim().length > 0 ? body.eventPhotoUrl.trim() : null;
     const googleDriveLink = typeof body.googleDriveLink === 'string' && body.googleDriveLink.trim().length > 0 ? body.googleDriveLink.trim() : null;
     const registrationLink = typeof body.registrationLink === 'string' && body.registrationLink.trim().length > 0 ? body.registrationLink.trim() : null;
 
@@ -77,6 +79,8 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
         time,
         location,
         description,
+        upcoming_description: upcomingDescription,
+        event_photo_url: eventPhotoUrl,
         google_drive_link: googleDriveLink,
         registration_link: registrationLink,
         status,
