@@ -21,7 +21,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
     {
       icon: Users,
       title: 'Community Focus',
-      description: 'Join a supportive community of like-minded individuals passionate about bodyweight training.'
+      description: 'Join a community of like-minded individuals passionate about bodyweight training.'
     },
     {
       icon: Calendar,
@@ -113,16 +113,16 @@ const About: React.FC<AboutProps> = ({ className }) => {
                   className="group h-full"
                 >
                   <TiltedCard
-                    backgroundColor="rgba(14, 13, 28, 0.8)"
-                    gradientColors={['rgba(14, 13, 28, 0.8)', 'rgba(20, 19, 40, 0.6)']}
+                    backgroundColor="#0e0d1c"
+                    gradientColors={['#0e0d1c', '#0e0d1c']}
                     altText={`${feature.title} - UACS`}
                     captionText={feature.title}
                     containerHeight="280px"
                     containerWidth="100%"
                     imageHeight="280px"
                     imageWidth="100%"
-                    rotateAmplitude={12}
-                    scaleOnHover={1.03}
+                    rotateAmplitude={8}
+                    scaleOnHover={1.02}
                     showMobileWarning={false}
                     showTooltip={false}
                     displayOverlayContent={true}

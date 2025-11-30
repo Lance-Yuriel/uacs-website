@@ -122,7 +122,7 @@ const Hero: React.FC<HeroProps> = ({ className }) => {
               external={navigation.ctaButton.external}
               variant="primary"
               size="lg"
-              className="w-full sm:w-auto min-w-[240px] sm:min-w-[280px] font-bold text-lg sm:text-xl px-8 sm:px-12 py-5 sm:py-6 shadow-2xl hover:shadow-primary-500/25 border-2 border-primary-400 transform hover:scale-[1.02] transition-transform duration-300 ease-out touch-manipulation"
+              className="w-full sm:w-auto min-w-[240px] sm:min-w-[280px] font-bold text-lg sm:text-xl px-8 sm:px-12 py-5 sm:py-6 shadow-2xl hover:shadow-primary-500/25 border-[3px] border-[#BBD6FF] shadow-[0_0_12px_rgba(187,214,255,0.5)] transform hover:scale-[1.02] transition-transform duration-300 ease-out touch-manipulation"
             >
               {navigation.ctaButton.label}
             </Button>

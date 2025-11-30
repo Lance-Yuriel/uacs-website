@@ -130,7 +130,7 @@ const ExecutiveGrid: React.FC<ExecutiveGridProps> = ({ className }) => {
 
         {/* Future Executives Message */}
         <motion.div variants={itemVariants} className="text-center max-w-2xl mx-auto">
-          <div className="bg-surface-card/50 backdrop-blur-sm border border-border-default rounded-2xl p-8">
+          <div className="bg-surface-card/50 backdrop-blur-sm border-2 border-[#BBD6FF] rounded-2xl p-8 shadow-[0_0_12px_rgba(187,214,255,0.5)]">
             <h3 className="text-xl font-semibold text-white mb-4">
               Growing Leadership Team
             </h3>

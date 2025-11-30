@@ -52,7 +52,7 @@ const ExecutiveCard: React.FC<ExecutiveCardProps> = ({ executive, className }) =
   return (
     <>
       <div className={className}>
-        <Card className="min-h-[520px] flex flex-col !border-white bg-[#0e0d1c]/90" hover={false} glass={false}>
+        <Card className="min-h-[520px] flex flex-col !border-2 !border-[#BBD6FF] bg-[#0e0d1c]/90 shadow-[0_0_12px_rgba(187,214,255,0.5)]" hover={false} glass={false}>
           <CardContent className="flex-1 flex flex-col p-4 md:p-6 text-center h-full relative min-h-0">
             {/* Expand Icon - Top Right */}
             <button

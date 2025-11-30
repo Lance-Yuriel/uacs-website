@@ -101,9 +101,9 @@ export default function TiltedCard({
   return (
     <figure
       ref={ref}
-      className="relative w-full h-full [perspective:800px] flex flex-col items-center justify-center"
+      className={`relative w-full [perspective:800px] flex flex-col items-center justify-center ${containerHeight === 'auto' ? '' : 'h-full'}`}
       style={{
-        height: containerHeight,
+        height: containerHeight === 'auto' ? undefined : containerHeight,
         width: containerWidth
       }}
       onMouseMove={handleMouse}
@@ -117,10 +117,11 @@ export default function TiltedCard({
       )}
 
       <motion.div
-        className="relative [transform-style:preserve-3d] rounded-2xl overflow-hidden border border-border-default"
+        className="relative [transform-style:preserve-3d] rounded-2xl overflow-hidden border-2 border-[#BBD6FF] shadow-[0_0_12px_rgba(187,214,255,0.5)]"
         style={{
           width: imageWidth,
-          height: imageHeight,
+          height: imageHeight === 'auto' ? undefined : imageHeight,
+          minHeight: imageHeight === 'auto' ? '100%' : undefined,
           rotateX,
           rotateY,
           scale,

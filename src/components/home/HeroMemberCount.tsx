@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { User } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui';
+import { TiltedCard } from '@/components/ui';
 import { MemberCountResponse } from '@/types/site';
 
 export interface HeroMemberCountProps {
@@ -84,14 +84,28 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
         }}
         className={`flex justify-center ${className || ''}`}
       >
-        <Card className="max-w-md w-full transition-transform duration-300 hover:scale-[1.02]" hover={true}>
-          <CardContent className="p-8">
-            <div className="text-center">
-              <User className="h-12 w-12 text-text-tertiary mx-auto mb-4 animate-pulse" />
-              <p className="text-text-secondary text-lg">Loading member count...</p>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="w-full max-w-md">
+          <TiltedCard
+            backgroundColor="#0e0d1c"
+            gradientColors={['#0e0d1c', '#0e0d1c']}
+            altText="Loading member count"
+            captionText=""
+            containerHeight="220px"
+            containerWidth="100%"
+            imageHeight="220px"
+            imageWidth="100%"
+            rotateAmplitude={12}
+            scaleOnHover={1.03}
+            showMobileWarning={false}
+            showTooltip={false}
+            displayOverlayContent={true}
+          >
+          <div className="w-full h-full flex flex-col items-center justify-center text-center">
+            <User className="h-12 w-12 text-text-tertiary mx-auto mb-4 animate-pulse" />
+            <p className="text-text-secondary text-lg">Loading member count...</p>
+          </div>
+        </TiltedCard>
+        </div>
       </motion.div>
     );
   }
@@ -106,16 +120,30 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
         }}
         className={`flex justify-center ${className || ''}`}
       >
-        <Card className="max-w-md w-full transition-transform duration-300 hover:scale-[1.02]" hover={true}>
-          <CardContent className="p-8">
-            <div className="text-center">
+        <div className="w-full max-w-md">
+          <TiltedCard
+            backgroundColor="#0e0d1c"
+            gradientColors={['#0e0d1c', '#0e0d1c']}
+            altText="Member count error"
+            captionText=""
+            containerHeight="220px"
+            containerWidth="100%"
+            imageHeight="220px"
+            imageWidth="100%"
+            rotateAmplitude={12}
+            scaleOnHover={1.03}
+            showMobileWarning={false}
+            showTooltip={false}
+            displayOverlayContent={true}
+          >
+            <div className="w-full h-full flex flex-col items-center justify-center text-center">
               <User className="h-12 w-12 text-text-tertiary mx-auto mb-4" />
               <p className="text-text-secondary text-lg">
                 Unable to retrieve member count at this time
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </TiltedCard>
+        </div>
       </motion.div>
     );
   }
@@ -128,9 +156,23 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
       }}
       className={`flex justify-center ${className || ''}`}
     >
-      <Card className="max-w-md w-full transition-transform duration-300 hover:scale-[1.02]" hover={true}>
-        <CardContent className="p-8">
-          <div className="text-center">
+      <div className="w-full max-w-md">
+        <TiltedCard
+          backgroundColor="#0e0d1c"
+          gradientColors={['#0e0d1c', '#0e0d1c']}
+          altText={`${currentYear} Member Count`}
+          captionText={`${currentYear} Member Count`}
+          containerHeight="240px"
+          containerWidth="100%"
+          imageHeight="240px"
+          imageWidth="100%"
+          rotateAmplitude={8}
+          scaleOnHover={1.02}
+          showMobileWarning={false}
+          showTooltip={false}
+          displayOverlayContent={true}
+        >
+          <div className="w-full h-full flex flex-col items-center justify-center text-center">
             <div className="flex items-center justify-center mb-4">
               <User className="h-16 w-16 text-primary-500" />
             </div>
@@ -159,8 +201,8 @@ const HeroMemberCount: React.FC<HeroMemberCountProps> = ({ className }) => {
               )}
             </motion.div>
           </div>
-        </CardContent>
-      </Card>
+        </TiltedCard>
+      </div>
     </motion.div>
   );
 };

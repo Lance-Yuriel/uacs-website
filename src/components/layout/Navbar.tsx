@@ -72,20 +72,24 @@ const Navbar: React.FC<NavbarProps> = ({ className }) => {
             {/* Desktop Navigation - Centered */}
             <div className="hidden md:flex flex-1 justify-center">
               <div className="flex items-center space-x-8">
-                {navigation.mainNav.map((item) => (
-                  <button
-                    key={item.label}
-                    onClick={() => handleNavClick(item.href)}
-                    className={cn(
-                      'px-3 py-2 text-sm font-medium transition-colors',
-                      'text-text-secondary hover:text-white',
-                      activeSection === item.href.replace('#', '') && 
-                      'text-white border-b-2 border-primary-500'
-                    )}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+                {navigation.mainNav.map((item) => {
+                  const sectionId = item.href.replace('#', '');
+                  const isActive = activeSection === sectionId;
+                  return (
+                    <button
+                      key={item.label}
+                      onClick={() => handleNavClick(item.href)}
+                      className={cn(
+                        'px-3 py-2 text-sm font-medium transition-colors',
+                        isActive 
+                          ? 'text-white border-b-2 border-primary-500' 
+                          : 'text-text-secondary hover:text-white'
+                      )}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

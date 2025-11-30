@@ -64,7 +64,7 @@ const Constitution: React.FC<ConstitutionProps> = ({ className }) => {
 
         {/* Constitution Content */}
         <motion.div variants={itemVariants} className="max-w-5xl mx-auto">
-          <div className="bg-surface-card/50 backdrop-blur-sm border border-border-default rounded-2xl p-8 md:p-12 shadow-xl">
+          <div className="bg-surface-card/50 backdrop-blur-sm border-2 border-[#BBD6FF] rounded-2xl p-8 md:p-12 shadow-[0_0_12px_rgba(187,214,255,0.5)]">
             <div className="text-center space-y-12">
               {/* Icon and Button */}
               <div className="flex flex-col items-center space-y-6">

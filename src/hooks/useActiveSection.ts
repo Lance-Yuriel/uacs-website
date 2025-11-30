@@ -7,49 +7,52 @@ export interface UseActiveSectionOptions {
 }
 
 export function useActiveSection(options: UseActiveSectionOptions = {}) {
-  const { threshold = 0.3, rootMargin = '0px 0px -80% 0px' } = options;
-  const [activeSection, setActiveSection] = useState<string>('');
+  const { threshold = 0.5, rootMargin = '-20% 0px -60% 0px' } = options;
+  const [activeSection, setActiveSection] = useState<string>('hero');
 
   useEffect(() => {
     const sections = document.querySelectorAll('[data-section]');
     
     if (sections.length === 0) return;
 
-    const observerCallback = throttle((entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const sectionId = entry.target.getAttribute('data-section');
+    const updateActiveSection = () => {
+      const scrollPosition = window.scrollY + 100; // Offset for navbar
+      
+      let currentSection = 'hero'; // Default to hero
+      
+      sections.forEach((section) => {
+        const element = section as HTMLElement;
+        const sectionTop = element.offsetTop;
+        const sectionHeight = element.offsetHeight;
+        const sectionId = element.getAttribute('data-section');
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
           if (sectionId) {
-            setActiveSection(sectionId);
+            currentSection = sectionId;
           }
         }
       });
-    }, 100) as (entries: IntersectionObserverEntry[]) => void;
-
-    const observer = new IntersectionObserver(observerCallback, {
-      threshold,
-      rootMargin,
-    });
-
-    sections.forEach((section) => {
-      observer.observe(section);
-    });
-
-    // Set initial active section
-    const firstSection = sections[0];
-    if (firstSection) {
-      const sectionId = firstSection.getAttribute('data-section');
-      if (sectionId) {
-        setActiveSection(sectionId);
+      
+      // If we're at the very top, make sure hero is active
+      if (window.scrollY < 100) {
+        currentSection = 'hero';
       }
-    }
-
-    return () => {
-      sections.forEach((section) => {
-        observer.unobserve(section);
-      });
+      
+      setActiveSection(currentSection);
     };
-  }, [threshold, rootMargin]);
+
+    const throttledUpdate = throttle(updateActiveSection, 100);
+
+    // Initial check
+    updateActiveSection();
+
+    // Listen to scroll
+    window.addEventListener('scroll', throttledUpdate);
+    
+    return () => {
+      window.removeEventListener('scroll', throttledUpdate);
+    };
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.querySelector(`[data-section="${sectionId}"]`);

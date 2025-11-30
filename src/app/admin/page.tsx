@@ -81,45 +81,51 @@ export default function AdminDashboard() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card 
-              glass={false} 
-              hover={false} 
-              className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white hover:scale-[1.02] [&:hover_*]:text-black touch-manipulation"
+            <div
               onClick={() => router.push('/admin/executives')}
-              style={{ minHeight: '120px' }}
+              className="cursor-pointer touch-manipulation"
             >
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="p-3 sm:p-4 bg-primary-500/10 rounded-lg flex-shrink-0">
-                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-primary-400" />
+              <Card 
+                glass={false} 
+                hover={false} 
+                className="bg-surface-card transition-all duration-300 hover:bg-white hover:scale-[1.02] [&:hover_*]:text-black border-2 border-[#BBD6FF] shadow-[0_0_12px_rgba(187,214,255,0.5)] min-h-[120px]"
+              >
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="p-3 sm:p-4 bg-primary-500/10 rounded-lg flex-shrink-0">
+                      <Users className="h-6 w-6 sm:h-8 sm:w-8 text-primary-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 font-display tracking-tight">Executives</h2>
+                      <p className="text-text-secondary text-sm sm:text-base">Manage team members</p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 font-display tracking-tight">Executives</h2>
-                    <p className="text-text-secondary text-sm sm:text-base">Manage team members</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card 
-              glass={false} 
-              hover={false} 
-              className="cursor-pointer bg-surface-card transition-all duration-300 hover:bg-white hover:scale-[1.02] [&:hover_*]:text-black touch-manipulation"
+            <div
               onClick={() => router.push('/admin/events')}
-              style={{ minHeight: '120px' }}
+              className="cursor-pointer touch-manipulation"
             >
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="p-3 sm:p-4 bg-primary-500/10 rounded-lg flex-shrink-0">
-                    <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-primary-400" />
+              <Card 
+                glass={false} 
+                hover={false} 
+                className="bg-surface-card transition-all duration-300 hover:bg-white hover:scale-[1.02] [&:hover_*]:text-black border-2 border-[#BBD6FF] shadow-[0_0_12px_rgba(187,214,255,0.5)] min-h-[120px]"
+              >
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="p-3 sm:p-4 bg-primary-500/10 rounded-lg flex-shrink-0">
+                      <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-primary-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 font-display tracking-tight">Events</h2>
+                      <p className="text-text-secondary text-sm sm:text-base">Manage events and photos</p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 font-display tracking-tight">Events</h2>
-                    <p className="text-text-secondary text-sm sm:text-base">Manage events and photos</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           <div className="mt-8">
