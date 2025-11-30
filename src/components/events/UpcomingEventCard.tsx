@@ -26,6 +26,26 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({ event, className 
   const daysNumber = daysMatch ? daysMatch[1] : null;
   const isToday = event.isHappeningToday;
 
+  // Check if description is empty
+  const hasDescription = event.upcomingDescription && event.upcomingDescription.trim().length > 0;
+
+  // Adjust top margin based on description presence
+  // Only shift content down when description is completely empty
+  const getCountdownTopMargin = () => {
+    if (daysNumber && !isToday) {
+      // When there's a countdown, use negative margin but adjust based on description
+      if (!hasDescription) {
+        return 'mt-2 md:mt-4'; // Push down when no description
+      }
+      return '-mt-6 md:-mt-8'; // Original negative margin when description exists
+    }
+    // When "Happening Today!" or no countdown, add margin if no description
+    if (!hasDescription) {
+      return 'mt-4 md:mt-6'; // Push down when no description
+    }
+    return ''; // Default spacing when description exists
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -51,7 +71,7 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({ event, className 
       >
         <div className="px-8 md:px-10 py-5 md:py-6 flex flex-col items-center text-center h-full min-h-0">
           {/* Countdown Message - Hero Section */}
-          <div className={`w-full space-y-1 flex-shrink-0 mb-3 ${daysNumber && !isToday ? '-mt-6 md:-mt-8' : ''}`}>
+          <div className={`w-full space-y-1 flex-shrink-0 mb-3 ${getCountdownTopMargin()}`}>
             {daysNumber && !isToday ? (
               <div className="space-y-1">
                 <div className="text-6xl md:text-7xl font-extrabold leading-none">
@@ -87,14 +107,14 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({ event, className 
           </div>
 
           {/* Event Title - Large and Prominent */}
-          <div className="w-full flex-shrink-0 mb-4">
+          <div className={`w-full flex-shrink-0 ${!hasDescription ? 'mb-5 md:mb-6' : 'mb-4'}`}>
             <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight font-display tracking-tight">
               {event.eventName}
             </h2>
           </div>
 
           {/* Event Details - Subtle and Centered */}
-          <div className="w-full flex-shrink-0 mb-5">
+          <div className={`w-full flex-shrink-0 ${!hasDescription ? 'mb-6 md:mb-8' : 'mb-5'}`}>
             {/* Date, Time, and Location on one line (wraps if needed) */}
             <div className="flex items-center justify-center gap-3 md:gap-4 text-text-secondary text-sm md:text-base flex-nowrap md:flex-wrap">
               <div className="flex items-center flex-shrink-0">
@@ -120,7 +140,7 @@ const UpcomingEventCard: React.FC<UpcomingEventCardProps> = ({ event, className 
 
           {/* Upcoming Description - If Available */}
           {event.upcomingDescription && (
-            <div className="w-full flex-shrink-0 mb-auto">
+            <div className="w-full flex-shrink-0 mb-4 md:mb-5">
               <p className="text-sm md:text-base text-text-secondary leading-relaxed max-w-2xl mx-auto break-words line-clamp-3">
                 {event.upcomingDescription}
               </p>
