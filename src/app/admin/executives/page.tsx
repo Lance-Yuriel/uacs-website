@@ -118,7 +118,7 @@ function SortableExecutiveCard({ executive, onEdit, onDelete, deleting }: Sortab
           <div className="flex gap-2 pt-4 border-t border-border-default mt-auto">
             <button
               onClick={() => onEdit(executive)}
-              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all duration-200 text-sm font-medium border border-primary-500/30 hover:border-primary-500/50 touch-manipulation"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 border border-white text-white hover:bg-white hover:text-black rounded-lg transition-all duration-300 text-sm font-medium touch-manipulation"
               style={{ minHeight: '44px' }}
             >
               <Pencil className="h-4 w-4" />
@@ -345,7 +345,7 @@ export default function AdminExecutivesPage() {
             </div>
             <Button
               onClick={handleAddClick}
-              className="bg-primary-500 hover:bg-primary-600 text-white touch-manipulation w-full sm:w-auto"
+              className="border border-white text-white hover:bg-white hover:text-black transition-all duration-300 touch-manipulation w-full sm:w-auto"
               style={{ minHeight: '44px' }}
             >
               <Plus className="h-4 w-4 mr-2" />

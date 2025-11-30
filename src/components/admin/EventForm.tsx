@@ -466,9 +466,9 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                     <span className={`text-xs ${eventNameLength > MAX_EVENT_NAME_CHARACTERS ? 'text-red-400' : 'text-text-secondary'}`}>
                       {eventNameLength}/{MAX_EVENT_NAME_CHARACTERS} characters
                     </span>
-                    {errors.eventName && (
+                  {errors.eventName && (
                       <span className="text-xs text-red-400">{errors.eventName}</span>
-                    )}
+                  )}
                   </div>
                 </div>
 
@@ -532,7 +532,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                     <span className={`text-xs ${locationLength > MAX_LOCATION_CHARACTERS ? 'text-red-400' : 'text-text-secondary'}`}>
                       {locationLength}/{MAX_LOCATION_CHARACTERS} characters
                     </span>
-                    {errors.location && (
+                  {errors.location && (
                       <span className="text-xs text-red-400">{errors.location}</span>
                     )}
                   </div>
@@ -726,11 +726,11 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                   </div>
                 )}
 
-                <div className="flex gap-3 pt-2">
+                <div className="flex gap-3 pt-2 justify-center">
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 bg-primary-500 hover:bg-primary-600 text-white"
+                    className="px-6 border border-white text-white hover:bg-white hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-white"
                   >
                     {loading ? (
                       <>
@@ -745,7 +745,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                     type="button"
                     onClick={handleCancel}
                     disabled={loading}
-                    className="px-6 bg-background-secondary hover:bg-background-tertiary text-white"
+                    className="px-6 border border-white text-white hover:bg-white hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-white"
                   >
                     Cancel
                   </Button>

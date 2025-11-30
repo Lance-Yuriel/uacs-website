@@ -174,7 +174,7 @@ export default function AdminEventsPage() {
           </div>
           <Button
             onClick={handleAddEvent}
-            className="bg-primary-500 hover:bg-primary-600 text-white self-start md:self-auto touch-manipulation w-full sm:w-auto"
+            className="border border-white text-white hover:bg-white hover:text-black transition-all duration-300 self-start md:self-auto touch-manipulation w-full sm:w-auto"
             style={{ minHeight: '44px' }}
           >
             <Plus className="h-4 w-4 mr-2" />

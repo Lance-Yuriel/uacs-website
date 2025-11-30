@@ -800,11 +800,11 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
                 </div>
               </div>
 
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-4 pt-4 justify-center">
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-primary-500 hover:bg-primary-600 text-white"
+                  className="px-6 border border-white text-white hover:bg-white hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-white"
                 >
                   {loading ? (
                     <>
@@ -819,7 +819,7 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
                   type="button"
                   onClick={onClose}
                   disabled={loading}
-                  className="px-6 bg-background-secondary hover:bg-background-tertiary text-white"
+                  className="px-6 border border-white text-white hover:bg-white hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-white"
                 >
                   Cancel
                 </Button>
