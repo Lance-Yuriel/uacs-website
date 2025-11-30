@@ -57,11 +57,16 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
     favourite_skills: executive?.favourite_skills?.join(', ') || '',
   });
 
+  const nameLength = useMemo(() => formData.name.length, [formData.name]);
   const responsibilitiesPreview = useMemo(() =>
     formData.responsibilities
       .split('\n')
       .map((r) => r.trim())
       .filter((r) => r.length > 0),
+    [formData.responsibilities]
+  );
+  const responsibilitiesLines = useMemo(() => 
+    formData.responsibilities.split('\n').map((r) => r.trim()),
     [formData.responsibilities]
   );
 
@@ -469,9 +474,14 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
                       errors.name ? 'border-red-500' : 'border-border-default focus:border-primary-500'
                     }`}
                   />
-                  {errors.name && (
-                    <span className="text-xs text-red-400 mt-1 block">{errors.name}</span>
-                  )}
+                  <div className="flex justify-between mt-1">
+                    <span className={`text-xs ${nameLength > MAX_NAME_CHARACTERS ? 'text-red-400' : 'text-text-secondary'}`}>
+                      {nameLength}/{MAX_NAME_CHARACTERS} characters
+                    </span>
+                    {errors.name && (
+                      <span className="text-xs text-red-400">{errors.name}</span>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -555,7 +565,7 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
                 />
                 <div className="flex justify-between mt-1">
                   <span className={`text-xs ${errors.bio ? 'text-red-400' : 'text-text-secondary'}`}>
-                    {formData.bio.length}/50 characters (~{estimateWordsFromCharacters(formData.bio.length)} words)
+                    {formData.bio.length}/50 characters
                   </span>
                   {errors.bio && (
                     <span className="text-xs text-red-400">{errors.bio}</span>
@@ -669,7 +679,7 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
                   <span className={`text-xs ${
                     errors.introduction || formData.introduction.length < MIN_INTRO_CHARACTERS ? 'text-red-400' : 'text-text-secondary'
                   }`}>
-                    {formData.introduction.length}/{MAX_INTRO_CHARACTERS} characters (~{estimateIntroWords(formData.introduction.length)} words)
+                    {formData.introduction.length}/{MAX_INTRO_CHARACTERS} characters
                     {formData.introduction.length > 0 && formData.introduction.length < MIN_INTRO_CHARACTERS && (
                       <span className="ml-2">(minimum {MIN_INTRO_CHARACTERS})</span>
                     )}
@@ -695,18 +705,26 @@ export default function ExecutiveForm({ executive, onClose }: ExecutiveFormProps
                   }`}
                   placeholder="Responsibility 1&#10;Responsibility 2&#10;Responsibility 3"
                 />
-                <div className="flex justify-between mt-1">
-                  <span className={`text-xs ${
-                    errors.responsibilities ? 'text-red-400' : 'text-text-secondary'
-                  }`}>
-                    {formData.responsibilities
-                      .split('\n')
-                      .map(r => r.trim())
-                      .filter(r => r.length > 0).length}/3 responsibilities (~5 words per line)
-                  </span>
-                  {errors.responsibilities && (
-                    <span className="text-xs text-red-400">{errors.responsibilities}</span>
-                  )}
+                <div className="mt-1 space-y-1">
+                  <div className="flex justify-between text-xs">
+                    <span className={responsibilitiesPreview.length > 3 ? 'text-red-400' : 'text-text-secondary'}>
+                      {responsibilitiesPreview.length}/3 responsibilities
+                    </span>
+                    {errors.responsibilities && (
+                      <span className="text-red-400">{errors.responsibilities}</span>
+                    )}
+                  </div>
+                  {responsibilitiesLines.slice(0, 3).map((line, index) => {
+                    const lineLength = line.length;
+                    const isOverLimit = lineLength > 40;
+                    return (
+                      <div key={index} className="flex justify-between text-xs">
+                        <span className={isOverLimit ? 'text-red-400' : 'text-text-secondary'}>
+                          Line {index + 1}: {lineLength}/40 characters
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 

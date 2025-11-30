@@ -105,6 +105,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
     registrationLink: event?.registrationLink ?? '',
   });
 
+  const eventNameLength = useMemo(() => formData.eventName.length, [formData.eventName]);
+  const locationLength = useMemo(() => formData.location.length, [formData.location]);
   const descriptionLength = useMemo(() => formData.description.length, [formData.description]);
   const descriptionEstimatedWords = useMemo(
     () => estimateDescriptionWords(descriptionLength),
@@ -460,9 +462,14 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                     }`}
                     placeholder="Calisthenics Training Night"
                   />
-                  {errors.eventName && (
-                    <p className="mt-1 text-xs text-red-400">{errors.eventName}</p>
-                  )}
+                  <div className="flex justify-between mt-1">
+                    <span className={`text-xs ${eventNameLength > MAX_EVENT_NAME_CHARACTERS ? 'text-red-400' : 'text-text-secondary'}`}>
+                      {eventNameLength}/{MAX_EVENT_NAME_CHARACTERS} characters
+                    </span>
+                    {errors.eventName && (
+                      <span className="text-xs text-red-400">{errors.eventName}</span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
@@ -521,9 +528,14 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                     }`}
                     placeholder="UoA Recreation Centre"
                   />
-                  {errors.location && (
-                    <p className="mt-1 text-xs text-red-400">{errors.location}</p>
-                  )}
+                  <div className="flex justify-between mt-1">
+                    <span className={`text-xs ${locationLength > MAX_LOCATION_CHARACTERS ? 'text-red-400' : 'text-text-secondary'}`}>
+                      {locationLength}/{MAX_LOCATION_CHARACTERS} characters
+                    </span>
+                    {errors.location && (
+                      <span className="text-xs text-red-400">{errors.location}</span>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -572,7 +584,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                   />
                   <div className="flex justify-between mt-1 text-xs">
                     <span className={descriptionLength > MAX_DESCRIPTION_CHARACTERS ? 'text-red-400' : 'text-text-secondary'}>
-                      {descriptionLength}/{MAX_DESCRIPTION_CHARACTERS} characters (~{descriptionEstimatedWords} words)
+                      {descriptionLength}/{MAX_DESCRIPTION_CHARACTERS} characters
                     </span>
                     {errors.description && (
                       <span className="text-red-400">{errors.description}</span>
