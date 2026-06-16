@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Card, CardContent, GradientText } from '@/components/ui';
 import { motion } from 'framer-motion';
-import { Users, Calendar, LogOut } from 'lucide-react';
-import { Button } from '@/components/ui';
+import { Calendar } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
@@ -43,11 +42,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -80,30 +74,7 @@ export default function AdminDashboard() {
             <p className="text-lg md:text-xl text-text-secondary">Welcome, {user.email}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <div
-              onClick={() => router.push('/admin/executives')}
-              className="cursor-pointer touch-manipulation"
-            >
-              <Card 
-                glass={false} 
-                hover={false} 
-                className="bg-surface-card transition-all duration-300 hover:bg-white hover:scale-[1.02] [&:hover_*]:text-black border-2 border-[#BBD6FF] shadow-[0_0_12px_rgba(187,214,255,0.5)] min-h-[120px]"
-              >
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex items-center gap-3 sm:gap-4">
-                    <div className="p-3 sm:p-4 bg-primary-500/10 rounded-lg flex-shrink-0">
-                      <Users className="h-6 w-6 sm:h-8 sm:w-8 text-primary-400" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 font-display tracking-tight">Executives</h2>
-                      <p className="text-text-secondary text-sm sm:text-base">Manage team members</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
+          <div className="max-w-md mx-auto">
             <div
               onClick={() => router.push('/admin/events')}
               className="cursor-pointer touch-manipulation"

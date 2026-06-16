@@ -22,48 +22,28 @@
 
 1. In Supabase dashboard, click **SQL Editor** in the left sidebar
 2. Click **New Query**
-3. Paste this SQL and click **RUN**:
+3. Paste the contents of `SUPABASE_INITIAL_SCHEMA.sql` and click **RUN**
+
+Alternatively, paste this SQL directly:
 
 ```sql
--- Create executives table
-CREATE TABLE executives (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  position TEXT NOT NULL,
-  title TEXT,
-  photo_url TEXT,
-  short_bio TEXT,
-  introduction TEXT,
-  degree TEXT,
-  favourite_skills TEXT[],
-  email TEXT,
-  instagram TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Create events table
 CREATE TABLE events (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id TEXT PRIMARY KEY,
   event_name TEXT NOT NULL,
   date DATE NOT NULL,
-  time TIME,
+  time TEXT,
   location TEXT,
   description TEXT,
+  upcoming_description TEXT,
+  event_photo_url TEXT,
   google_drive_link TEXT,
-  status TEXT CHECK (status IN ('upcoming', 'past')) DEFAULT 'upcoming',
+  registration_link TEXT,
+  status TEXT DEFAULT 'past' CHECK (status IN ('upcoming', 'past')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Enable Row Level Security (RLS) on both tables
-ALTER TABLE executives ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
-
--- Create policies to allow public read access (visitors can view data)
-CREATE POLICY "Public read access for executives"
-  ON executives FOR SELECT
-  USING (true);
 
 CREATE POLICY "Public read access for events"
   ON events FOR SELECT
@@ -86,7 +66,7 @@ Run `npm run dev` and check if the connection works. You should see no errors in
 
 ## Next Steps
 
-After setup is complete, we'll:
-1. Add migration data (existing executives and events)
-2. Implement admin authentication
-3. Add CRUD operations
+After setup is complete:
+1. Run `npm run migrate` to seed events from JSON data
+2. Configure admin authentication (see `SETUP_ADMIN_AUTH.md`)
+3. Set up event photo storage (see `SUPABASE_EVENT_PHOTOS_SETUP.md`)

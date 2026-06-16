@@ -2,64 +2,6 @@
 export interface Database {
   public: {
     Tables: {
-      executives: {
-        Row: {
-          id: string;
-          name: string;
-          position: string;
-          title: string | null;
-          is_co_founder: boolean | null;
-          bio: string | null;
-          image: string | null;
-          responsibilities: string[] | null;
-          joined_year: number | null;
-          email: string | null;
-          instagram: string | null;
-          introduction: string | null;
-          degree: string | null;
-          favourite_skills: string[] | null;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          name: string;
-          position: string;
-          title?: string | null;
-          is_co_founder?: boolean | null;
-          bio?: string | null;
-          image?: string | null;
-          responsibilities?: string[] | null;
-          joined_year?: number | null;
-          email?: string | null;
-          instagram?: string | null;
-          linked_in?: string | null;
-          introduction?: string | null;
-          degree?: string | null;
-          favourite_skills?: string[] | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          name?: string;
-          position?: string;
-          title?: string | null;
-          is_co_founder?: boolean | null;
-          bio?: string | null;
-          image?: string | null;
-          responsibilities?: string[] | null;
-          joined_year?: number | null;
-          email?: string | null;
-          instagram?: string | null;
-          linked_in?: string | null;
-          introduction?: string | null;
-          degree?: string | null;
-          favourite_skills?: string[] | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-      };
       events: {
         Row: {
           id: string;

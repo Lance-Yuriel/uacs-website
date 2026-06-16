@@ -180,29 +180,6 @@ html.scrolling ::-webkit-scrollbar-thumb {
   opacity: 1;
 }
 
-/* Executive modal scrollbar - thin */
-#executive-modal-scroll-container {
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #27272A transparent; /* Firefox */
-}
-
-#executive-modal-scroll-container::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-#executive-modal-scroll-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-#executive-modal-scroll-container::-webkit-scrollbar-thumb {
-  background: #27272A;
-  border-radius: 3px;
-}
-
-#executive-modal-scroll-container::-webkit-scrollbar-thumb:hover {
-  background: #3F3F46;
-}
 
 /* Hide scrollbar utility */
 .scrollbar-hide {

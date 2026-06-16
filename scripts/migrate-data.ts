@@ -6,7 +6,6 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import executivesData from '../src/data/executives.json';
 import eventsData from '../src/data/events.json';
 import * as dotenv from 'dotenv';
 
@@ -23,53 +22,6 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
-
-async function migrateExecutives() {
-  console.log('📊 Migrating executives data...');
-  
-  // First, delete all existing executives to avoid duplicates
-  console.log('🗑️  Clearing existing executives...');
-  const { error: deleteError } = await supabase
-    .from('executives')
-    .delete()
-    .not('id', 'is', null); // Delete all rows
-  
-  if (deleteError) {
-    console.error('⚠️  Warning: Could not clear existing executives:', deleteError);
-    console.log('Continuing with migration (you may have duplicates)...');
-  } else {
-    console.log('✅ Cleared existing executives');
-  }
-  
-  const executives = executivesData.executives.map((exec) => ({
-    id: exec.id,
-    name: exec.name,
-    position: exec.position,
-    title: exec.title || null,
-    is_co_founder: exec.isCoFounder ?? false,
-    bio: exec.bio || null,
-    image: exec.image || null,
-    responsibilities: exec.responsibilities || null,
-    joined_year: exec.joinedYear || null,
-    email: exec.email || null,
-    instagram: exec.instagram || null,
-    introduction: (exec as any).introduction || null,
-    degree: (exec as any).degree || null,
-    favourite_skills: (exec as any).favouriteSkills || null,
-  }));
-
-  const { data, error } = await supabase
-    .from('executives')
-    .insert(executives);
-
-  if (error) {
-    console.error('❌ Error migrating executives:', error);
-    return false;
-  }
-
-  console.log(`✅ Successfully migrated ${executives.length} executives`);
-  return true;
-}
 
 async function migrateEvents() {
   console.log('📅 Migrating events data...');
@@ -145,15 +97,12 @@ async function migrateEvents() {
 async function main() {
   console.log('🚀 Starting database migration...\n');
 
-  const executivesSuccess = await migrateExecutives();
-  console.log();
   const eventsSuccess = await migrateEvents();
 
   console.log('\n📋 Migration Summary:');
-  console.log(`Executives: ${executivesSuccess ? '✅' : '❌'}`);
   console.log(`Events: ${eventsSuccess ? '✅' : '❌'}`);
 
-  if (executivesSuccess && eventsSuccess) {
+  if (eventsSuccess) {
     console.log('\n🎉 Migration completed successfully!');
   } else {
     console.log('\n⚠️  Migration completed with errors. Please check the logs above.');

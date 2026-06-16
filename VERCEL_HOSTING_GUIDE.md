@@ -6,8 +6,8 @@ This guide provides step-by-step instructions for deploying the UACS Website to 
 
 The UACS Website is a Next.js 15 App Router application for the University of Auckland Calisthenics Society. It features:
 
-- **Public-facing website**: Marketing site with hero section, executive carousel, events display, and member counter
-- **Admin dashboard**: Authenticated Supabase-based management system for executives and events
+- **Public-facing website**: Marketing site with hero section, events display, and member counter
+- **Admin dashboard**: Authenticated Supabase-based management system for events
 - **Backend**: Supabase (PostgreSQL, Auth, Storage) + Google Sheets API for member count
 - **Tech Stack**: Next.js 15.5.6, TypeScript, Tailwind CSS 4, Framer Motion, Supabase SSR
 
@@ -22,7 +22,6 @@ You have multiple feature branches:
 - `feature/event-enhancements` - Event photo uploads, separate descriptions
 - `feature/documentation-updates` - Documentation improvements
 - `feature/admin-authentication` - Admin auth system
-- `feature/executive-management` - Executive CRUD operations
 - `feature/supabase-schema` - Database schema
 - `feature/data-validation` - Form validation
 - `feature/add-data-validation` - Additional validation
@@ -66,27 +65,18 @@ These features are planned but not yet implemented. They should be completed bef
    - Test touch interactions, scrolling, and layout
 
 2. **Hover Animations**
-   - Expand/minimize animations for executive cards
    - Better hover effects for event dropdown menus
    - Smooth transitions throughout the site
 
 3. **Past Events Expandable Cards**
    - Design and implement expandable cards for past events
-   - Similar to executive modal but tailored for events
 
 4. **Color Scheme Updates**
    - Consider incorporating more blue elements
    - Review and potentially update color palette
    - Ensure accessibility and contrast
 
-5. **Executive Carousel Fix**
-   - Fix display when screen is minimized
-   - When 3 cards can't fit, show only 1 card
-   - Ensure left/right arrow buttons still work correctly
-   - Current issue: Carousel doesn't adapt properly to smaller screens
-
-6. **Admin Pages Redesign**
-   - Improve UI/UX of admin executive editing page
+5. **Admin Pages Redesign**
    - Improve UI/UX of admin events editing page
    - Better visual hierarchy and user experience
 
@@ -208,7 +198,6 @@ For each variable, select:
    - Test public pages
    - Test admin login
    - Test member counter
-   - Test executive carousel
    - Test events display
 
 3. **Check Function Logs**
@@ -277,12 +266,10 @@ For each variable, select:
 
 - [ ] Public site loads correctly
 - [ ] Member counter displays and updates
-- [ ] Executive carousel works on all screen sizes
 - [ ] Events display correctly (upcoming and past)
 - [ ] Admin login works
-- [ ] Admin can create/edit executives
 - [ ] Admin can create/edit events
-- [ ] Image uploads work (executive photos, event photos)
+- [ ] Image uploads work (event photos)
 - [ ] Mobile responsiveness is verified
 - [ ] All links work correctly
 - [ ] Custom domain (if used) is configured
