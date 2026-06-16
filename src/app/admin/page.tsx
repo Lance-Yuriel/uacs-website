@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { auth } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { Card, CardContent, GradientText } from '@/components/ui';
 import { motion } from 'framer-motion';
 import { Calendar } from 'lucide-react';
@@ -13,34 +14,16 @@ export default function AdminDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    checkUser();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (!session) {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setLoading(false);
+      if (!firebaseUser) {
         router.push('/admin/login');
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => unsubscribe();
   }, [router]);
-
-  const checkUser = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        setUser(session.user);
-      } else {
-        router.push('/admin/login');
-      }
-    } catch (error) {
-      console.error('Error checking user:', error);
-      router.push('/admin/login');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (

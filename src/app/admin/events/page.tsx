@@ -13,7 +13,8 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { auth } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { Badge, Button, Card, CardContent, GradientText } from '@/components/ui';
 import { motion } from 'framer-motion';
 import EventForm from '@/components/admin/EventForm';
@@ -33,36 +34,17 @@ export default function AdminEventsPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
-    const initialise = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          router.push('/admin/login');
-          return;
-        }
-        setUser(session.user);
-        await fetchEvents();
-      } catch (err) {
-        console.error('Error initialising admin events page:', err);
-        setError('Unable to load events. Please try again.');
-      } finally {
-        setInitializing(false);
-      }
-    };
-
-    initialise();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (!firebaseUser) {
         router.push('/admin/login');
-      } else {
-        setUser(session.user);
+        return;
       }
+      setUser(firebaseUser);
+      setInitializing(false);
+      await fetchEvents();
     });
 
-    return () => subscription.unsubscribe();
+    return () => unsubscribe();
   }, [router]);
 
   const fetchEvents = async () => {
@@ -114,9 +96,12 @@ export default function AdminEventsPage() {
 
     try {
       setDeletingId(id);
+      const token = await auth.currentUser?.getIdToken();
       const response = await fetch(`/api/events/${id}`, {
         method: 'DELETE',
-        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {

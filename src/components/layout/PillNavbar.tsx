@@ -8,7 +8,8 @@ import { cn } from '@/lib/utils';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui';
-import { supabase } from '@/lib/supabase';
+import { auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
 import navigationData from '@/data/navigation.json';
 import { NavigationData } from '@/types/navigation';
 
@@ -35,7 +36,7 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
   }, [isAdmin, user]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut(auth);
     router.push('/');
   };
   

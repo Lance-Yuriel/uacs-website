@@ -1,37 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClientFromRequest } from '@/lib/supabase-server';
+import { adminDb } from '@/lib/firebase-admin';
 import { determineEventStatus } from '@/lib/events';
-import { mapRowToMetaEvent, validateEventPayload } from '../route';
+import { mapRowToMetaEvent, validateEventPayload, verifyAdmin } from '../route';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = await createClientFromRequest(request);
     const { id } = await context.params;
 
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle();
-
-    if (error) {
-      console.error('Error fetching event:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch event' },
-        { status: 500 }
-      );
-    }
-
-    if (!data) {
+    const doc = await adminDb.collection('events').doc(id).get();
+    if (!doc.exists) {
       return NextResponse.json(
         { error: 'Event not found' },
         { status: 404 }
       );
     }
 
+    const data = { id: doc.id, ...doc.data() };
     return NextResponse.json(mapRowToMetaEvent(data));
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('API GET ID Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -41,20 +28,8 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = await createClientFromRequest(request);
+    await verifyAdmin(request);
     const { id } = await context.params;
-
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 401 }
-      );
-    }
 
     const body = await request.json();
     validateEventPayload(body);
@@ -70,62 +45,44 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const registrationLink = typeof body.registrationLink === 'string' && body.registrationLink.trim().length > 0 ? body.registrationLink.trim() : null;
 
     const status = determineEventStatus(date);
+    const updatedAt = new Date().toISOString();
 
-    const { data, error } = await supabase
-      .from('events')
-      .update({
-        event_name: eventName,
-        date,
-        time,
-        location,
-        description,
-        upcoming_description: upcomingDescription,
-        event_photo_url: eventPhotoUrl,
-        google_drive_link: googleDriveLink,
-        registration_link: registrationLink,
-        status,
-      })
-      .eq('id', id)
-      .select()
-      .maybeSingle();
-
-    if (error) {
-      console.error('Error updating event:', error);
+    const docRef = adminDb.collection('events').doc(id);
+    const existingDoc = await docRef.get();
+    if (!existingDoc.exists) {
       return NextResponse.json(
-        { error: 'Failed to update event', details: error.message },
-        { status: 500 }
+        { error: 'Event not found' },
+        { status: 404 }
       );
     }
 
-    let updated = data;
+    const updatedData = {
+      eventName,
+      date,
+      time,
+      location,
+      description,
+      upcomingDescription,
+      eventPhotoUrl,
+      googleDriveLink,
+      registrationLink,
+      status,
+      updatedAt,
+    };
 
-    if (!updated) {
-      const { data: fetched, error: fetchError } = await supabase
-        .from('events')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
+    await docRef.update(updatedData);
 
-      if (fetchError) {
-        console.error('Error fetching updated event:', fetchError);
-        return NextResponse.json(
-          { error: 'Failed to fetch updated event', details: fetchError.message },
-          { status: 500 }
-        );
-      }
+    const completeDoc = {
+      id,
+      ...existingDoc.data(),
+      ...updatedData,
+    };
 
-      if (!fetched) {
-        return NextResponse.json(
-          { success: true, message: 'Event updated' },
-          { status: 200 }
-        );
-      }
-
-      updated = fetched;
-    }
-
-    return NextResponse.json(mapRowToMetaEvent(updated));
+    return NextResponse.json(mapRowToMetaEvent(completeDoc));
   } catch (error: any) {
+    if (error.message.startsWith('Unauthorized')) {
+      return NextResponse.json({ error: error.message }, { status: 401 });
+    }
     if (error?.details) {
       return NextResponse.json(
         { error: 'Validation failed', details: error.details },
@@ -133,7 +90,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    console.error('API Error:', error);
+    console.error('API PUT ID Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -143,48 +100,29 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = await createClientFromRequest(request);
+    await verifyAdmin(request);
     const { id } = await context.params;
 
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
+    const docRef = adminDb.collection('events').doc(id);
+    const doc = await docRef.get();
+    if (!doc.exists) {
       return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 401 }
+        { error: 'Event not found' },
+        { status: 404 }
       );
     }
 
-    const { error } = await supabase
-      .from('events')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      console.error('Error deleting event:', error);
-      return NextResponse.json(
-        { error: 'Failed to delete event', details: error.message },
-        { status: 500 }
-      );
-    }
-
+    await docRef.delete();
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {
-    if (error?.details) {
-      return NextResponse.json(
-        { error: 'Validation failed', details: error.details },
-        { status: 400 }
-      );
+    if (error.message.startsWith('Unauthorized')) {
+      return NextResponse.json({ error: error.message }, { status: 401 });
     }
 
-    console.error('API Error:', error);
+    console.error('API DELETE ID Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
-

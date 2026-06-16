@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { auth } from '@/lib/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Card, CardContent } from '@/components/ui';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -20,22 +21,25 @@ export default function AdminLogin() {
     setError(null);
 
     try {
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (signInError) {
-        setError(signInError.message);
-        setLoading(false);
-        return;
-      }
+      await signInWithEmailAndPassword(auth, email, password);
 
       // Login successful
       router.push('/admin');
       router.refresh();
-    } catch (err) {
-      setError('An unexpected error occurred');
+    } catch (err: any) {
+      console.error('Login error:', err);
+      let message = 'An unexpected error occurred';
+      if (
+        err?.code === 'auth/user-not-found' ||
+        err?.code === 'auth/wrong-password' ||
+        err?.code === 'auth/invalid-credential' ||
+        err?.code === 'auth/invalid-email'
+      ) {
+        message = 'Invalid email or password';
+      } else if (err?.message) {
+        message = err.message;
+      }
+      setError(message);
       setLoading(false);
     }
   };

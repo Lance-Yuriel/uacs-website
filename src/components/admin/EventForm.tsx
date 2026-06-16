@@ -3,7 +3,8 @@
 import { useMemo, useState, useRef } from 'react';
 import { X, Loader2, Upload, Image as ImageIcon } from 'lucide-react';
 import { Button, Card, CardContent } from '@/components/ui';
-import { supabase } from '@/lib/supabase';
+import { auth, storage } from '@/lib/firebase';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import Image from 'next/image';
 import UpcomingEventCard from '@/components/events/UpcomingEventCard';
 import PastEventCard from '@/components/events/PastEventCard';
@@ -200,7 +201,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
     await uploadFile(file);
   };
 
-  // Upload file to Supabase Storage
+  // Upload file to Firebase Storage
   const uploadFile = async (file: File) => {
     setUploading(true);
     setUploadError(null);
@@ -212,64 +213,30 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
       const fileName = `${eventId}-${Date.now()}.${fileExt}`;
       const filePath = `events/${fileName}`;
 
-      // Upload to Supabase Storage
-      const { data, error } = await supabase.storage
-        .from('event-photos')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (error) {
-        // If file already exists, try with different timestamp
-        if (error.message.includes('already exists')) {
-          const retryFileName = `${eventId}-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-          const retryPath = `events/${retryFileName}`;
-          const { data: retryData, error: retryError } = await supabase.storage
-            .from('event-photos')
-            .upload(retryPath, file, {
-              cacheControl: '3600',
-              upsert: false
-            });
-
-          if (retryError) throw retryError;
-
-          const { data: urlData } = supabase.storage
-            .from('event-photos')
-            .getPublicUrl(retryPath);
-
-          if (urlData?.publicUrl) {
-            setFormData(prev => ({ ...prev, eventPhotoUrl: urlData.publicUrl }));
-          }
-          return;
-        }
-        throw error;
-      }
+      // Upload to Firebase Storage
+      const storageRef = ref(storage, filePath);
+      await uploadBytes(storageRef, file);
 
       // Get public URL
-      const { data: urlData } = supabase.storage
-        .from('event-photos')
-        .getPublicUrl(filePath);
+      const publicUrl = await getDownloadURL(storageRef);
 
-      if (urlData?.publicUrl) {
-        // Update form data with the new URL
-        setFormData(prev => ({
-          ...prev,
-          eventPhotoUrl: urlData.publicUrl
-        }));
+      // Update form data with the new URL
+      setFormData(prev => ({
+        ...prev,
+        eventPhotoUrl: publicUrl
+      }));
 
-        // If editing and had a previous image, delete old one (optional cleanup)
-        if (isEditing && event?.eventPhotoUrl && event.eventPhotoUrl.includes('event-photos')) {
-          // Extract old file path from URL and delete it
-          const urlParts = event.eventPhotoUrl.split('event-photos/');
-          if (urlParts.length > 1) {
-            const oldPath = urlParts[1].split('?')[0];
-            if (oldPath) {
-              await supabase.storage
-                .from('event-photos')
-                .remove([`events/${oldPath}`]);
-            }
+      // If editing and had a previous image, delete old one (optional cleanup)
+      if (isEditing && event?.eventPhotoUrl && event.eventPhotoUrl.includes('/o/events%2F')) {
+        try {
+          const urlObj = new URL(event.eventPhotoUrl);
+          const path = decodeURIComponent(urlObj.pathname.split('/o/')[1].split('?')[0]);
+          if (path) {
+            const oldRef = ref(storage, path);
+            await deleteObject(oldRef);
           }
+        } catch (err) {
+          console.warn('Failed to delete old event photo:', err);
         }
       }
     } catch (error: any) {
@@ -395,12 +362,14 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
       const url = isEditing ? `/api/events/${eventIdRef.current}` : '/api/events';
       const method = isEditing ? 'PUT' : 'POST';
 
+      const token = await auth.currentUser?.getIdToken();
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        credentials: 'include',
         body: JSON.stringify(payload),
       });
 
