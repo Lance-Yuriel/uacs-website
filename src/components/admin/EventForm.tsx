@@ -1,10 +1,9 @@
 'use client';
 
 import { useMemo, useState, useRef } from 'react';
-import { X, Loader2, Upload, Image as ImageIcon } from 'lucide-react';
+import { X, Loader2, Image as ImageIcon } from 'lucide-react';
 import { Button, Card, CardContent } from '@/components/ui';
-import { auth, storage } from '@/lib/firebase';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { auth } from '@/lib/firebase';
 import Image from 'next/image';
 import UpcomingEventCard from '@/components/events/UpcomingEventCard';
 import PastEventCard from '@/components/events/PastEventCard';
@@ -88,11 +87,6 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(event?.eventPhotoUrl || null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     eventName: event?.eventName ?? '',
@@ -147,120 +141,15 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
 
   const pastPreviewEvent = useMemo<EventWithMeta>(() => ({
     ...previewEvent,
-    eventPhotoUrl: imagePreview || formData.eventPhotoUrl || null,
+    eventPhotoUrl: formData.eventPhotoUrl || null,
     upcomingDescription: null, // Past events don't show upcoming description
     status: 'past',
     daysUntil: null,
     countdownMessage: null,
     isHappeningToday: false,
-  }), [previewEvent, imagePreview, formData.eventPhotoUrl]);
+  }), [previewEvent, formData.eventPhotoUrl]);
 
-  // File validation
-  const validateFile = (file: File): string | null => {
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    const maxSize = 50 * 1024 * 1024; // 50MB
-
-    if (!allowedTypes.includes(file.type)) {
-      return 'Invalid file type. Please upload a JPEG, PNG, or WebP image.';
-    }
-
-    if (file.size > maxSize) {
-      return 'File size too large. Maximum size is 50MB.';
-    }
-
-    return null;
-  };
-
-  // Handle file selection
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const validationError = validateFile(file);
-    if (validationError) {
-      setUploadError(validationError);
-      setSelectedFile(null);
-      setImagePreview(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-      return;
-    }
-
-    setUploadError(null);
-    setSelectedFile(file);
-
-    // Create preview
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    // Upload file immediately
-    await uploadFile(file);
-  };
-
-  // Upload file to Firebase Storage
-  const uploadFile = async (file: File) => {
-    setUploading(true);
-    setUploadError(null);
-
-    try {
-      // Generate unique filename - use ID if available, otherwise use temp ID
-      const fileExt = file.name.split('.').pop();
-      const eventId = eventIdRef.current || `temp-${Date.now()}`;
-      const fileName = `${eventId}-${Date.now()}.${fileExt}`;
-      const filePath = `events/${fileName}`;
-
-      // Upload to Firebase Storage
-      const storageRef = ref(storage, filePath);
-      await uploadBytes(storageRef, file);
-
-      // Get public URL
-      const publicUrl = await getDownloadURL(storageRef);
-
-      // Update form data with the new URL
-      setFormData(prev => ({
-        ...prev,
-        eventPhotoUrl: publicUrl
-      }));
-
-      // If editing and had a previous image, delete old one (optional cleanup)
-      if (isEditing && event?.eventPhotoUrl && event.eventPhotoUrl.includes('/o/events%2F')) {
-        try {
-          const urlObj = new URL(event.eventPhotoUrl);
-          const path = decodeURIComponent(urlObj.pathname.split('/o/')[1].split('?')[0]);
-          if (path) {
-            const oldRef = ref(storage, path);
-            await deleteObject(oldRef);
-          }
-        } catch (err) {
-          console.warn('Failed to delete old event photo:', err);
-        }
-      }
-    } catch (error: any) {
-      console.error('Error uploading file:', error);
-      setUploadError(error.message || 'Failed to upload image. Please try again.');
-      setSelectedFile(null);
-      setImagePreview(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleClearExistingImage = () => {
-    setSelectedFile(null);
-    setImagePreview(null);
-    setFormData(prev => ({ ...prev, eventPhotoUrl: '' }));
-    setUploadError(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
+  // No client-side uploader methods needed since we're pasting image URLs directly.
 
   const validateForm = () => {
     const nextErrors: Record<string, string> = {};
@@ -562,90 +451,45 @@ const EventForm: React.FC<EventFormProps> = ({ event, onClose }) => {
                 </div>
 
                 <div>
-                  <div className="text-center mb-3 space-y-1">
-                    <label className="block text-sm font-medium text-white">
-                      Event Photo <span className="text-text-secondary text-xs">(optional - for past events)</span>
-                    </label>
-                    <p className="text-xs text-text-secondary">
-                      Recommended: 16:9 aspect ratio. Accepted formats: JPEG, PNG, WebP (max 50MB).
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col items-center gap-4 rounded-2xl bg-background-secondary/40 p-5">
-                    <div className="relative w-full max-w-md h-48">
-                      {imagePreview ? (
-                        <Image
-                          src={imagePreview}
-                          alt="Event photo preview"
-                          fill
-                          className="object-cover rounded-lg border-2 border-primary-500/40 shadow-lg"
-                        />
-                      ) : (
-                        <div className="w-full h-full rounded-lg border-2 border-dashed border-border-default/60 bg-background-tertiary/60 flex items-center justify-center">
-                          <ImageIcon className="h-12 w-12 text-text-tertiary" />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col items-center gap-3 text-center w-full">
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/jpeg,image/jpg,image/png,image/webp"
-                        onChange={handleFileSelect}
-                        disabled={uploading}
-                        className="hidden"
-                        id="event-photo-upload"
-                      />
-
-                      <label
-                        htmlFor="event-photo-upload"
-                        className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-all text-sm font-medium w-full max-w-xs ${
-                          uploadError
-                            ? 'border-red-500/80 text-red-300 hover:border-red-500'
-                            : 'border-border-default/80 text-white hover:border-primary-500 hover:text-primary-300'
-                        } ${uploading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
-                      >
-                        {uploading ? (
-                          <>
-                            <Loader2 className="h-4 w-4 animate-spin text-primary-400" />
-                            Uploading...
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="h-4 w-4 text-primary-400" />
-                            {imagePreview ? 'Change Photo' : 'Upload Photo'}
-                          </>
-                        )}
-                      </label>
-
-                      {uploadError && (
-                        <p className="mt-2 text-sm text-red-400">{uploadError}</p>
-                      )}
-
-                      {selectedFile && !uploadError && (
-                        <p className="text-xs text-text-secondary">
-                          Selected: <span className="text-white font-medium">{selectedFile.name}</span>
-                        </p>
-                      )}
-
-                      {(imagePreview || formData.eventPhotoUrl) && !uploading && (
-                        <button
-                          type="button"
-                          onClick={handleClearExistingImage}
-                          className="text-xs text-red-400 hover:text-red-300 underline underline-offset-4 transition-colors"
-                        >
-                          Remove photo
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Event Photo URL (optional — host on postimages.org or imgur.com)
+                  </label>
+                  <p className="text-xs text-text-secondary mb-2">
+                    Upload your image to a free service (like <a href="https://postimages.org" target="_blank" rel="noopener noreferrer" className="text-primary-400 hover:underline">postimages.org</a>) and paste the **direct image link** here.
+                  </p>
                   <input
-                    type="hidden"
+                    type="url"
                     name="eventPhotoUrl"
                     value={formData.eventPhotoUrl}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 bg-background-secondary border rounded-lg text-white focus:outline-none ${
+                      errors.eventPhotoUrl ? 'border-red-500 focus:border-red-500' : 'border-border-default focus:border-primary-500'
+                    }`}
+                    placeholder="https://i.postimg.cc/your-image.png"
                   />
+
+                  {formData.eventPhotoUrl && (
+                    <div className="mt-4 flex flex-col items-center gap-2 rounded-2xl bg-background-secondary/40 p-5">
+                      <div className="relative w-full max-w-md h-48">
+                        <Image
+                          src={formData.eventPhotoUrl}
+                          alt="Event photo preview"
+                          fill
+                          unoptimized
+                          className="object-cover rounded-lg border-2 border-primary-500/40 shadow-lg"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, eventPhotoUrl: '' }))}
+                        className="text-xs text-red-400 hover:text-red-300 underline underline-offset-4 transition-colors"
+                      >
+                        Remove photo
+                      </button>
+                    </div>
+                  )}
+                </div>
                 </div>
 
                 <div>
