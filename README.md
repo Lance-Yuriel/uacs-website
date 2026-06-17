@@ -1,19 +1,19 @@
 # UACS Website
 
-A Next.js 15 App Router site for the University of Auckland Calisthenics Society (UACS). The app combines a public marketing site with authenticated admin tools backed by Supabase.
+A Next.js 15 App Router site for the University of Auckland Calisthenics Society (UACS). The app combines a public marketing site with authenticated admin tools backed by Firebase (Cloud Firestore and Firebase Auth).
 
 ## Overview
 
 - **Public experience**: Aurora-inspired design, dynamic hero with live member count, events gallery, smooth motion via Framer Motion, and responsive layout with Tailwind CSS 4.
-- **Admin experience**: Secure Supabase-authenticated dashboards where committee members manage events and upload photos.
-- **Data sources**: Supabase Postgres for structured content and Google Sheets for real-time member statistics. API routes use `@supabase/ssr` helpers for cookie-aware sessions.
+- **Admin experience**: Secure Firebase-authenticated dashboard where committee members manage events.
+- **Data sources**: Cloud Firestore for structured event content, and Google Sheets for real-time member statistics.
 
 ## Key Features
 
 - **Real-time Member Counter**: Reads from Google Sheets with smart caching (`s-maxage=300`, `stale-while-revalidate=600`) and graceful fallbacks.
-- **Events Management**: CRUD via `/admin/events`, Supabase Storage-backed photo uploads, and public upcoming/past event displays.
-- **Authentication & Authorization**: Supabase Auth integration (SSR-compatible), middleware session refresh, and app-wide `AuthContext`.
-- **Admin Dashboard**: Personalized welcome, quick stats, and navigation to management tools; admin navigation elements appear only when signed in.
+- **Events Management**: CRUD via `/admin/events` using Cloud Firestore as the database.
+- **Authentication & Authorization**: Firebase Auth integration (Email/Password), route protection, and app-wide `AuthContext`.
+- **Admin Dashboard**: Redesigned dashboard with statistics and event management capabilities. Admin navigation elements appear only when signed in.
 
 ## Tech Stack
 
@@ -22,8 +22,8 @@ A Next.js 15 App Router site for the University of Auckland Calisthenics Society
 - **Styling**: Tailwind CSS 4 + custom tokens
 - **Animations**: Framer Motion 12
 - **Icons**: Lucide React
-- **Backend**: Supabase (PostgreSQL, Auth, Storage)
-- **Utilities**: Google Sheets API, `@supabase/ssr`
+- **Backend**: Firebase (Cloud Firestore, Authentication)
+- **Utilities**: Google Sheets API, Firebase Admin SDK
 - **Deployment**: Vercel
 
 ## Getting Started
@@ -37,7 +37,7 @@ A Next.js 15 App Router site for the University of Auckland Calisthenics Society
 2. **Environment variables**
    ```bash
    cp .env.example .env.local
-   # Populate .env.local with Supabase + Google credentials (see below)
+   # Populate .env.local with Firebase + Google credentials (see below)
    ```
 3. **Run locally**
    ```bash
@@ -48,17 +48,22 @@ A Next.js 15 App Router site for the University of Auckland Calisthenics Society
 ### Required Environment Variables
 
 ```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# Optional service key (CLI scripts only)
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-
 # Google Sheets member count
 GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
-GOOGLE_SHEETS_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
-GOOGLE_SHEETS_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KEY-----\n"
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KEY-----\n"
+
+# Firebase Client Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_firebase_app_id
+
+# Firebase Admin configuration (reuses Google Service Account credentials by default if not set)
+FIREBASE_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KEY-----\n"
 ```
 
 ### Available Scripts
@@ -67,39 +72,35 @@ GOOGLE_SHEETS_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVA
 - `npm run build` – Production build
 - `npm run start` – Run production server
 - `npm run lint` – ESLint
-- `npm run migrate` – Seed Supabase events table from JSON data
+- `npm run migrate` – Seed Firebase Firestore database with initial events from JSON data
 
 ## Documentation & Setup Guides
 
-- **Supabase project bootstrap**: `SETUP_SUPABASE.md`
-- **Admin authentication**: `SETUP_ADMIN_AUTH.md`
-- **Supabase Storage for event photos**: `SUPABASE_EVENT_PHOTOS_SETUP.md`
-- **Local + deployment quick reference**: `SETUP.md`
-- **Database schema**: `SUPABASE_INITIAL_SCHEMA.sql`
-
-Each guide focuses on a specific operational area; the README stays high-level to avoid duplication.
+- **Admin authentication setup**: [SETUP_ADMIN_AUTH.md](file:///Users/lancevillanueva/Documents/uacs-website/SETUP_ADMIN_AUTH.md)
+- **Local + deployment reference**: [SETUP.md](file:///Users/lancevillanueva/Documents/uacs-website/SETUP.md)
+- **Vercel hosting guide**: [VERCEL_HOSTING_GUIDE.md](file:///Users/lancevillanueva/Documents/uacs-website/VERCEL_HOSTING_GUIDE.md)
 
 ## Architecture Notes
 
 ```
 src/
 ├── app/
-│   ├── api/               # Supabase-powered Next.js API routes
-│   ├── admin/             # Auth-protected admin pages
+│   ├── api/               # API routes verifying Firebase Admin tokens
+│   ├── admin/             # Auth-protected admin dashboard & login pages
 │   └── layout.tsx         # Wraps site with AuthProvider
 ├── components/
 │   ├── events/            # Event gallery, cards, modals
-│   ├── admin/             # Forms used in dashboard
+│   ├── admin/             # Forms and dashboard components
 │   └── home/              # Hero member counter and landing sections
-├── contexts/              # Auth context for client components
-├── lib/                   # Supabase clients, Google Sheets helpers, utilities
+├── contexts/              # Auth context for client components using Firebase Auth
+├── lib/                   # Firebase clients and Admin SDK initialization, Google Sheets helpers
 └── types/                 # Shared TypeScript contracts
 ```
 
 ## Security & Deployment
 
-- Secrets live in `.env.local` (never committed). Production variables configured in Vercel.
-- Supabase RLS policies permit public reads while restricting writes to authenticated admins.
+- Secrets live in `.env.local` (never committed). Production variables are configured in Vercel.
+- Firebase Auth rules and Firestore security rules restrict writes to authenticated admins.
 - Admin pages hide from unauthenticated visitors and redirect to `/admin/login`.
 - Deploy to Vercel by connecting your repository, setting environment variables, and pushing to `main`.
 
