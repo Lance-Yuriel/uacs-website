@@ -18,10 +18,8 @@ const isConfigured = Boolean(
   firebaseConfig.appId
 );
 
-if (!isConfigured && typeof window !== 'undefined') {
-  console.warn(
-    'Firebase environment variables are missing. Database, Auth, and Storage features will run in mock mode.'
-  );
+if (typeof window !== 'undefined') {
+  console.log('Firebase Client Config status:', isConfigured ? 'Configured' : 'Missing (using mock fallback)');
 }
 
 // Initialize Firebase with mock configuration fallback if actual keys are not defined yet
