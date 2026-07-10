@@ -76,9 +76,9 @@ FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour key\n-----END PRIVATE KE
 
 ## Documentation & Setup Guides
 
-- **Admin authentication setup**: [SETUP_ADMIN_AUTH.md](file:///Users/lancevillanueva/Documents/uacs-website/SETUP_ADMIN_AUTH.md)
-- **Local + deployment reference**: [SETUP.md](file:///Users/lancevillanueva/Documents/uacs-website/SETUP.md)
-- **Vercel hosting guide**: [VERCEL_HOSTING_GUIDE.md](file:///Users/lancevillanueva/Documents/uacs-website/VERCEL_HOSTING_GUIDE.md)
+- **Admin authentication setup**: [SETUP_ADMIN_AUTH.md](./SETUP_ADMIN_AUTH.md)
+- **Local + deployment reference**: [SETUP.md](./SETUP.md)
+- **Vercel hosting guide**: [VERCEL_HOSTING_GUIDE.md](./VERCEL_HOSTING_GUIDE.md)
 
 ## Architecture Notes
 
