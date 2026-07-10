@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
       // Keep support for local/relative paths if any
     ],
   },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
 };
 
 export default nextConfig;
