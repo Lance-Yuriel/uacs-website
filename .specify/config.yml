@@ -1,0 +1,33 @@
+# Spec Kit Configuration
+# Project: UACS Website
+# Stack: Next.js 15 (App Router), TypeScript, Firebase, Tailwind CSS, Vercel
+
+project:
+  name: uacs-website
+  specs_dir: specs
+  memory_dir: .specify/memory
+
+agents:
+  - antigravity
+  - vscode-copilot
+
+phases:
+  - constitution
+  - specify
+  - plan
+  - tasks
+  - implement
+  - verify
+
+hooks:
+  post-specify: .specify/hooks/post-specify.sh
+  post-plan: .specify/hooks/post-plan.sh
+  post-tasks: .specify/hooks/post-tasks.sh
+  pre-implement: .specify/hooks/pre-implement.sh
+  post-implement: .specify/hooks/post-implement.sh
+
+gates:
+  spec-to-plan: strict
+  plan-to-tasks: strict
+  tasks-to-implement: strict
+  implement-to-done: strict

@@ -120,3 +120,5 @@ temp/
 
 # Local development
 .local
+# Private files
+employment/

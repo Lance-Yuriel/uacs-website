@@ -1,0 +1,11 @@
+# Spec Kit Extensions
+# Manage with: specify extension add <name>
+
+extensions:
+  - name: spec-gates
+    description: Deterministic quality gates between SDD phases
+    status: planned
+
+  - name: specfact
+    description: Local fact-checking validator against live codebase
+    status: planned
