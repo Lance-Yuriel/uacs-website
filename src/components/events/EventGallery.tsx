@@ -103,6 +103,12 @@ const EventGallery: React.FC<EventGalleryProps> = ({ className }) => {
       return acc;
     }, {});
 
+    // Ensure the current year is always represented in the years list
+    const currentYear = new Date().getFullYear();
+    if (!grouped[currentYear]) {
+      grouped[currentYear] = [];
+    }
+
     return Object.entries(grouped)
       .map(([year, events]) => ({
         year: Number(year),

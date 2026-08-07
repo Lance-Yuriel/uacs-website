@@ -49,6 +49,30 @@ export async function getMemberCount(): Promise<number> {
   }
 }
 
+function parseDateString(dateStr: string): Date | null {
+  if (!dateStr) return null;
+  const cleanStr = dateStr.trim();
+  
+  // Match DD/MM/YYYY or DD-MM-YYYY with optional time
+  const match = cleanStr.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if (match) {
+    const day = parseInt(match[1], 10);
+    const month = parseInt(match[2], 10);
+    const year = parseInt(match[3], 10);
+    const date = new Date(year, month - 1, day);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+  }
+  
+  const fallbackDate = new Date(cleanStr);
+  if (!isNaN(fallbackDate.getTime())) {
+    return fallbackDate;
+  }
+  
+  return null;
+}
+
 export async function getCurrentYearMemberCount(): Promise<number> {
   const sheets = google.sheets({ version: 'v4', auth });
   
@@ -87,9 +111,9 @@ export async function getCurrentYearMemberCount(): Promise<number> {
         const row = rows[i];
         if (row && row[dateColumnIndex]) {
           const dateStr = row[dateColumnIndex];
-          const date = new Date(dateStr);
+          const date = parseDateString(dateStr);
           
-          if (!isNaN(date.getTime()) && date.getFullYear() === currentYear) {
+          if (date && date.getFullYear() === currentYear) {
             currentYearMembers++;
           }
         }

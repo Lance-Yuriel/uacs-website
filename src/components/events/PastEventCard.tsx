@@ -32,45 +32,52 @@ const PastEventCard: React.FC<PastEventCardProps> = ({ event, className, onClick
       >
         {/* Event Image */}
         {event.eventPhotoUrl ? (
-          <div className="relative w-full h-48 overflow-hidden">
+          <div className="relative w-full h-48 overflow-hidden border-b border-white/5">
             <img
               src={event.eventPhotoUrl}
               alt={event.eventName}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           </div>
         ) : (
-          <div className="relative w-full h-48 bg-gradient-to-br from-primary-500/20 to-accent-blue/20 flex items-center justify-center">
-            <ImageIcon className="h-12 w-12 text-text-tertiary/40" />
+          <div className="relative w-full h-48 overflow-hidden bg-slate-950 flex items-center justify-center border-b border-white/5">
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/10 via-[#0e0d1c] to-accent-blue/10" />
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#BBD6FF_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="relative z-10 flex flex-col items-center gap-2">
+              <div className="p-3.5 rounded-full bg-white/5 border border-white/10 text-primary-300 shadow-md">
+                <ImageIcon className="h-5 w-5" />
+              </div>
+              <span className="text-[11px] text-text-secondary/70 font-semibold tracking-wider uppercase">Gallery Coming Soon</span>
+            </div>
           </div>
         )}
 
         {/* Event Content */}
         <div className="p-5 flex flex-col flex-1">
           {/* Event Title */}
-          <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-primary-300 transition-colors">
+          <h3 className="text-xl font-bold text-white mb-4 group-hover:text-primary-300 transition-colors tracking-tight font-display">
             {event.eventName}
           </h3>
 
-          {/* Date & Time */}
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center text-text-secondary text-sm">
-              <Calendar className="h-4 w-4 mr-2 flex-shrink-0" />
-              <span>{formatDate(event.date)}</span>
-            </div>
+          {/* Date & Time Badges */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/5 border border-white/10 text-text-secondary">
+              <Calendar className="h-3 w-3 text-primary-400" />
+              {formatDate(event.date)}
+            </span>
 
             {formattedTime && (
-              <div className="flex items-center text-text-secondary text-sm">
-                <Clock className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span>{formattedTime}</span>
-              </div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/5 border border-white/10 text-text-secondary">
+                <Clock className="h-3 w-3 text-primary-400" />
+                {formattedTime}
+              </span>
             )}
 
             {event.location && (
-              <div className="flex items-center text-text-secondary text-sm">
-                <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/5 border border-white/10 text-text-secondary max-w-full">
+                <MapPin className="h-3 w-3 text-primary-400 flex-shrink-0" />
                 <span className="truncate">{event.location}</span>
-              </div>
+              </span>
             )}
           </div>
 
@@ -88,10 +95,10 @@ const PastEventCard: React.FC<PastEventCardProps> = ({ event, className, onClick
               }}
               disabled={!hasValidDriveLink}
               className={`
-                w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 text-sm
+                w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all duration-300 text-sm border
                 ${hasValidDriveLink 
-                  ? 'bg-primary-500/10 text-primary-400 hover:bg-white hover:text-black border border-primary-500/30 hover:border-primary-500' 
-                  : 'bg-surface-card text-text-tertiary cursor-not-allowed border border-border-default'
+                  ? 'bg-primary-500/5 text-primary-300 hover:bg-white hover:text-black border-primary-500/30 hover:border-white shadow-sm hover:shadow-md' 
+                  : 'bg-surface-card/40 text-text-tertiary/60 cursor-not-allowed border-border-default'
                 }
               `}
             >
