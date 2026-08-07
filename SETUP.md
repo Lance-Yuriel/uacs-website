@@ -19,9 +19,9 @@ Copy your Firebase Web Config details to `.env.local` along with Google Sheets v
 
 ## Where to Find Detailed Instructions
 
-- Admin authentication workflow & users configuration → [SETUP_ADMIN_AUTH.md](file:///Users/lancevillanueva/Documents/uacs-website/SETUP_ADMIN_AUTH.md)
-- Full project overview, environment variables schema, and architecture → [README.md](file:///Users/lancevillanueva/Documents/uacs-website/README.md)
-- Deployment guide for Vercel → [VERCEL_HOSTING_GUIDE.md](file:///Users/lancevillanueva/Documents/uacs-website/VERCEL_HOSTING_GUIDE.md)
+- Admin authentication workflow & users configuration → [SETUP_ADMIN_AUTH.md](./SETUP_ADMIN_AUTH.md)
+- Full project overview, environment variables schema, and architecture → [README.md](./README.md)
+- Deployment guide for Vercel → [VERCEL_HOSTING_GUIDE.md](./VERCEL_HOSTING_GUIDE.md)
 
 ## Deployment Snapshot
 
