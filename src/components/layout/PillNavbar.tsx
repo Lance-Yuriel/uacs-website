@@ -32,7 +32,9 @@ const PillNavbar: React.FC<PillNavbarProps> = ({ className }) => {
 
   // Debug: Log admin status
   useEffect(() => {
-    console.log('Navbar - isAdmin:', isAdmin, 'user:', user);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Navbar - Auth State:', { isAdmin, loggedIn: !!user });
+    }
   }, [isAdmin, user]);
 
   const handleLogout = async () => {
