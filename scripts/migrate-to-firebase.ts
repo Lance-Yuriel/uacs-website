@@ -69,7 +69,9 @@ async function migrateEvents() {
     let parsedDate: string;
 
     try {
-      if (dateStr.includes('Oct')) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        parsedDate = dateStr;
+      } else if (dateStr.includes('Oct')) {
         const dayMatch = dateStr.match(/(\d+)(?:st|nd|rd|th)/);
         const day = dayMatch ? dayMatch[1].padStart(2, '0') : '01';
         parsedDate = `${event.year || 2025}-10-${day}`;
