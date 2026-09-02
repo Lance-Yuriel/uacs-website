@@ -9,6 +9,15 @@ const auth = new google.auth.GoogleAuth({
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 
+/**
+ * Fetches the total member count from the first column of the active Google Sheet.
+ * Reads column A of the first sheet tab and counts non-empty rows.
+ * Excludes the header row if it contains names, emails, or timestamps.
+ * 
+ * @returns A promise that resolves to the count of valid members.
+ * @throws Error if connection or API request fails.
+ * @privateRemarks Requires GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_PRIVATE_KEY server secrets.
+ */
 export async function getMemberCount(): Promise<number> {
   const sheets = google.sheets({ version: 'v4', auth });
   
@@ -40,7 +49,7 @@ export async function getMemberCount(): Promise<number> {
     
     const memberCount = isHeader ? validRows.length - 1 : validRows.length;
     
-    console.log(`Google Sheets: Found ${memberCount} members (${validRows.length} total rows, header: ${isHeader})`);
+    console.info(`Google Sheets: Found ${memberCount} members (${validRows.length} total rows, header: ${isHeader})`);
     
     return Math.max(0, memberCount);
   } catch (error) {
@@ -73,6 +82,14 @@ function parseDateString(dateStr: string): Date | null {
   return null;
 }
 
+/**
+ * Fetches the member count signups specifically for the current calendar year.
+ * Locates the date/timestamp column in the sheet, parses row dates using a DD/MM/YYYY
+ * format helper, and filters rows matching the current year.
+ * Falls back to total count if no date column is found.
+ * 
+ * @returns A promise that resolves to the count of members for the current year.
+ */
 export async function getCurrentYearMemberCount(): Promise<number> {
   const sheets = google.sheets({ version: 'v4', auth });
   
@@ -119,11 +136,11 @@ export async function getCurrentYearMemberCount(): Promise<number> {
         }
       }
       
-      console.log(`Google Sheets: Found ${currentYearMembers} members for ${currentYear}`);
+      console.info(`Google Sheets: Found ${currentYearMembers} members for ${currentYear}`);
       return currentYearMembers;
     } else {
       // No date column found, return total count
-      console.log('No date column found, returning total member count');
+      console.info('No date column found, returning total member count');
       return await getMemberCount();
     }
   } catch (error) {
@@ -133,6 +150,12 @@ export async function getCurrentYearMemberCount(): Promise<number> {
   }
 }
 
+/**
+ * Gets the current year member count bundled with a generation ISO timestamp.
+ * Used by API routes to return caching and update payloads.
+ * 
+ * @returns A promise that resolves to the count and ISO timestamp.
+ */
 export async function getMemberCountWithTimestamp(): Promise<MemberCountResponse> {
   try {
     // Try to get current year count first, fallback to total count

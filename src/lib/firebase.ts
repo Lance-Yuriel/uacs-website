@@ -2,6 +2,10 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
+/**
+ * Client-side Firebase Web configuration options retrieved from environment variables.
+ * Used to establish client-side connections to Firebase services.
+ */
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
@@ -11,7 +15,10 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
 };
 
-// Check if actual configuration is provided
+/**
+ * Boolean flag indicating if the client-side Firebase configuration environment variables
+ * are fully provided. Used to determine if fallback mocks should be used during static builds.
+ */
 const isConfigured = Boolean(
   firebaseConfig.apiKey && 
   firebaseConfig.projectId && 
@@ -19,10 +26,14 @@ const isConfigured = Boolean(
 );
 
 if (typeof window !== 'undefined') {
-  console.log('Firebase Client Config status:', isConfigured ? 'Configured' : 'Missing (using mock fallback)');
+  console.info('Firebase Client Config status:', isConfigured ? 'Configured' : 'Missing (using mock fallback)');
 }
 
-// Initialize Firebase with mock configuration fallback if actual keys are not defined yet
+/**
+ * The initialized client-side Firebase App instance.
+ * Defaults to a mock configuration during static site pre-rendering or builds
+ * if environment keys are missing, preventing pre-render runtime crashes.
+ */
 const app = getApps().length === 0 
   ? initializeApp(
       isConfigured 
@@ -38,7 +49,14 @@ const app = getApps().length === 0
     ) 
   : getApp();
 
+/**
+ * The client-side Firebase Authentication service instance.
+ */
 const auth = getAuth(app);
+
+/**
+ * The client-side Firebase Storage service instance.
+ */
 const storage = getStorage(app);
 
 export { app, auth, storage, isConfigured };

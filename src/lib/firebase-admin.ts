@@ -18,19 +18,34 @@ if (getApps().length === 0) {
           privateKey: privateKey.replace(/\\n/g, '\n'),
         }),
       });
-      console.log('Firebase Admin SDK initialized successfully with service account cert.');
+      console.info('Firebase Admin SDK initialized successfully with service account cert.');
     } else {
       // Fallback to default application credentials or system environment config
       initializeApp({
         projectId,
       });
-      console.log('Firebase Admin SDK initialized with project ID fallback.');
+      console.info('Firebase Admin SDK initialized with project ID fallback.');
     }
   } catch (error) {
     console.error('Error initializing Firebase Admin SDK:', error);
   }
 }
 
+/**
+ * Firebase Firestore database administrative instance.
+ * Running exclusively on the server side via the Admin SDK, this instance
+ * bypasses all database Firestore Security Rules.
+ */
 export const adminDb = getFirestore();
+
+/**
+ * Firebase Authentication administrative service instance.
+ * Used to verify ID tokens (JWTs) and manage users on the server side.
+ */
 export const adminAuth = getAuth();
+
+/**
+ * Firebase Storage administrative service instance.
+ * Used for bucket operations and server-side file management.
+ */
 export const adminStorage = getStorage();
